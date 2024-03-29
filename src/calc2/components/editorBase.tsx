@@ -355,7 +355,7 @@ type Table = {
 
 
 type Props = {
-	mode: 'relalg' | 'bagalg' | 'text/x-mysql',
+	mode: 'relalg' | 'bagalg' | 'text/x-mysql' | 'trc',
 
 	/** sync, should throw exception on error */
 	execFunction(self: EditorBase, query: string, offset: CodeMirror.Position): { result: JSX.Element },
@@ -364,7 +364,7 @@ type Props = {
 	/** */
 	getHintsFunction(): string[],
 	
-	tab: 'relalg' | 'bagalg' | 'sql' | 'group',
+	tab: 'relalg' | 'bagalg' | 'sql' | 'trc' | 'group',
 
 	enableInlineRelationEditor: boolean,
 
