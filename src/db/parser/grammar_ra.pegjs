@@ -554,14 +554,14 @@ listOfOrderByArgs
 
 
 aggFunction
-= func:$('sum'i / 'count'i / 'avg'i / 'min'i / 'max'i) '(' _ col:columnName _ ')'
+= func:$('sum'i / 'count'i / 'avg'i / 'min'i / 'max'i) _ '(' _ col:columnName _ ')'
 	{
 		return {
 			aggFunction: func.toUpperCase(),
 			col: col
 		};
 	}
-/ 'count(*)'i
+/ 'count'i _ '(' _ '*' _ ')'
 	{
 		return {
 			aggFunction: 'COUNT_ALL',
