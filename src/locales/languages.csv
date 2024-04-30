@@ -112,6 +112,7 @@ calc.maintainer-groups.uibk,University of Innsbruck,University of Innsbruck,Univ
 calc.maintainer-groups.karlsruhe,Karlsruhe University of Applied Sciences,Universidade de Ciências Aplicadas de Karlsruhe,Hochschule Karlsruhe,Universidad de Ciencias Aplicadas de Karlsruhe,Karlsruhe 대학교
 calc.maintainer-groups.saarland,University of Saarland,University of Saarland,Universität Saarland,Universidad de Saarland,Saarland 대학교
 calc.maintainer-groups.hsd,University of Applied Sciences Düsseldorf,Universidade de Ciências Aplicadas de Düsseldorf, Hochschule Düsseldorf,Universidad de Düsseldorf, Düsseldorf 대학교
+calc.maintainer-groups.ufes,Federal University of Espírito Santo,Universidade Federal do Espírito Santo,Bundesuniversität Espirito Santo,Universidad Federal de Espírito Santo,에스피리토 산토 연방대학교
 calc.editors.button-history,history,Histórico,Verlauf,historia,기록
 calc.editors.insert-relation-title,Insert,Inserir,Einfügen,Insertar,Insert
 calc.editors.insert-relation-tooltip,Insert relation or column names,Inserir relação ou nomes de coluna,Beziehungs- oder Spaltennamen einfügen,Insertar nombres de relaciones o columnas,Insert relation or column names
@@ -174,8 +175,8 @@ calc.editors.group.modal-sqldump.button-import-sql,import SQL,Importar SQL,impor
 calc.editors.group.modal-sqldump.description,Put your SQL-Dump here to create a group.,Coloque seu SQL-Dump aqui para criar um grupo.,Kopieren Sie den SQL-Dump hier her um einen Datensatz daraus zu erstellen.,Ponga su SQL-Dump aquí para crear un grupo.,그룹을 생성하려면 SQL-Dump 이곳에 가져와라
 calc.editors.ra.tab-name,Relational Algebra,Álgebra Relacional,Relationale Algebra,Álgebra Relacional,관계 대수
 calc.editors.ra.tab-name-short,RelAlg,AlgRel,RelAlg,ÁlgRel,관계 대수
-calc.editors.ra.button-execute-query,execute query,Executar consulta,Query ausführen,executar consulta,쿼리 실행
-calc.editors.ra.button-execute-selection,execute selection,Executar seleção,Markierung ausführen,executar selección,셀렉션 실행
+calc.editors.ra.button-execute-query,execute query,Executar consulta,Query ausführen,ejecutar consulta,쿼리 실행
+calc.editors.ra.button-execute-selection,execute selection,Executar seleção,Markierung ausführen,ejecutar selección,셀렉션 실행
 calc.editors.ra.button-download,download,Download,download,descargar,다운로드
 calc.editors.ra.toolbar.projection,projection,Projeção,Projektion,proyección,프로젝션
 calc.editors.ra.toolbar.projection-content,"<b class=""math"">&pi;</b> a, b <b>(</b> A <b>)</b>

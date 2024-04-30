@@ -110,6 +110,7 @@ export const langES: Partial<typeof langEN> = {
   'calc.maintainer-groups.misc': 'Misceláneo',
   'calc.maintainer-groups.temp': 'Temporal',
   'calc.maintainer-groups.uibk': 'Universidad de Innsbruck',
+  'calc.maintainer-groups.ufes': 'Universidad Federal de Espírito Santo',
   'calc.editors.button-history': 'historia',
 	'calc.editors.insert-relation-title': 'Insertar',
 	'calc.editors.insert-relation-tooltip': 'Insertar nombres de relaciones o columnas',
@@ -133,8 +134,8 @@ export const langES: Partial<typeof langEN> = {
 
   'calc.editors.ra.tab-name': 'Álgebra Relacional',
   'calc.editors.ra.tab-name-short': 'ÁlgRel',
-  'calc.editors.ra.button-execute-query': 'executar consulta',
-  'calc.editors.ra.button-execute-selection': 'executar selección',
+  'calc.editors.ra.button-execute-query': 'ejecutar consulta',
+  'calc.editors.ra.button-execute-selection': 'ejecutar selección',
   'calc.editors.ra.button-download': 'Descargar',
   'calc.editors.ra.button-download-csv': 'Resultado (CSV)',
   'calc.editors.ra.button-download-query': 'Query',

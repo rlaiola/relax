@@ -254,6 +254,24 @@ QUnit.test('test selection with xor', function (assert) {
 	assert.deepEqual(root.getResult(), ref.getResult());
 });
 
+QUnit.test('test projection[*](R)', function (assert) {
+	const relations = getTestRelations();
+	const query = 'pi * (R)';
+	const root = exec_ra(query, relations);
+
+	const ref = exec_ra(`{
+		R.a, R.b, R.c
+
+		1, 'a', 'd'
+		3, 'c', 'c'
+		4, 'd', 'f'
+		5, 'd', 'b'
+		6, 'e', 'f'
+	}`, relations);
+
+	assert.deepEqual(root.getResult(), ref.getResult());
+});
+
 QUnit.test('test projection[a, b](R)', function (assert) {
 	const relations = getTestRelations();
 	const query = 'pi a, b (R)';
@@ -299,6 +317,22 @@ QUnit.test('test projection[b, a, a, b](R)', function (assert) {
 	catch (e) {
 		assert.ok(true);
 	}
+});
+
+QUnit.test('test (pi * (R)) inner join [R.b = S.b] (pi * (S))', function (assert) {
+	const relations = getTestRelations();
+	const root = exec_ra('(R) inner join R.b = S.b (S)', relations);
+	const ref = exec_ra(`{
+		R.a:number, R.b:string, R.c:string, S.b:string, S.d:number
+
+		1,          'a',        'd',        'a',        100
+		3,          'c',        'c',        'c',        400
+		4,          'd',        'f',        'd',        200
+		5,          'd',        'b',        'd',        200
+		6,          'e',        'f',        'e',        150
+	}`, relations);
+
+	assert.deepEqual(root.getResult(), ref.getResult());
 });
 
 QUnit.test('test (R) inner join [R.b = S.b] join (S)', function (assert) {
@@ -1073,6 +1107,17 @@ QUnit.test('pi with eval: date', function (assert) {
 	assert.deepEqual(result, reference);
 });
 
+QUnit.test('pi with wrong date format', function (assert) {
+	try {
+		const query = "pi date('01-01-1970')->d (R)";
+		exec_ra(query, getTestRelations());
+		assert.ok(false);
+	}
+	catch (e) {
+		assert.ok(true);
+	}
+});
+
 QUnit.test('pi with eval: upper()', function (assert) {
 	const relations = getTestRelations();
 	const result = exec_ra(" sigma x < 'D' pi upper(S.b)->x S ", relations).getResult();
@@ -1085,6 +1130,69 @@ QUnit.test('pi with eval: upper()', function (assert) {
 		B
 		C
 	}`, {}).getResult();
+
+	assert.deepEqual(result, reference);
+});
+
+QUnit.test('pi with eval: lower()', function (assert) {
+	const relations = getTestRelations();
+	const result = exec_ra(" sigma y < 'd' (pi lower(x)->y (pi upper(S.b)->x S)) ", relations).getResult();
+	result.eliminateDuplicateRows();
+
+	const reference = exec_ra(`
+	{
+		x:string
+		a
+		b
+		c
+	}`, {}).getResult();
+
+	assert.deepEqual(result, reference);
+});
+
+QUnit.test('pi with eval: repeat()', function (assert) {
+	const relations = getTestRelations();
+	const result = exec_ra(" pi repeat(b, 3)->x (R)) ", relations).getResult();
+	result.eliminateDuplicateRows();
+
+	const reference = exec_ra('{x:string\n' +
+		'aaa\n' +
+		'ccc\n' +
+		'ddd\n' +
+		'eee\n' +
+	'}', {}).getResult();
+
+	assert.deepEqual(result, reference);
+});
+
+QUnit.test('pi with eval: replace()', function (assert) {
+	const relations = getTestRelations();
+	const result = exec_ra(" pi replace(x, 'c', 'C')->y (pi concat(a, b, c)->x (R)) ", relations).getResult();
+	result.eliminateDuplicateRows();
+
+	const reference = exec_ra('{y:string\n' +
+		'1ad\n' +
+		'3CC\n' +
+		'4df\n' +
+		'5db\n' +
+		'6ef\n' +
+	'}', {}).getResult();
+
+	assert.deepEqual(result, reference);
+});
+
+QUnit.test('pi with eval: reverse()', function (assert) {
+	const relations = getTestRelations();
+	const result = exec_ra(" pi reverse(x)->y (pi concat(a, b, c)->x (R)) ", relations).getResult();
+	result.eliminateDuplicateRows();
+
+	const reference = exec_ra('{y:string\n' +
+		'da1\n' +
+		'cc3\n' +
+		'fd4\n' +
+		'bd5\n' +
+		'fe6\n' +
+	'}', {}).getResult();
 
 	assert.deepEqual(result, reference);
 });
@@ -1211,6 +1319,26 @@ QUnit.test('test like operator', function (assert) {
 	assert.deepEqual(result, reference);
 });
 
+QUnit.test('test regexp operator', function (assert) {
+	const result = exec_ra(`pi x, x regexp '^(a|e)'->starts_a_or_e, x regexp '(a|e)$'->ends_b_or_c, x rlike '(a|e)'->has_a_or_e {
+	x
+
+	abb
+	bba
+	bab
+	ebe
+	}`, {}).getResult();
+
+	const reference = exec_ra(`{
+	x, starts_a_or_e, ends_a_or_e, has_a_or_e
+
+	abb, true,  false, true
+	bba, false, true,  true
+	eab, false, false, true
+	aba, true,  true,  true
+	}`, {}).getResult();
+	assert.deepEqual(result, reference);
+});
 
 QUnit.test('groupby textgen', function (assert) {
 	const ast = relalgjs.parseRelalg(`gamma a; sum(b)->c ({a, b
@@ -1222,6 +1350,73 @@ QUnit.test('groupby textgen', function (assert) {
 		'\ta:string, b:number\n' +
 		"\t'a'     , 1       \n" +
 		'} ) ');
+});
+
+QUnit.test('whitespace(s) between aggregate function and opening parenthesis', function (assert) {
+	const result = exec_ra("gamma ; sum (a)->total_a (R)", getTestRelations()).getResult();
+	result.eliminateDuplicateRows();
+
+	const reference = exec_ra('{total_a\n' +
+		'19\n' +
+		'}', {}).getResult();
+
+	assert.deepEqual(result, reference);
+});
+
+QUnit.test('whitespace(s) between count(*) function and opening parenthesis', function (assert) {
+	const result = exec_ra("gamma ; count    (*)->n (R)", getTestRelations()).getResult();
+	result.eliminateDuplicateRows();
+
+	const reference = exec_ra('{n\n' +
+		'5\n' +
+		'}', {}).getResult();
+
+	assert.deepEqual(result, reference);
+});
+
+QUnit.test('whitespace(s) between n-ary text function and opening parenthesis', function (assert) {
+	const result = exec_ra("pi concat  (a, b, c)->k (R)", getTestRelations()).getResult();
+	result.eliminateDuplicateRows();
+
+	const reference = exec_ra('{k\n' +
+		'1ad\n' +
+		'3cc\n' +
+		'4df\n' +
+		'5db\n' +
+		'6ef\n' +
+		'}', {}).getResult();
+
+	assert.deepEqual(result, reference);
+});
+
+QUnit.test('whitespace(s) between binary function and opening parenthesis', function (assert) {
+	const result = exec_ra("pi add    (a, 5)->a_plus_5 (R)", getTestRelations()).getResult();
+	result.eliminateDuplicateRows();
+
+	const reference = exec_ra('{a_plus_5\n' +
+		'6\n' +
+		'8\n' +
+		'9\n' +
+		'10\n' +
+		'11\n' +
+		'}', {}).getResult();
+
+	assert.deepEqual(result, reference);
+});
+
+QUnit.test('whitespace(s) between unary function and opening parenthesis', function (assert) {
+	const result = exec_ra("pi a + length  (  c )->x, upper (   b  )->k (R)", getTestRelations()).getResult();
+	result.eliminateDuplicateRows();
+
+	const reference = exec_ra('{\tx:number, k:string\n' +
+		"\t2, 'A'\n" +
+		"\t4, 'C'\n" +
+		"\t5, 'D'\n" +
+		"\t6, 'D'\n" +
+		"\t7, 'E'\n" +
+		'}', {}).getResult();
+
+	assert.deepEqual(result, reference);
 });
 
 QUnit.test('test orderBy explicit column of relation', function (assert) {
