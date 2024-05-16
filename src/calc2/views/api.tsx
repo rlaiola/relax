@@ -29,7 +29,12 @@ export class Api extends React.Component<Props, State> {
 		super(props);
 		this.state = {};
 		this.mode = props.params.mode;
-		this.query = atob(props.params.query)
+		// Fix issue of parsing + as a space
+		// https://www.npmjs.com/package/query-string
+		// https://github.com/sindresorhus/query-string/issues/305
+		// https://stackoverflow.com/questions/2678551/when-to-encode-space-to-plus-or-20
+		// https://stackoverflow.com/questions/3794919/replace-all-spaces-in-a-string-with
+		this.query = atob(props.params.query.split(' ').join('+'))
 	}
 
 	componentDidMount() {
