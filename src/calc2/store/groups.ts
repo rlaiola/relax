@@ -68,16 +68,39 @@ export function* rootSaga() {
 				};
 				yield saga.put(success);
 				if (setCurrent !== undefined && loadedGroups.length > 0) {
-					const { source, id, filename } = loadedGroups[0].groupInfo;
+					// In case the :filename and :index are set in the URL,
+					// it's necessary to set the correct group accordingly
+					if (setCurrent && setCurrent != 'first' && 
+						setCurrent.filename && setCurrent.index) {
+						for(var i=0;i<loadedGroups.length;i++) {
+							const g = loadedGroups[i];
+							const { source, id, filename, index } = g.groupInfo;
+							if (filename == setCurrent.filename && index == setCurrent.index) {
+								const setCurrent: GROUP_SET_CURRENT = {
+									type: 'GROUP_SET_CURRENT',
+									source,
+									id,
+									filename,
+									index,
+								};
+								yield saga.put(setCurrent);
+								break;
+							}
+						}
+					}
+					// Otherwise, just try using the first group
+					else {
+						const { source, id, filename } = loadedGroups[0].groupInfo;
 
-					const setCurrent: GROUP_SET_CURRENT = {
-						type: 'GROUP_SET_CURRENT',
-						source,
-						id,
-						filename,
-						index: 0,
-					};
-					yield saga.put(setCurrent);
+						const setCurrent: GROUP_SET_CURRENT = {
+							type: 'GROUP_SET_CURRENT',
+							source,
+							id,
+							filename,
+							index: 0,
+						};
+						yield saga.put(setCurrent);
+					}
 				}
 			}
 			catch (e) {
@@ -223,82 +246,19 @@ export function loadStaticGroups() {
 		id: string,
 	}[] = [
 			{
+				maintainerGroup: t('calc.maintainer-groups.ufes'),
+				maintainer: '<a href="https://github.com/rlaiola">Rodrigo Laiola Guimaraes</a>',
+
+				source: 'local',
+				id: 'ufes',
+			},
+			{
 				maintainerGroup: t('calc.maintainer-groups.misc'),
 				maintainer: '',
 
 				source: 'local',
 				id: 'uibk',
 			},
-			{
-				maintainerGroup: t('calc.maintainer-groups.uibk'),
-				maintainer: '<a href="https://github.com/mtschu">mtschu</a>',
-
-				source: 'gist',
-				id: '2923a30a474fdcb46bee',
-			},
-			{
-				maintainerGroup: t('calc.maintainer-groups.uibk'),
-				maintainer: '<a href="https://gist.github.com/woolfg">Wolfgang Gassler</a>',
-
-				source: 'gist',
-				id: '7d1871f79a8bcb4788de',
-			},
-			{
-				maintainerGroup: t('calc.maintainer-groups.karlsruhe'),
-				maintainer: '<a href="https://github.com/jstoess">Jan Stoess</a>',
-
-				source: 'gist',
-				id: '4f7866c17624ca9dfa85ed2482078be8',
-			},
-			{
-				maintainerGroup: t('calc.maintainer-groups.karlsruhe'),
-				maintainer: '<a href="https://github.com/jstoess">Jan Stoess</a>',
-
-				source: 'gist',
-				id: 'a287f5ad991c08a74f55c06789c95508',
-			},
-			{
-				maintainerGroup: t('calc.maintainer-groups.saarland'),
-				maintainer: '<a href="https://gist.github.com/jensdittrich">Jens Dittrich</a>',
-
-				source: 'gist',
-				id: '41cf5ce652756d9331eec7562644e074',
-			},
-			{
-				maintainerGroup: t('calc.maintainer-groups.saarland'),
-				maintainer: '<a href="https://gist.github.com/jensdittrich">Jens Dittrich</a>',
-
-				source: 'gist',
-				id: 'c306ecf21c6e6d175508d3ac6b4355e7',
-			},
-
-			{
-				maintainerGroup: t('calc.maintainer-groups.hsd'),
-				maintainer: '<a href="https://gist.github.com/mafo3186">Mareike Focken</a>',
-	
-				source: 'gist',
-				id: 'dd9b9e4a5bd3b9a5265104e4c8f171c6',
-			},
-			{
-				maintainerGroup: t('calc.maintainer-groups.hsd'),
-				maintainer: '<a href="https://gist.github.com/mafo3186">Mareike Focken</a>',
-	
-				source: 'gist',
-				id: '7716a847139f098709a88f1835d5b08b',
-			},
-			{
-				maintainerGroup: t('calc.maintainer-groups.hsd'),
-				maintainer: '<a href="https://gist.github.com/mafo3186">Mareike Focken</a>',
-	
-				source: 'gist',
-				id: 'd37f667154aec34f5c4954723ae01db9',
-			},
-		{
-			maintainerGroup: 'OTH Regensburg',
-			maintainer: '<a href="https://gist.github.com/jschildgen">Johannes Schildgen</a>',
-			source: 'gist',
-			id: 'd67f16874b528abc6e6c88d07a50b2dc',
-		},
 		];
 
 	let first: boolean = true;
