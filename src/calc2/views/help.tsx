@@ -321,7 +321,7 @@ export class Help extends React.Component<Props> {
 									</td>
 								</tr>
 								<tr>
-									<td className="math">&delta;</td>
+									<td className="math">∂</td>
 									<td>delta</td>
 								</tr>
 								<tr>
@@ -1342,7 +1342,7 @@ export class Help extends React.Component<Props> {
 									<tbody>
 										<tr>
 											<th>symbol</th>
-											<td className="math">&delta;</td>
+											<td className="math">∂</td>
 										</tr>
 										<tr>
 											<th>alternative syntax</th>
@@ -1360,7 +1360,7 @@ export class Help extends React.Component<Props> {
 								<p>There is no argument</p>
 
 								<div className="example">
-									<code>&delta; ( Customer )</code>
+									<code>∂ ( Customer )</code>
 								</div>
 
 								<div className="example">
