@@ -101,7 +101,7 @@ export function relalgFromTRCAstRoot(astRoot: trcAst.TRC_Expr | null, relations:
 			case 'RelationPredicate': { references.set(root.variable, root.relation) } break
 			case 'Negation': { setupReferences(root.formula) } break
 			case 'QuantifiedExpression': { setupReferences(root.formula) } break
-			case 'LogicalExpression': {  setupReferences(root.left); setupReferences(root.right)} break
+			case 'LogicalExpression': { setupReferences(root.left); setupReferences(root.right) } break
 		}
 	}
 
@@ -126,7 +126,7 @@ export function relalgFromTRCAstRoot(astRoot: trcAst.TRC_Expr | null, relations:
 		}
 		return lookupTable[op]
 	}
-	
+
 	function usesVariableInPredicate(node: any, variable: string): boolean {
 		switch (node.type) {
 			// if we encounter another quantified expression, we know we should stop
@@ -221,7 +221,7 @@ export function relalgFromTRCAstRoot(astRoot: trcAst.TRC_Expr | null, relations:
 							variable: null as any,
 							attribute: 'count'
 						},
-						operator: negated ? '=' :'>',
+						operator: negated ? '=' : '>',
 						right: 0
 					}
 					// TODO: handle nested cases, not only the tuple variable
@@ -234,14 +234,15 @@ export function relalgFromTRCAstRoot(astRoot: trcAst.TRC_Expr | null, relations:
 					return new Selection(new CrossJoin(tupleVariableRelation, count), recValueExpr(convertPredicate(condition)))
 				} else {
 					// NOTE: ∀xP(x) ≡ ¬∃x(¬P(x))
-					const notFormula = usesVariableInPredicate(nRaw, tupleVariable as string) ?  nRaw.formula : { type: 'Negation', formula: nRaw.formula }
+					const notFormula = usesVariableInPredicate(nRaw, tupleVariable as string) ? nRaw.formula : { type: 'Negation', formula: nRaw.formula }
 					const notExists = {
-						 ...nRaw,
+						...nRaw,
 						quantifier: 'exists',
 						formula: notFormula
 					}
 
-					const shouldBeNegated =  negated ? false : !usesVariableInPredicate(nRaw.formula, tupleVariable as string)
+					const uses = usesVariableInPredicate(nRaw.formula, tupleVariable as string)
+					const shouldBeNegated = negated ? uses : !uses
 					return rec(notExists, tupleVariable, shouldBeNegated)
 				}
 			}
@@ -254,7 +255,7 @@ export function relalgFromTRCAstRoot(astRoot: trcAst.TRC_Expr | null, relations:
 			case 'Negation': {
 				// NOTE: it means we're negating a predicate, so we can use set difference
 				// NOTE: not(codition(R)) ≡ R - sigma condition(R) 
-				switch(nRaw.formula.type) {
+				switch (nRaw.formula.type) {
 					case 'Negation': {
 						return rec(nRaw.formula, tupleVariable, false)
 					}
@@ -317,7 +318,7 @@ export function relalgFromTRCAstRoot(astRoot: trcAst.TRC_Expr | null, relations:
 								}
 
 								return rec(and, tupleVariable, true)
-							} 
+							}
 
 							// ¬(A → B) ≡ A ∧ ¬B
 							case 'implies': {
@@ -336,12 +337,12 @@ export function relalgFromTRCAstRoot(astRoot: trcAst.TRC_Expr | null, relations:
 								return rec(and, tupleVariable, true)
 							}
 
-							default: 
+							default:
 								throw new Error('Unreachable')
 						}
 					}
 
-					default: 
+					default:
 						throw new Error('Negation is only allowed for predicates, logical expressions or quantified expressions!')
 				}
 			}
@@ -353,7 +354,7 @@ export function relalgFromTRCAstRoot(astRoot: trcAst.TRC_Expr | null, relations:
 
 				if (negated) {
 					const notOp = notOperator(nRaw.operator)
-					nRaw = { ...nRaw, operator:  notOp }
+					nRaw = { ...nRaw, operator: notOp }
 				}
 
 				// NOTE: that means we're dealing with a join
