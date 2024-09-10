@@ -186,7 +186,7 @@ export function relalgFromTRCAstRoot(astRoot: trcAst.TRC_Expr | null, relations:
 					return new Projection(rec(nRaw.formula, tupleRel), projections)
 				}
 
-				return new SemiJoin(tupleRel, rec(nRaw.formula, tupleRel), true)
+				return rec(nRaw.formula, tupleRel)
 			}
 
 			case 'QuantifiedExpression': {
@@ -222,7 +222,7 @@ export function relalgFromTRCAstRoot(astRoot: trcAst.TRC_Expr | null, relations:
 						}
 
 						const right = rec(nRaw.formula, newBaseRel, negated)
-						return right
+						return new SemiJoin(baseRel, right, true)
 					}
 
 					case 'forAll': {
