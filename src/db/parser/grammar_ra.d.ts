@@ -52,6 +52,7 @@ declare module relalgAst {
 	type relalgOperation
 		= relation
 		| table
+		| eliminateDuplicates
 		| projection
 		| selection
 		| renameColumns
@@ -77,6 +78,12 @@ declare module relalgAst {
 		type: 'columnName',
 		name: string | number,
 		relAlias: string | null,
+	}
+
+	interface columnAsterisk {
+		type: 'column',
+		name: '*',
+		relAlias: string | null
 	}
 
 	interface namedColumnExpr {
@@ -139,7 +146,18 @@ declare module relalgAst {
 		child: relalgOperation,
 		child2?: undefined,
 		assignments?: undefined,
-		arg: (namedColumnExpr | columnName)[],
+		arg: (namedColumnExpr | columnName | columnAsterisk)[],
+
+		wrappedInParentheses?: boolean,
+		metaData?: { [key: string]: any },
+		codeInfo: CodeInfo,
+	}
+
+	interface eliminateDuplicates {
+		type: 'eliminateDuplicates',
+		child: relalgOperation,
+		child2?: undefined,
+		assignments?: undefined,
 
 		wrappedInParentheses?: boolean,
 		metaData?: { [key: string]: any },
@@ -327,6 +345,7 @@ declare module relalgAst {
 		assignments: assignment[],
 		codeInfo: CodeInfo,
 		exampleSql?: string,
+		exampleBags?: string,
 		exampleRA?: string;
 	}
 
@@ -340,6 +359,8 @@ declare module relalgAst {
 		| 'and'
 		| 'like'
 		| 'ilike'
+		| 'regexp'
+		| 'rlike'
 		| 'add'
 		| 'sub'
 		| 'mul'
@@ -353,6 +374,9 @@ declare module relalgAst {
 		| 'subdate'
 		| 'upper'
 		| 'lower'
+		| 'repeat'
+		| 'replace'
+		| 'reverse'
 		| 'strlen'
 		| 'abs'
 		| 'floor'
