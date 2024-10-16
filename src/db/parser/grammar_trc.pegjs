@@ -94,6 +94,7 @@ TRC_Expr
 			}
 			return [p.relAlias ? p.relAlias : p.name]
 		})
+		.filter(v => v)
 
 		const variables = [...new Set(nonUniquevariables)]
 		return createTrcRoot(variables, formula, proj)
