@@ -237,6 +237,40 @@ export function relalgFromTRCAstRoot(astRoot: trcAst.TRC_Expr | null, relations:
 
 			case 'LogicalExpression': {
 				switch (nRaw.operator) {
+					case 'iff': {
+						// NOTE: ¬(p ⇔ q) = (¬p ∨ ¬q) ∧ (p ∨ q)
+						if (negated) {
+							return rec(
+								and(
+									or(
+										not(nRaw.left),
+										not(nRaw.right)
+									),
+									or(
+										nRaw.left,
+										nRaw.right
+									)
+								),
+								baseRel
+							)
+						}
+
+						// NOTE: p ⇔ q = (p ∧ q) ∨ (¬p ∧ ¬q)
+						return rec(
+							or(
+								and(
+									nRaw.left,
+									nRaw.right)
+								,
+								and(
+									not(nRaw.left),
+									not(nRaw.right)
+								)
+							),
+							baseRel
+						)
+					}
+
 					case 'implies': {
 						// NOTE: ¬(p → q) ≡ p ∧ ¬q
 						if (negated) {
