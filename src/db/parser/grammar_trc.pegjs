@@ -748,7 +748,7 @@ expr_precedence0
 		return e;
 	}
 
-variableName 'relationName'
+variableName 'variableName'
 = !(RESERVED_KEYWORD !([0-9a-zA-Z_]+)) a:$([a-zA-Z]+ $[0-9a-zA-Z_]*)
 	{
 		return a;
