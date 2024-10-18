@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { EditorGroup } from 'calc2/components/editorGroup';
 import { EditorRelalg } from 'calc2/components/editorRelalg';
 import { EditorBagalg } from 'calc2/components/editorBagalg';
+import { EditorTrc } from 'calc2/components/editorTrc';
 import { EditorSql } from 'calc2/components/editorSql';
 import { i18n, T, t } from 'calc2/i18n';
 import * as store from 'calc2/store';
@@ -23,7 +24,6 @@ import { GroupRelationList } from '../components/groupRelationList';
 import { MenuConnected } from '../components/menu';
 import { Navigation } from '../components/navigation';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { EditorTrc } from './editorTrc';
 require('./calculator.scss');
 
 
@@ -34,7 +34,7 @@ type Props = {
 };
 
 type State = {
-	activeTab: 'relalg' | 'bagalg' | 'sql' | 'trc' | 'group',
+	activeTab: 'relalg' | 'bagalg' | 'trc' | 'sql' | 'group',
 	datasetModal: boolean,
 	relationModal: boolean,
 };
@@ -43,8 +43,8 @@ type State = {
 export class Calculator extends React.Component<Props, State> {
 	private refEditorRelalg = React.createRef<EditorRelalg>();
 	private refEditorBagalg = React.createRef<EditorBagalg>();
-	private refEditorSql = React.createRef<EditorSql>();
 	private refEditorTrc = React.createRef<EditorTrc>();
+	private refEditorSql = React.createRef<EditorSql>();
 	private refEditorGroup = React.createRef<EditorGroup>();
 
 	constructor(props: Props) {
@@ -88,14 +88,14 @@ export class Calculator extends React.Component<Props, State> {
 
 	private getCurrentEditor() {
 		switch (this.state.activeTab) {
-			case 'sql':
-				return this.refEditorSql;
 			case 'relalg':
 				return this.refEditorRelalg;
 			case 'bagalg':
 				return this.refEditorBagalg;
 			case 'trc':
 				return this.refEditorTrc;
+			case 'sql':
+				return this.refEditorSql;
 			case 'group':
 				return this.refEditorGroup;
 		}
@@ -192,20 +192,20 @@ example,  42
 							</NavItem>
 							<NavItem>
 								<NavLink
-									className={classnames({ active: activeTab === 'sql' })}
-									onClick={() => { this.setState({ activeTab: 'sql' }); }}
-								>
-									<span className="hideOnSM"><T id="calc.editors.sql.tab-name" /></span>
-									<span className="showOnSM"><T id="calc.editors.sql.tab-name-short" /></span>
-								</NavLink>
-							</NavItem>
-							<NavItem>
-								<NavLink
 									className={classnames({ active: activeTab === 'trc' })}
 									onClick={() => { this.setState({ activeTab: 'trc' }); }}
 								>
 									<span className="hideOnSM">TRC</span>
 									<span className="showOnSM">TRC</span>
+								</NavLink>
+							</NavItem>
+							<NavItem>
+								<NavLink
+									className={classnames({ active: activeTab === 'sql' })}
+									onClick={() => { this.setState({ activeTab: 'sql' }); }}
+								>
+									<span className="hideOnSM"><T id="calc.editors.sql.tab-name" /></span>
+									<span className="showOnSM"><T id="calc.editors.sql.tab-name-short" /></span>
 								</NavLink>
 							</NavItem>
 							<NavItem>
@@ -233,17 +233,17 @@ example,  42
 									relInsertModalToggle={this.insertRelationToggle}
 								/>
 							</TabPane>
+							<TabPane tabId="trc">
+								<EditorTrc
+									group={group}
+									ref={this.refEditorTrc}
+								/>
+							</TabPane>
 							<TabPane tabId="sql">
 								<EditorSql
 									group={group}
 									ref={this.refEditorSql}
 									relInsertModalToggle={this.insertRelationToggle}
-								/>
-							</TabPane>
-							<TabPane tabId="trc">
-								<EditorTrc
-									group={group}
-									ref={this.refEditorTrc}
 								/>
 							</TabPane>
 							<TabPane tabId="group">

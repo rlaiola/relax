@@ -41,9 +41,9 @@ require('codemirror/mode/sql/sql.js');
 require('handsontable/dist/handsontable.full.css');
 
 CodeMirror.defineMode('trc', function () {
-	const keywords = ['in', 'and', 'or', 'xor', 'not', 'implies', 'exists', 'for all', 'empty'];
-	const keywordsMath = ['∈', '∃', '∀', '∅'];
-	const operators = ['←', '→', '∧', '∨', '⊻', '⊕', '⇒', '¬', '=', '≠', '≤', '≥', '<', '>'];
+	const keywords = ['in', 'and', 'or', 'xor', 'not', 'implies', 'iff', 'exists', 'for all'];
+	const keywordsMath = ['∈', '∃', '∀'];
+	const operators = ['←', '→', '∧', '∨', '⊻', '¬', '⇒', '⇔', '=', '≠', '≤', '≥', '<', '>'];
 	const matchAny = (
 		stream: CodeMirror.StringStream,
 		array: string[],
@@ -455,7 +455,7 @@ type Table = {
 
 
 type Props = {
-	mode: 'relalg' | 'bagalg' | 'text/x-mysql' | 'trc',
+	mode: 'relalg' | 'bagalg' | 'trc' | 'text/x-mysql',
 
 	/** sync, should throw exception on error */
 	execFunction(self: EditorBase, query: string, offset: CodeMirror.Position): { result: JSX.Element },
@@ -464,7 +464,7 @@ type Props = {
 	/** */
 	getHintsFunction(): string[],
 	
-	tab: 'relalg' | 'bagalg' | 'sql' | 'trc' | 'group',
+	tab: 'relalg' | 'bagalg' | 'trc' | 'sql' | 'group',
 
 	enableInlineRelationEditor: boolean,
 

@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 
 const NUM_TREE_LABEL_COLORS = 6;
-const KEYWORDS_TRC = ['in', 'and', 'or', 'xor', 'implies', 'not', 'exists', 'for all'];
+const KEYWORDS_TRC = ['in', 'and', 'or', 'xor', 'not', 'implies', 'iff', 'exists', 'for all'];
 
 interface Props {
 	group: Group,
@@ -73,9 +73,11 @@ export class EditorTrc extends React.Component<Props, State> {
 					return {
 						result: (
 							<Result
+								editorRef={this.editorBase!}
 								root={root}
 								numTreeLabelColors={NUM_TREE_LABEL_COLORS}
 								execTime={self.state.execTime == null ? 0 : self.state.execTime}
+								doEliminateDuplicates={true}
 							/>
 						),
 					};
@@ -170,16 +172,22 @@ export class EditorTrc extends React.Component<Props, State> {
 								onClick: item => this.replaceText(item, '⊻'),
 							},
 							{
+								label: '¬',
+								tooltipTitle: 'calc.editors.trc.toolbar.not',
+								tooltip: 'calc.editors.trc.toolbar.not-content',
+								onClick: item => this.replaceText(item, '¬'),
+							},
+							{
 								label: '⇒',
 								tooltipTitle: 'calc.editors.trc.toolbar.implies',
 								tooltip: 'calc.editors.trc.toolbar.implies-content',
 								onClick: item => this.replaceText(item, '⇒'),
 							},
 							{
-								label: '¬',
-								tooltipTitle: 'calc.editors.trc.toolbar.not',
-								tooltip: 'calc.editors.trc.toolbar.not-content',
-								onClick: item => this.replaceText(item, '¬'),
+								label: '⇔',
+								tooltipTitle: 'calc.editors.trc.toolbar.equivalence',
+								tooltip: 'calc.editors.trc.toolbar.equivalence-content',
+								onClick: item => this.replaceText(item, '⇔'),
 							},
 						]
 					},

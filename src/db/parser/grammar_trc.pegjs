@@ -112,8 +112,8 @@ LogicalExpression
     }
 
 AtomicFormula
-  = Predicate
-  / RelationPredicate
+  = RelationPredicate
+  / Predicate
 
 BaseFormula 
   =	AtomicFormula 
@@ -163,16 +163,11 @@ LogicOp
   / or
   / xor
   / implication
+  / equivalence
 
-String
-  = [a-zA-Z_][a-zA-Z0-9_]*
-    {
-      return text();
-    }
+Relation = relationName
 
-Relation = String
-
-Variable = String
+Variable = variableName
 
 existentialQuantifier
   = 'exists'i
@@ -211,8 +206,14 @@ implication 'logical IMPLICATION'
       return 'implies';
     }
 
+equivalence 'logical BICONDITIONAL'
+  = ('iff'i / '<=>' / '⇔')
+    {
+      return 'iff';
+    }
+
 not 'logical NOT'
-= _ ('not' / '!' / '¬') _
+  = _ ('not' / '!' / '¬') _
 
 // comparisons
 comparisonOperators
@@ -747,6 +748,12 @@ expr_precedence0
 		return e;
 	}
 
+variableName 'variableName'
+= !(RESERVED_KEYWORD !([0-9a-zA-Z_]+)) a:$([a-zA-Z]+ $[0-9a-zA-Z_]*)
+	{
+		return a;
+	}
+
 relationName 'relationName'
 = !(RESERVED_KEYWORD !([0-9a-zA-Z_]+)) a:$([a-zA-Z]+ $[0-9a-zA-Z_]*)
 	{
@@ -771,7 +778,7 @@ columnName
 			relAlias: relAlias
 		};
 	}
-/ relAlias:(relationName '.')? '[' index:$[0-9]+ ']'
+/ relAlias:(relationName '.')? '[' _ index:$[0-9]+ _ ']'
 	{
 		if(relAlias != null)
 			relAlias = relAlias[0];
@@ -836,7 +843,10 @@ listOfColumns
 		return t;
 	}
 
-RESERVED_KEYWORD = RESERVED_KEYWORD_RELALG
+RESERVED_KEYWORD
+= RESERVED_KEYWORD_RELALG
+/ RESERVED_KEYWORDS_TRC
+/ RESERVED_KEYWORDS_FUNCTIONS
 
 RESERVED_KEYWORD_RELALG
 = 'pi'i
@@ -846,18 +856,18 @@ RESERVED_KEYWORD_RELALG
 / 'gamma'i
 / 'and'i
 / 'or'i
+/ 'xor'i
 / 'not'i
 / 'union'i
 / 'intersect'i
 / 'except'i
 / 'join'i
 / 'cross'i
-/ 'join'i
 / 'left'i
 / 'right'i
 / 'outer'i
 / 'full'i
-/ 'natual'i
+/ 'natural'i
 / 'semi'i
 / 'anti'i
 / 'desc'i
@@ -870,3 +880,64 @@ RESERVED_KEYWORD_RELALG
 / 'true'i
 / 'false'i
 / 'null'i
+
+RESERVED_KEYWORDS_TRC
+= 'in'i
+/ 'and'i
+/ 'or'i
+/ 'xor'i
+/ 'not'i
+/ 'implies'i
+/ 'iff'i
+/ 'exists'i
+/ 'for all'i
+/ 'case'i
+/ 'when'i
+/ 'then'i
+/ 'else'i
+/ 'end'i
+/ 'true'i
+/ 'false'i
+/ 'null'i
+
+RESERVED_KEYWORDS_FUNCTIONS
+= 'coalesce'i
+/ 'concat'i
+/ 'upper'i
+/ 'ucase'i
+/ 'lower'i
+/ 'lcase'i
+/ 'length'i
+/ 'strlen'i
+/ 'like'i
+/ 'ilike'i
+/ 'rlike'i
+/ 'regexp'i
+/ 'repeat'i
+/ 'replace'i
+/ 'reverse'i
+/ 'rand'i
+/ 'rownum'i
+/ 'add'i
+/ 'sub'i
+/ 'mul'i
+/ 'div'i
+/ 'mod'i
+/ 'abs'i
+/ 'round'i
+/ 'floor'i
+/ 'ceil'i
+/ 'date'i
+/ 'adddate'i
+/ 'subdate'i
+/ 'now'i
+/ 'transaction_timestamp'i
+/ 'statement_timestamp'i
+/ 'clock_timestamp'i
+/ 'year'i
+/ 'month'i
+/ 'day'i
+/ 'dayofmonth'i
+/ 'hour'i
+/ 'minute'i
+/ 'second'i

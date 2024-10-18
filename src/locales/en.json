@@ -446,6 +446,8 @@
     "calc.editors.trc.toolbar.xor-content": "F₁ <b class=\"math\">\u22bb</b> F₂<br>F₁ <b>xor</b> F₂",
     "calc.editors.trc.toolbar.implies": "implication",
     "calc.editors.trc.toolbar.implies-content": "F₁ <b>⇒</b> F₂<br>F₁ <b>=></b> F₂<br>F₁ <b>implies</b> F₂",
+    "calc.editors.trc.toolbar.equivalence": "equivalence",
+    "calc.editors.trc.toolbar.equivalence-content": "F₁ <b>⇔</b> F₂<br>F₁ <b><=></b> F₂<br>F₁ <b>iff</b> F₂",
     "calc.editors.trc.toolbar.not": "not",
     "calc.editors.trc.toolbar.not-content": "<b>¬</b>(F)<br><b>!</b>(F)<br><b>not</b>(F)",
     "calc.editors.trc.toolbar.equals": "equals",
