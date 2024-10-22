@@ -369,7 +369,6 @@ declare module relalgAst {
 		| 'minus'
 		| 'not'
 		| 'coalesce'
-		| 'concat'
 		| 'adddate'
 		| 'subdate'
 		| 'upper'
