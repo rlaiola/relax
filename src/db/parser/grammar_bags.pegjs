@@ -266,6 +266,16 @@ columnName
 		};
 	}
 
+columnAsterisk
+= relAlias:(relationName '.')? '*'
+	{
+		return {
+			type: 'column',
+			name: '*',
+			relAlias: relAlias ? relAlias[0] : null
+		};
+	}
+
 // operator names:
 delta
 = _ o:('∂' { return getNodeInfo('delta'); }) _
@@ -447,6 +457,11 @@ namedColumnExpr
 / a:columnName
 	{
 		return a;
+	}
+/ col:columnAsterisk
+	{
+		col.alias = null;
+		return col;
 	}
 
 // list of columns (kd.id, kd.name, test) e.g. for the projection
