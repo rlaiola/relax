@@ -57,7 +57,11 @@ export class RaTree extends React.Component<Props> {
 				// Split relation aliases into array
 				const variableNames = n.hasMetaData('fromVariable') ? n.getMetaData('fromVariable')!.split(" ") : [];
 
-				if (variableNames.length === 1 && n._functionName !== variableNames[0]) {
+				if (variableNames.length === 1 && (
+					(n instanceof RANodeUnary && n.getChild().getMetaData('fromVariable') !== variableNames[0]) ||
+					(n instanceof RANodeBinary && n.getChild().getMetaData('fromVariable') !== variableNames[0]
+											   && n.getChild2().getMetaData('fromVariable') !== variableNames[0])
+					)) {
 					const variableName = variableNames[0];
 					if (usedVariableNames.has(variableName) === false) {
 						usedVariableNames.set(variableName, usedVariables++);
