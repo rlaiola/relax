@@ -6,7 +6,7 @@
 
 import { Popover } from 'calc2/components/popover';
 import classNames from 'classnames';
-import { RANode, RANodeBinary, RANodeUnary } from 'db/exec/RANode';
+import { RANode, RANodeNullary, RANodeUnary, RANodeBinary } from 'db/exec/RANode';
 import * as React from 'react';
 import { t } from 'calc2/i18n';
 
@@ -58,7 +58,12 @@ export class RaTree extends React.Component<Props> {
 				const variableNames = n.hasMetaData('fromVariable') ? n.getMetaData('fromVariable')!.split(" ") : [];
 
 				if (variableNames.length === 1 && (
+					// If the relation alias is not the same as the function name, add the relation alias to the tree
+					(n instanceof RANodeNullary && n._functionName !== variableNames[0]) ||
+					// If the relation alias is not the same as the child's relation alias, add the relation alias to the tree
 					(n instanceof RANodeUnary && n.getChild().getMetaData('fromVariable') !== variableNames[0]) ||
+					// If the relation alias is not the same as the child's relation alias or the child2's relation alias,
+					// add the relation alias to the tree
 					(n instanceof RANodeBinary && n.getChild().getMetaData('fromVariable') !== variableNames[0]
 											   && n.getChild2().getMetaData('fromVariable') !== variableNames[0])
 					)) {
