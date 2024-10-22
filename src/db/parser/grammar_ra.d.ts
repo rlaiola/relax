@@ -164,17 +164,6 @@ declare module relalgAst {
 		codeInfo: CodeInfo,
 	}
 
-	interface eliminateDuplicates {
-		type: 'eliminateDuplicates',
-		child: relalgOperation,
-		child2?: undefined,
-		assignments?: undefined,
-
-		wrappedInParentheses?: boolean,
-		metaData?: { [key: string]: any },
-		codeInfo: CodeInfo,
-	}
-
 	interface colAssignment {
 		type: 'colAssignment',
 		src: columnName,
