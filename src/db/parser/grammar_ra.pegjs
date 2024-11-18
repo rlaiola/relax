@@ -1796,7 +1796,7 @@ RESERVED_KEYWORD_RELALG
 / 'right'i
 / 'outer'i
 / 'full'i
-/ 'natual'i
+/ 'natural'i
 / 'semi'i
 / 'anti'i
 / 'desc'i
