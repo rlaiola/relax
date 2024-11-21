@@ -1,4 +1,4 @@
-group: UFES - Bank database
+group: UFES - Banking database
 description: Laboratory material [Database System Concepts, Fourth Edition - Avi Silberschatz, Henry F. Korth, S. Sudarshan] (https://www.db-book.com/db4/) Courtesy: Gary Lindstrom. Credits: Rodrigo Laiola Guimaraes
 category@en:Federal University of Espírito Santo
 
@@ -94,7 +94,7 @@ borrower = {
   'Curry',    'L-93'
 }
 
-group: UFES - Car database
+group: UFES - Autos database
 description: Laboratory material [Database Systems Course, UFES] (http://www.informatica.ufes.br) Courtesy (Schema): Marcos V. Villas (PUC-Rio). Credits: Rodrigo Laiola Guimaraes
 category@en: Federal University of Espírito Santo
 
@@ -445,7 +445,7 @@ prereq = {
   EE-181,  PHY-101
 }
 
-group: UFES - Formula 1 database
+group: UFES - F1 database
 description: Laboratory material [Database Systems Course, UFES] (http://www.informatica.ufes.br) Courtesy: Vopani ([Kaggle](https://www.kaggle.com/rohanrao/formula-1-world-championship-1950-2020)). Credits: Rodrigo Laiola Guimaraes
 category@en: Federal University of Espírito Santo
 
