@@ -1025,7 +1025,7 @@ export class Help extends React.Component<Props> {
 										</tr>
 										<tr>
 											<th>alternative syntax</th>
-											<td>pi</td>
+											<td>sigma</td>
 										</tr>
 										<tr>
 											<th>example</th>
