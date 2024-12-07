@@ -245,14 +245,21 @@ export function loadStaticGroups() {
 		source: GroupSourceType,
 		id: string,
 	}[] = [
-			{
-				maintainerGroup: t('calc.maintainer-groups.ufes'),
-				maintainer: '<a href="https://github.com/rlaiola">Rodrigo Laiola Guimaraes</a>',
+		{
+			maintainerGroup: t('calc.maintainer-groups.savben'),
+			maintainer: '<a href="https://github.com/gionata">Gionata Massi</a>',
+			
+			source: 'local',
+			id: 'sb',
+		},
+		{
+			maintainerGroup: t('calc.maintainer-groups.ufes'),
+			maintainer: '<a href="https://github.com/rlaiola">Rodrigo Laiola Guimaraes</a>',
 
-				source: 'local',
-				id: 'ufes',
-			},
-			{
+			source: 'local',
+			id: 'ufes',
+		},
+		{
 				maintainerGroup: t('calc.maintainer-groups.misc'),
 				maintainer: '',
 
