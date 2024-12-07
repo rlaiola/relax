@@ -100,6 +100,7 @@ export const langEN = {
 	'calc.maintainer-groups.misc': 'Miscellaneous',
 	'calc.maintainer-groups.temp': 'Temporary',
 	'calc.maintainer-groups.uibk': 'University of Innsbruck',
+	'calc.maintainer-groups.ufes': 'Federal University of Espírito Santo',
 	'calc.editors.button-history': 'history',
 	'calc.editors.insert-relation-title': 'Insert',
 	'calc.editors.insert-relation-tooltip': 'Insert relation or column names',
@@ -130,6 +131,10 @@ export const langEN = {
 	'calc.editors.ra.button-download-csv': 'Result (CSV)',
 	'calc.editors.ra.button-download-jpg': 'Result (JPG)',
 	'calc.editors.ra.button-download-query': 'Query',
+	'calc.editors.ra.button-zoom-in': 'Zoom in',
+	'calc.editors.ra.button-zoom-out': 'Zoom out',
+	'calc.editors.ra.button-zoom-reset': 'Reset zoom',
+	'calc.editors.ra.button-zoom-center': 'Zoom to fit',
 	'calc.editors.ra.toolbar.duplicate-elimination': 'duplicate elimination',
   'calc.editors.ra.toolbar.duplicate-elimination-content': [
     '<b class="math">∂</b> <b>(</b> A <b>)</b>',
