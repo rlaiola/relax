@@ -2735,6 +2735,70 @@ export class Help extends React.Component<Props> {
 									href="#relalg-valueexpr">value expression</a></p>
 
 
+							<h2 id="trc-reference">Reference - TRC</h2>
+
+							<h3 id="trc-syntax">General syntax</h3>
+							<div>
+								<h4 id="trc-expression">TRC expression</h4>
+								<p>A TRC expression has the general form: </p>
+								<code className="example trc" >&#123; t1..tn | formula(t1..tn) &#125;</code>
+								<p>First you define the tuple variables that will be used, then you write a formula involving those variables</p>
+							</div>
+
+							<div>
+								<h4 id="trc-relation-predicate">Relation Predicate</h4>
+								<p>
+									For every new variable that you introduce, it's necessary to define its boundaries.
+									Meaning you have to define which relation that variable belongs to. There are 3 ways to do so in this TRC implementation:
+								</p>
+								<div className="scroll-x">
+									<table className="table table-nonfluid">
+										<tbody>
+											<tr>
+											<th>first syntax</th>
+												<td>Relation(variable)</td>
+											</tr>
+											<tr>
+												<th>second syntax</th>
+											<td>variable in Relation</td>
+											</tr>
+											<tr>
+												<th>third syntax</th>
+											<td>variable ∈ Relation</td>
+											</tr>
+											<tr>
+											<th>example</th>
+												<td>
+													<code className="trc">&#123; t | R(t) &#125;</code>
+													<br />
+													<code className="trc">&#123; t | t in R &#125;</code>
+													<br />
+													<code className="trc">&#123; t | t ∈ R &#125;</code>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+
+							<div>
+								<h4 id="trc-projection">Projection</h4>
+								<p>If you want to project only some of the fields fields from a tuple variable, the . operator can be used, as follows:</p>
+								<code className="example trc">&#123; t.a..tn | t ∈ R &#125;</code>
+								<p>In this case, the columns t.a..t.n will be projected and will appear on the final result set.</p>
+							</div>
+
+							<div>
+								<h4 id="trc-renaming">Renaming</h4>
+								<p>It's also possible to rename the columns after projecting, the syntax adopted here is exactly the same as the RA one:</p>
+								<code className="example trc">&#123; t.a&#8594;x | t ∈ R &#125;</code>
+								<p>In this case, the <b>a</b> column will be renamed to <b>x</b></p>
+							</div>
+
+
+							<h3 id="trc-operations">Operations</h3>
+
+							<h3 id="trc-quantifiers">Quantifiers</h3>
 
 
 							<h2 id="license-help">Licence</h2>
