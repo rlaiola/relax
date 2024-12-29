@@ -2781,6 +2781,74 @@ export class Help extends React.Component<Props> {
 								</div>
 							</div>
 
+							<h3 id="trc-alt-syntax">Alternative plain text notation</h3>
+							<p>
+								The TRC implementation allows for plain text representation of queries for more convenient use
+								while typing.
+							</p>
+
+							<p>In the following table you can see a list of all supported substitutions:</p>
+							
+							<div className="scroll-x"><table className="table table-condensed">
+								<thead>
+									<tr>
+										<th>classNameical notation</th>
+										<th>alternative notation</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td className="math">&and;</td>
+										<td>and</td>
+									</tr>
+									<tr>
+										<td className="math">&or;</td>
+										<td>or</td>
+									</tr>
+									<tr>
+										<td className="math">⊕</td>
+										<td>xor</td>
+									</tr>
+									<tr>
+										<td className="math">⊻</td>
+										<td>xor</td>
+									</tr>
+									<tr>
+										<td className="math">&not;</td>
+										<td>not</td>
+									</tr>
+									<tr>
+										<td className="math">&not;</td>
+										<td>!</td>
+									</tr>
+									<tr>
+										<td className="math">⇒</td>
+										<td>implies</td>
+									</tr>
+									<tr>
+										<td className="math">⇒</td>
+										<td>=&gt;</td>
+									</tr>
+									<tr>
+										<td className="math">∃</td>
+										<td>exists</td>
+									</tr>
+									<tr>
+										<td className="math">∀</td>
+										<td>for all</td>
+									</tr>
+									<tr>
+										<td className="math">⇔</td>
+										<td>iff</td>
+									</tr>
+									<tr>
+										<td className="math">⇔</td>
+										<td>&lt;=&gt;</td>
+									</tr>
+								</tbody>
+							</table>
+							</div>
+
 							<div>
 								<h4 id="trc-projection">Projection</h4>
 								<p>If you want to project only some of the fields fields from a tuple variable, the . operator can be used, as follows:</p>
@@ -2794,7 +2862,6 @@ export class Help extends React.Component<Props> {
 								<code className="example trc">&#123; t.a&#8594;x | t ∈ R &#125;</code>
 								<p>In this case, the <b>a</b> column will be renamed to <b>x</b></p>
 							</div>
-
 
 							<h3 id="trc-operations">Operations</h3>
 
