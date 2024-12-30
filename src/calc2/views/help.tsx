@@ -2781,6 +2781,20 @@ export class Help extends React.Component<Props> {
 								</div>
 							</div>
 
+							<div>
+								<h4 id="trc-projection">Projection</h4>
+								<p>If you want to project only some of the fields fields from a tuple variable, the . operator can be used, as follows:</p>
+								<code className="example trc">&#123; t.a..tn | t ∈ R &#125;</code>
+								<p>In this case, the columns t.a..t.n will be projected and will appear on the final result set.</p>
+							</div>
+
+							<div>
+								<h4 id="trc-renaming">Renaming</h4>
+								<p>It's also possible to rename the columns after projecting, the syntax adopted here is exactly the same as the RA one:</p>
+								<code className="example trc">&#123; t.a&#8594;x | t ∈ R &#125;</code>
+								<p>In this case, the <b>a</b> column will be renamed to <b>x</b></p>
+							</div>
+
 							<h3 id="trc-alt-syntax">Alternative plain text notation</h3>
 							<p>
 								The TRC implementation allows for plain text representation of queries for more convenient use
@@ -2849,24 +2863,101 @@ export class Help extends React.Component<Props> {
 							</table>
 							</div>
 
+							<h3 id="trc-operations">Logical operations</h3>
+							<p>
+								Logical operations are the building blocks of TRC expressions, they specifiy under which 
+								conditions a tuple will be included in the result set.
+							</p>
+							<p>The logical operations supported by this implementation are:</p>
+
 							<div>
-								<h4 id="trc-projection">Projection</h4>
-								<p>If you want to project only some of the fields fields from a tuple variable, the . operator can be used, as follows:</p>
-								<code className="example trc">&#123; t.a..tn | t ∈ R &#125;</code>
-								<p>In this case, the columns t.a..t.n will be projected and will appear on the final result set.</p>
+								<h4 id="trc-and">and</h4>
+								<p>
+									The logical <strong>and(&and;)</strong> operator ensures a tuple will appear on the final result set 
+									if both conditions hold true.
+								</p>
+								<code className="example trc" >&#123; t | R(t) ∧ t.a &gt; 3 ∧ t.a &lt; 6 &#125;</code>
+								<p>
+									In this example, only the tuples where <strong>a</strong> field is greater than 3 but less than 6 will be included
+									in the final result set.
+								</p>
 							</div>
 
 							<div>
-								<h4 id="trc-renaming">Renaming</h4>
-								<p>It's also possible to rename the columns after projecting, the syntax adopted here is exactly the same as the RA one:</p>
-								<code className="example trc">&#123; t.a&#8594;x | t ∈ R &#125;</code>
-								<p>In this case, the <b>a</b> column will be renamed to <b>x</b></p>
+								<h4 id="trc-or">or</h4>
+								<p>
+									The logical <strong>or(&or;)</strong> operator ensures a tuple will appear on the final result set 
+									if any of the conditions hold true.
+								</p>
+								<code className="example trc" >&#123; t | R(t) ∧ t.a &gt; 3 &or; t.a = 1 &#125;</code>
+								<p>
+									In this example, tuples where <strong>a</strong> field is greater than 3 or 1 exactly 1 will
+									appear in the result set.
+								</p>
 							</div>
 
-							<h3 id="trc-operations">Operations</h3>
+							<div>
+								<h4 id="trc-xor">xor</h4>
+								<p>
+									The logical <strong>xor(⊻)</strong> operator ensures a tuple will appear on the final result set 
+									if one, and only one of the conditions holds true at a time.
+								</p>
+								<code className="example trc" >&#123; t | R(t) ∧ t.a &lt; 3 ⊻ t.a &lt; 5 &#125;</code>
+								<p>
+									In this example, tuples where <strong>a</strong> field is less than 5 but not less than 3
+									will show up on the result set.
+								</p>
+							</div>
+
+							<div>
+								<h4 id="trc-not">not</h4>
+								<p>
+									The logical <strong>not(&not;)</strong> operator is used to negate the meaning of an expression, meaning the
+									tuples that will appear on the result set are the ones that resolve to false.
+								</p>
+								<code className="example trc" >&#123; t | R(t) ∧ ¬(t.a &lt; 3) &#125;</code>
+								<p>
+									In this example, tuples where <strong>a</strong> field is not less than 3 will
+									appear in the result set.
+								</p>
+							</div>
+
+							<div>
+								<h4 id="trc-implication">implication</h4>
+								<p>
+									The logical <strong>implies(⇒)</strong> operator ensures that, given that a certain condition
+									is true, the implied condition should also be true.
+								</p>
+								<code className="example trc" >&#123; t | R(t) ∧ t.a &lt; 7 ⇒ t.b = 'a' &#125;</code>
+								<p>
+									In this example, if tuples where <strong>a</strong> field are less than 7, that means
+									the <strong>b</strong> field of that tuple must be 'a' for it to appear on the final result set.
+								</p>
+							</div>
+
+							<div>
+								<h4 id="trc-iff">biconditional</h4>
+								<p>
+									The logical <strong>iff(⇔)</strong> operator is used to ensure equivalence, meaning if one of the conditions
+									is true, the other one is also true. If one of them is false, the other one must also be false.
+								</p>
+								<code className="example trc" >&#123; t | t(R) ∧ t.a &gt; 4 ⇔ t.b = 'a' &#125;</code>
+								<p>
+									In this example both, tuples where <strong>a</strong> field is greater than 4 
+									and where <strong>b</strong> field is <strong>'a'</strong> and the ones
+									where <strong>a</strong> is not greater than 4 and <strong>b</strong> is 
+									not <strong>'a'</strong> will appear in the result set.
+								</p>
+							</div>
 
 							<h3 id="trc-quantifiers">Quantifiers</h3>
+							<div>
+								<h4 id="trc-exists">existential</h4>
+							</div>
 
+							<div>
+								<h4 id="trc-forall">universal</h4>
+							</div>
 
 							<h2 id="license-help">Licence</h2>
 							<p>
