@@ -2951,12 +2951,39 @@ export class Help extends React.Component<Props> {
 							</div>
 
 							<h3 id="trc-quantifiers">Quantifiers</h3>
+							<p>
+								Quantifiers are another building block of TRC queries, they're used to express logical quantification, 
+								namely existential and universal quantification.
+							</p>
+
 							<div>
 								<h4 id="trc-exists">existential</h4>
+								<p>
+									The <strong>exists(∃)</strong> operator is used to define a new scope where there should be at least one 
+									tuple that satisfies a certain condition
+								</p>
+								<code className="example trc" >&#123; t | R(t) ∧ ∃s(S(s) ∧ t.a &gt; 3 ∧ s.d &gt; 300) &#125;</code>
+
+								<p>
+									In this example, besides t belongging to the <strong>R</strong> relation 
+									and the <strong>a</strong> field being greater than 3, there should also be a tuple
+									in the relation <strong>S</strong> where 
+									its <strong>s</strong> field is greater than 3.
+								</p>
 							</div>
 
 							<div>
 								<h4 id="trc-forall">universal</h4>
+								<p>
+									The <strong>for all(∀)</strong> operator is used to define a new scope where a certain condition
+									should be true for all elements of a given relation.
+								</p>
+								<code className="example trc" >&#123; t | R(t) and ∀s(S(s) and s.d &gt; 300) &#125;</code>
+
+								<p>
+									In this example, besides <strong>t</strong> belongging to the <strong>R</strong> relation,
+									all tuples from the <strong>S</strong> relation should also be greater than 300. 
+								</p>
 							</div>
 
 							<h2 id="license-help">Licence</h2>
