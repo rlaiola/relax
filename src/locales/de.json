@@ -477,7 +477,6 @@
     "calc.editors.trc.toolbar.autoreplace-operators.none": "kein Ersatz",
     "calc.editors.trc.toolbar.autoreplace-operators.plain2math": "exists => ∃",
     "calc.editors.trc.toolbar.autoreplace-operators.math2plain": "∃ => exists",
-    "calc.editors.trc.toolbar.empty": "empty set",
     "calc.result.modal.title": "Ergebnis",
     "calc.result.modal.close": "Schließen",
     "calc.editors.ra.inline-editor.title": "Relation Editor",
