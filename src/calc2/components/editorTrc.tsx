@@ -60,12 +60,7 @@ export class EditorTrc extends React.Component<Props, State> {
 				execFunction={(self: EditorBase, text: string, offset) => {
 					self.historyAddEntry(text);
 
-					console.log('TEXT SQL: ', text)
-
 					const ast = parseTRCSelect(text);
-
-					console.log('PARSED TRC AST: ', ast)
-
 					const root = relalgFromTRCAstRoot(ast, relations)
 
 					root.check()
