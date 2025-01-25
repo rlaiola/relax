@@ -26,7 +26,7 @@ To get started, follow these steps:
 * Clone the repo
 * Checkout the `development` branch
 * Execute `yarn install` to install all dependencies
-* Use `yarn build` to create release build in the `dist` folder
+* Use `NODE_OPTIONS=--openssl-legacy-provider yarn build` to create release build in the `dist` folder
 * Copy the content of your `dist` folder somewhere outside of the repository
 * Checkout the branch `gh-pages`
 * Remove everything there and paste content of the former `dist` folder
