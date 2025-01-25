@@ -357,3 +357,46 @@ film_categoria = {film_id,categoria_id
 	20,12
 	21,1
 }
+
+group: SB - Corsi - by Hugh Darwen
+category@en: IIS Savoia Benincasa
+description[[Schema dei dati tratti da Hugh Darwen, "An Introduction to Relational Database Theory". 2014 ]]
+
+iscrizione={studentId:string,name:string,courseId:string
+'S1','Anne','C1'
+'S1','Anne','C2'
+'S2','Boris','C1'
+'S3','Cindy','C3'
+'S4','Devinder','C1'
+}
+
+si_chiama={studentId:string,name:string
+'S1','Anne'
+'S2','Boris'
+'S3','Cindy'
+'S4','Devinder'
+'S5', 'Boris'
+}
+
+e_iscritto_a={studentId:string,courseId:string
+'S1','C1'
+'S1','C2'
+'S2','C1'
+'S3','C3'
+'S4','C1'
+}
+
+corso={courseId:string,title:string
+'C1','Database'
+'C2','HCI'
+'C3','Op Systems'
+'C4','Programming'
+}
+
+voto_esame={studentId:string,courseId:string,mark:number
+'S1','C1',85
+'S1','C2',49
+'S2','C1',49
+'S3','C3',66
+'S4','C1',93
+}
