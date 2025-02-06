@@ -47,6 +47,7 @@
 	"db.messages.translate.error-relation-predicate-not-found": "변수에 대한 관계 술어가 정의되어야 합니다 \"{{variable}}\"",
 	"db.messages.translate.error-relation-predicate-defined-twice": "변수에 대해 관계 술어가 두 번 정의되었습니다 \"{{variable}}\" ",
 	"db.messages.translate.error-trc-unsafe-formula": "관계 술어를 부정할 수 없습니다 \"{{relation}}({{variable}})\" (안전하지 않은 공식) ",
+	"db.messages.translate.error-trc-unbound-variable": "지원되지 않는 변수입니다",
 	"editor.codemirror-placeholder": "\ucffc\ub9ac\ub294 \uc774\uacf3\uc5d0 \ud45c\uc2dc\ub41c\ub2e4 ...\n\n\ud0a4\ubcf4\ub4dc \ub2e8\ucd95\ud0a4:\n\tstatement \uc2e4\ud589:    [CTRL]+[RETURN]\n\tselection \uc2e4\ud589:    [CTRL]+[SHIFT]+[RETURN]\n\t\uc790\ub3d9 \uc644\uc131:         [CTRL]+[SPACE]",
 	"editor.alert-message-headers.success": "\uc131\uacf5",
 	"editor.alert-message-headers.info": "\uc815\ubcf4",

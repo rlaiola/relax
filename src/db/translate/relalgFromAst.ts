@@ -52,6 +52,7 @@ function parseJoinCondition(condition: relalgAst.booleanExpr | string[] | null):
 	}
 }
 
+
 // translate a TRC-AST to RA
 export function relalgFromTRCAstRoot(astRoot: trcAst.TRC_Expr | null, relations: { [key: string]: Relation }): RANode {
 	type DataType = 'string' | 'boolean' | 'number' | 'null' | 'date'
@@ -67,6 +68,42 @@ export function relalgFromTRCAstRoot(astRoot: trcAst.TRC_Expr | null, relations:
 
 	function makeBooleanExpr(func: relalgAst.ValueExprFunction, args: any[]) {
 		return makeValueExpr('boolean', func, args)
+	}
+
+	function checkUnboundRelationPredicates(root: any) {
+		const allRelPredicates = getAllRelationPredicates(root)
+		const tupleVariables = root?.variables
+		const hasUnboundVariable = allRelPredicates.length > tupleVariables.length
+
+		if (hasUnboundVariable) {
+			throw new ExecutionError(i18n.t('db.messages.translate.error-trc-unbound-variable'));
+		}
+	}
+
+	function getAllRelationPredicates(root: any) {
+		let relPreds: any = []
+
+		function rec(root: any) {
+			switch (root.type) {
+				case 'TRC_Expr': return rec(root.formula)
+				case 'RelationPredicate': {
+					relPreds.push(root)
+					return null
+				}
+				case 'Negation': return rec(root.formula)
+				case 'QuantifiedExpression': return rec(root.formula)
+				case 'LogicalExpression': {
+					rec(root.left)
+					rec(root.right)
+					return
+				}
+				default: return null
+			}
+		}
+		
+		rec(root)
+
+		return relPreds
 	}
 
 	function getRelationPredicate(root: any, tupleVar: string, scopeChanges = 0): trcAst.RelationPredicate | null {
@@ -174,6 +211,10 @@ export function relalgFromTRCAstRoot(astRoot: trcAst.TRC_Expr | null, relations:
 	}
 
 	function rec(nRaw: trcAst.TRC_Expr | any, baseRel: RANode | null = null, negated: boolean = false): any {
+		if (nRaw.type === 'TRC_Expr') {
+			checkUnboundRelationPredicates(nRaw)
+		}
+
 		switch (nRaw.type) {
 			case 'TRC_Expr': {
 				const projections = nRaw.projections.flatMap((e: any) => {
