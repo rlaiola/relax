@@ -2737,12 +2737,18 @@ export class Help extends React.Component<Props> {
 
 							<h2 id="trc-reference">Reference - TRC</h2>
 
+							<p>In contrast to Relational Algebra, which is procedural, Tuple Relational Calculus (TRC) is a declarative
+								language, meaning that it tells what to retrieve instead of the steps on how to do it. In this context,
+								a TRC expression is an unified logical formula that states the conditions for the data to be 
+								retrieved. The goal of the TRC extension is to make possible learning TRC and visualize how
+								it relates to relational algebra.</p>
+
 							<h3 id="trc-syntax">General syntax</h3>
 							<div>
 								<h4 id="trc-expression">TRC expression</h4>
 								<p>A TRC expression has the general form: </p>
-								<code className="example trc" >&#123; t1..tn | formula(t1..tn) &#125;</code>
-								<p>First you define the tuple variables that will be used, then you write a formula involving those variables</p>
+								<code className="example trc" >&#123; t1, ..., tn | formula(t1, ..., tn) &#125;</code>
+								<p>First you define the tuple variables that will be used, then you write a formula involving those variables.</p>
 							</div>
 
 							<div>
@@ -2784,15 +2790,137 @@ export class Help extends React.Component<Props> {
 							<div>
 								<h4 id="trc-projection">Projection</h4>
 								<p>If you want to project only some of the fields fields from a tuple variable, the . operator can be used, as follows:</p>
-								<code className="example trc">&#123; t.a..tn | t ∈ R &#125;</code>
-								<p>In this case, the columns t.a..t.n will be projected and will appear on the final result set.</p>
+								<code className="example trc">&#123; t.a, ..., t.n | t ∈ R &#125;</code>
+								<p>In this case, the columns t.a, ..., t.n will be projected and will appear on the final result set.</p>
 							</div>
 
 							<div>
 								<h4 id="trc-renaming">Renaming</h4>
 								<p>It's also possible to rename the columns after projecting, the syntax adopted here is exactly the same as the RA one:</p>
 								<code className="example trc">&#123; t.a&#8594;x | t ∈ R &#125;</code>
-								<p>In this case, the <b>a</b> column will be renamed to <b>x</b></p>
+								<p>In this case, the column <b>a</b> will be renamed to <b>x</b>.</p>
+							</div>
+
+							<h3 id="trc-operations">Logical operations</h3>
+							<p>
+								Logical operations are the building blocks of TRC expressions, they specifiy under which 
+								conditions a tuple will be included in the result set.
+							</p>
+							<p>The logical operations supported by this implementation are:</p>
+
+							<div>
+								<h4 id="trc-and">and</h4>
+								<p>
+									The logical and operator (<strong>∧</strong>) ensures a tuple will appear on the resulting relation 
+									if both conditions hold true.
+								</p>
+								<code className="example trc" >&#123; t | R(t) ∧ t.a &gt; 3 ∧ t.a &lt; 6 &#125;</code>
+								<p>
+									In this example, only the tuples where column <strong>a</strong> is greater than 3 but less than 6.
+								</p>
+							</div>
+
+							<div>
+								<h4 id="trc-or">or</h4>
+								<p>
+									The logical or operator (<strong>∨</strong>) ensures a tuple will appear on the resulting relation 
+									if any of the conditions hold true.
+								</p>
+								<code className="example trc" >&#123; t | R(t) ∧ (t.a &gt; 3 &or; t.a = 1) &#125;</code>
+								<p>
+									In this example, tuples where the column <strong>a</strong> is greater than 3 or exactly equal to 1 will
+									appear in the result.
+								</p>
+							</div>
+
+							<div>
+								<h4 id="trc-xor">xor</h4>
+								<p>
+									The logical xor operator (<strong>⊻</strong>) ensures a tuple will appear on the resulting relation
+									if one, and only one of the conditions holds true at a time.
+								</p>
+								<code className="example trc" >&#123; t | R(t) ∧ (t.a &lt; 3 ⊻ t.a &lt; 5) &#125;</code>
+								<p>
+									In this example, tuples where the column <strong>a</strong> is less than 5 but not less than 3
+									will show up.
+								</p>
+							</div>
+
+							<div>
+								<h4 id="trc-not">not</h4>
+								<p>
+									The logical not operator (<strong>¬</strong>) is used to negate an expression, meaning the
+									tuples that will appear on the result are the ones that resolve the expression to false.
+								</p>
+								<code className="example trc" >&#123; t | R(t) ∧ ¬(t.a &lt; 3) &#125;</code>
+								<p>
+									In this example, tuples where the column <strong>a</strong> is not less than 3 will
+									appear in resulting relation.
+								</p>
+							</div>
+
+							<div>
+								<h4 id="trc-implication">implication</h4>
+								<p>
+									The logical implication operator (<strong>⇒</strong>) ensures that, given that a certain condition
+									is true, the implied condition should also be true.
+								</p>
+								<code className="example trc" >&#123; t | R(t) ∧ t.a &lt; 7 ⇒ t.b = 'a' &#125;</code>
+								<p>
+									In this example, if tuples in which column <strong>a</strong> is less than 7, that means that 
+									column <strong>b</strong> of those tuples must be equal to 'a' for them to appear on the resulting relation.
+								</p>
+							</div>
+
+							<div>
+								<h4 id="trc-iff">biconditional</h4>
+								<p>
+									The logical biconditional operator (<strong>⇔</strong>) is used to ensure equivalence, meaning that if
+									one of the conditions is true, the other one is also true. If one of them is false, the other one must also be false.
+								</p>
+								<code className="example trc" >&#123; t | t(R) ∧ t.a &gt; 4 ⇔ t.b = 'a' &#125;</code>
+								<p>
+									In this example, tuples in which column <strong>a</strong> is greater than 4 
+									and column <strong>b</strong> is equal to <strong>'a'</strong>, and the ones
+									in which column <strong>a</strong> is not greater than 4 and column <strong>b</strong> is 
+									not equal to <strong>'a'</strong> will appear in the resulting relation.
+								</p>
+							</div>
+
+							<h3 id="trc-quantifiers">Quantifiers</h3>
+							<p>
+								Quantifiers are another building block of TRC queries as they are used to express logical quantification, 
+								namely existential and universal quantification.
+							</p>
+
+							<div>
+								<h4 id="trc-exists">existential</h4>
+								<p>
+									The existential quantifier (<strong>∃</strong>) is used to define a new scope in which there should be at least one 
+									tuple that satisfies a certain condition.
+								</p>
+								<code className="example trc" >&#123; t | R(t) ∧ ∃s(S(s) ∧ t.a &gt; 3 ∧ s.d &gt; 300) &#125;</code>
+
+								<p>
+									In this example, besides the tuple variable <strong>t</strong> belonging to <strong>R</strong> and 
+									its column <strong>a</strong> being greater than 3, there should also exist at least a tuple
+									in relation <strong>S</strong> where 
+									its column <strong>d</strong> is greater than 3.
+								</p>
+							</div>
+
+							<div>
+								<h4 id="trc-forall">universal</h4>
+								<p>
+									The universal quantifier (<strong>∀</strong>) is used to define a new scope in which a certain condition
+									should be true for all tuples of a given relation.
+								</p>
+								<code className="example trc" >&#123; t | R(t) and ∀s(S(s) and s.d &gt; 300) &#125;</code>
+
+								<p>
+									In this example, besides the tuple variable <strong>t</strong> belonging to <strong>R</strong>,
+									all tuples in relation <strong>S</strong> should also be greater than 300.
+								</p>
 							</div>
 
 							<h3 id="trc-alt-syntax">Alternative plain text notation</h3>
@@ -2801,7 +2929,7 @@ export class Help extends React.Component<Props> {
 								while typing.
 							</p>
 
-							<p>In the following table you can see a list of all supported substitutions:</p>
+							<p>In the following table you can find a list of all supported substitutions:</p>
 							
 							<div className="scroll-x"><table className="table table-condensed">
 								<thead>
@@ -2819,29 +2947,37 @@ export class Help extends React.Component<Props> {
 										<td className="math">&or;</td>
 										<td>or</td>
 									</tr>
-									<tr>
+									{/* <tr>
 										<td className="math">⊕</td>
 										<td>xor</td>
-									</tr>
+									</tr> */}
 									<tr>
 										<td className="math">⊻</td>
 										<td>xor</td>
 									</tr>
 									<tr>
 										<td className="math">&not;</td>
-										<td>not</td>
-									</tr>
-									<tr>
-										<td className="math">&not;</td>
-										<td>!</td>
+										<td>not, !</td>
 									</tr>
 									<tr>
 										<td className="math">⇒</td>
-										<td>implies</td>
+										<td>=&gt;, implies</td>
 									</tr>
 									<tr>
-										<td className="math">⇒</td>
-										<td>=&gt;</td>
+										<td className="math">⇔</td>
+										<td>&lt;=&gt;, iff (if and only if)</td>
+									</tr>
+									<tr>
+										<td className="math">≠</td>
+										<td>&lt;&gt;, !=</td>
+									</tr>
+									<tr>
+										<td className="math">≤</td>
+										<td>&lt;=</td>
+									</tr>
+									<tr>
+										<td className="math">≥</td>
+										<td>&gt;=</td>
 									</tr>
 									<tr>
 										<td className="math">∃</td>
@@ -2851,139 +2987,8 @@ export class Help extends React.Component<Props> {
 										<td className="math">∀</td>
 										<td>for all</td>
 									</tr>
-									<tr>
-										<td className="math">⇔</td>
-										<td>iff</td>
-									</tr>
-									<tr>
-										<td className="math">⇔</td>
-										<td>&lt;=&gt;</td>
-									</tr>
 								</tbody>
 							</table>
-							</div>
-
-							<h3 id="trc-operations">Logical operations</h3>
-							<p>
-								Logical operations are the building blocks of TRC expressions, they specifiy under which 
-								conditions a tuple will be included in the result set.
-							</p>
-							<p>The logical operations supported by this implementation are:</p>
-
-							<div>
-								<h4 id="trc-and">and</h4>
-								<p>
-									The logical <strong>and(&and;)</strong> operator ensures a tuple will appear on the final result set 
-									if both conditions hold true.
-								</p>
-								<code className="example trc" >&#123; t | R(t) ∧ t.a &gt; 3 ∧ t.a &lt; 6 &#125;</code>
-								<p>
-									In this example, only the tuples where <strong>a</strong> field is greater than 3 but less than 6 will be included
-									in the final result set.
-								</p>
-							</div>
-
-							<div>
-								<h4 id="trc-or">or</h4>
-								<p>
-									The logical <strong>or(&or;)</strong> operator ensures a tuple will appear on the final result set 
-									if any of the conditions hold true.
-								</p>
-								<code className="example trc" >&#123; t | R(t) ∧ t.a &gt; 3 &or; t.a = 1 &#125;</code>
-								<p>
-									In this example, tuples where <strong>a</strong> field is greater than 3 or 1 exactly 1 will
-									appear in the result set.
-								</p>
-							</div>
-
-							<div>
-								<h4 id="trc-xor">xor</h4>
-								<p>
-									The logical <strong>xor(⊻)</strong> operator ensures a tuple will appear on the final result set 
-									if one, and only one of the conditions holds true at a time.
-								</p>
-								<code className="example trc" >&#123; t | R(t) ∧ t.a &lt; 3 ⊻ t.a &lt; 5 &#125;</code>
-								<p>
-									In this example, tuples where <strong>a</strong> field is less than 5 but not less than 3
-									will show up on the result set.
-								</p>
-							</div>
-
-							<div>
-								<h4 id="trc-not">not</h4>
-								<p>
-									The logical <strong>not(&not;)</strong> operator is used to negate the meaning of an expression, meaning the
-									tuples that will appear on the result set are the ones that resolve to false.
-								</p>
-								<code className="example trc" >&#123; t | R(t) ∧ ¬(t.a &lt; 3) &#125;</code>
-								<p>
-									In this example, tuples where <strong>a</strong> field is not less than 3 will
-									appear in the result set.
-								</p>
-							</div>
-
-							<div>
-								<h4 id="trc-implication">implication</h4>
-								<p>
-									The logical <strong>implies(⇒)</strong> operator ensures that, given that a certain condition
-									is true, the implied condition should also be true.
-								</p>
-								<code className="example trc" >&#123; t | R(t) ∧ t.a &lt; 7 ⇒ t.b = 'a' &#125;</code>
-								<p>
-									In this example, if tuples where <strong>a</strong> field are less than 7, that means
-									the <strong>b</strong> field of that tuple must be 'a' for it to appear on the final result set.
-								</p>
-							</div>
-
-							<div>
-								<h4 id="trc-iff">biconditional</h4>
-								<p>
-									The logical <strong>iff(⇔)</strong> operator is used to ensure equivalence, meaning if one of the conditions
-									is true, the other one is also true. If one of them is false, the other one must also be false.
-								</p>
-								<code className="example trc" >&#123; t | t(R) ∧ t.a &gt; 4 ⇔ t.b = 'a' &#125;</code>
-								<p>
-									In this example both, tuples where <strong>a</strong> field is greater than 4 
-									and where <strong>b</strong> field is <strong>'a'</strong> and the ones
-									where <strong>a</strong> is not greater than 4 and <strong>b</strong> is 
-									not <strong>'a'</strong> will appear in the result set.
-								</p>
-							</div>
-
-							<h3 id="trc-quantifiers">Quantifiers</h3>
-							<p>
-								Quantifiers are another building block of TRC queries, they're used to express logical quantification, 
-								namely existential and universal quantification.
-							</p>
-
-							<div>
-								<h4 id="trc-exists">existential</h4>
-								<p>
-									The <strong>exists(∃)</strong> operator is used to define a new scope where there should be at least one 
-									tuple that satisfies a certain condition
-								</p>
-								<code className="example trc" >&#123; t | R(t) ∧ ∃s(S(s) ∧ t.a &gt; 3 ∧ s.d &gt; 300) &#125;</code>
-
-								<p>
-									In this example, besides t belongging to the <strong>R</strong> relation 
-									and the <strong>a</strong> field being greater than 3, there should also be a tuple
-									in the relation <strong>S</strong> where 
-									its <strong>s</strong> field is greater than 3.
-								</p>
-							</div>
-
-							<div>
-								<h4 id="trc-forall">universal</h4>
-								<p>
-									The <strong>for all(∀)</strong> operator is used to define a new scope where a certain condition
-									should be true for all elements of a given relation.
-								</p>
-								<code className="example trc" >&#123; t | R(t) and ∀s(S(s) and s.d &gt; 300) &#125;</code>
-
-								<p>
-									In this example, besides <strong>t</strong> belongging to the <strong>R</strong> relation,
-									all tuples from the <strong>S</strong> relation should also be greater than 300. 
-								</p>
 							</div>
 
 							<h2 id="license-help">Licence</h2>
