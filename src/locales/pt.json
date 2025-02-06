@@ -47,6 +47,7 @@
 	"db.messages.translate.error-relation-predicate-not-found": "predicado relacional deve ser definido para a variável \"{{variable}}\"",
 	"db.messages.translate.error-relation-predicate-defined-twice": "predicado relacional definido duas vezes para a variável \"{{variable}}\" ",
 	"db.messages.translate.error-trc-unsafe-formula": "não é possível negar um predicado relacional \"{{relation}}({{variable}})\" (formula insegura) ",
+	"db.messages.translate.error-trc-unbound-variable": "Variáveis não vinculadas não são suportadas.",
 	"editor.codemirror-placeholder": "Digite sua consulta aqui\n\nAtalhos do teclado:\n\texecutar declara\u00e7\u00e3ot:    [CTRL]+[RETURN]\n\texecutar sele\u00e7\u00e3o:    [CTRL]+[SHIFT]+[RETURN]\n\tautocompletar:         [CTRL]+[SPACE]\n",
 	"editor.alert-message-headers.success": "Sucesso",
 	"editor.alert-message-headers.info": "Info",

@@ -43,6 +43,7 @@
 	"db.messages.translate.error-relation-predicate-not-found": "El predicado relacional debe estar definido para la variable \"{{variable}}\"",
 	"db.messages.translate.error-relation-predicate-defined-twice": "El predicado relacional está definido dos veces para la variable \"{{variable}}\" ",
 	"db.messages.translate.error-trc-unsafe-formula": "No se puede negar el predicado relacional \"{{relation}}({{variable}})\" (Fórmula insegura) ",
+	"db.messages.translate.error-trc-unbound-variable": "Las variables no vinculadas no son compatibles.",
 	"db.messages.translate.warning-distinct-missing": "DISTINCT fehlt",
 	"db.messages.translate.warning-ignored-all-on-set-operators": "TODOS los operadores de cantidad fueron ignorados",
 	"db.messages.translate.error-variable-name-conflict": "conflicto de nombre: nombre de relaci\u00f3n \"{{name}}\" ya existe",

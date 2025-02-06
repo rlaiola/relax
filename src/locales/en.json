@@ -43,6 +43,7 @@
 	"db.messages.translate.error-relation-predicate-not-found": "relation predicate must be defined for variable \"{{variable}}\"",
 	"db.messages.translate.error-relation-predicate-defined-twice": "relation predicate defined twice for variable \"{{variable}}\" ",
 	"db.messages.translate.error-trc-unsafe-formula": "cannot negate relation predicate \"{{relation}}({{variable}})\" (unsafe formula) ",
+	"db.messages.translate.error-trc-unbound-variable": "Unbound variables are not supported.",
 	"db.messages.translate.warning-distinct-missing": "DISTINCT is missing",
 	"db.messages.translate.warning-ignored-all-on-set-operators": "ignored ALL on set operation",
 	"db.messages.translate.error-variable-name-conflict": "name conflict: relation name \"{{name}}\" already exists",
