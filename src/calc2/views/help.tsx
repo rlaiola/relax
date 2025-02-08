@@ -2991,6 +2991,32 @@ export class Help extends React.Component<Props> {
 							</table>
 							</div>
 
+							<h2 id="trc-limits">Limitations</h2>
+							<p>The current implementation has some limitations that should be observed</p>
+
+							<h3>No variable interpolation</h3>
+							<p>
+								In the current implementation, each tuple variable must belong to one, and only one relation,
+							 	there's no support for assigning multiple relations to the same variable
+							</p>
+							<code className="example trc" >&#123; t | t ∈ S &or; t ∈ T &#125;</code>
+							<p>
+								The previous example is not supported, as we try assigning the variable <strong>t</strong> 
+								to <strong>S</strong> and <strong>T</strong> at the same time!
+							</p>
+
+							<h3>No implicit variables</h3>
+							<p>
+								The current implementation also doesn't support implicit variables, meaning that for each tuple variable used,
+								there must be a relation assigment to it
+							</p>
+
+							<code className="example trc" >&#123; t | ∃p ∈ S (t.b = p.b) &#125;</code>
+							<p>The previous example is incorrect, as we don't assign <strong>t</strong> to any relation whatsoever</p>
+
+							<h3>No outer joins</h3>
+							<p>The current implementation also have no support for outer joins, either left, right or full outer joins are not yet available</p>
+
 							<h2 id="license-help">Licence</h2>
 							<p>
 								<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
