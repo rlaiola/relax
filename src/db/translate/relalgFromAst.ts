@@ -72,12 +72,41 @@ export function relalgFromTRCAstRoot(astRoot: trcAst.TRC_Expr | null, relations:
 
 	function checkUnboundRelationPredicates(root: any) {
 		const allRelPredicates = getAllRelationPredicates(root)
-		const tupleVariables = root?.variables
+		const tupleVariables = getAllTupleVariables(root)
 		const hasUnboundVariable = allRelPredicates.length > tupleVariables.length
 
 		if (hasUnboundVariable) {
 			throw new ExecutionError(i18n.t('db.messages.translate.error-trc-unbound-variable'));
 		}
+	}
+
+	function getAllTupleVariables(root: any) {
+		let vars: string[] = []
+
+		function rec(root: any) {
+			switch (root.type) {
+				case 'TRC_Expr': {
+					vars.push(...root.variables)
+					return rec(root.formula)
+				}
+				case 'RelationPredicate': return 
+				case 'Negation': return rec(root.formula)
+				case 'QuantifiedExpression': {
+					vars.push(root.variable)
+					return rec(root.formula)
+				}
+				case 'LogicalExpression': {
+					rec(root.left)
+					rec(root.right)
+					return
+				}
+				default: return null
+			}
+		}
+		
+		rec(root)
+
+		return vars
 	}
 
 	function getAllRelationPredicates(root: any) {
