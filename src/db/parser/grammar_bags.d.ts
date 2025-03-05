@@ -393,5 +393,10 @@ declare module relalgAst {
 		| '<='
 		| '>'
 		| '<'
+		| "regexp"
+		| "rlike"
+		| "repeat"
+		| "replace"
+		| "reverse"
 	);
 }
