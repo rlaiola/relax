@@ -199,6 +199,14 @@ export function relalgFromTRCAstRoot(astRoot: trcAst.TRC_Expr | null, relations:
 			);
 		}
 
+		if (typeof (relations[relationPredicate.relation]) === 'undefined') {
+			throw new ExecutionError(
+				i18n.t('db.messages.translate.error-relation-not-found',
+				{ name: relationPredicate.relation }),
+				nRaw.codeInfo
+			);
+		}
+
 		const rel = relations[relationPredicate.relation].copy()
 		if (!rel) {
 			throw new Error("Could not get the tuple relation by its reference!")
@@ -226,6 +234,14 @@ export function relalgFromTRCAstRoot(astRoot: trcAst.TRC_Expr | null, relations:
 			throw new ExecutionError(
 				i18n.t('db.messages.translate.error-relation-predicate-not-found',
 				{ variable }),
+				nRaw.codeInfo
+			);
+		}
+
+		if (typeof (relations[pred.relation]) === 'undefined') {
+			throw new ExecutionError(
+				i18n.t('db.messages.translate.error-relation-not-found',
+				{ name: pred.relation }),
 				nRaw.codeInfo
 			);
 		}
@@ -280,6 +296,14 @@ export function relalgFromTRCAstRoot(astRoot: trcAst.TRC_Expr | null, relations:
 							throw new ExecutionError(
 								i18n.t('db.messages.translate.error-relation-predicate-not-found',
 								{ variable: nRaw.variable }),
+								nRaw.codeInfo
+							);
+						}
+
+						if (typeof (relations[relationPredicate.relation]) === 'undefined') {
+							throw new ExecutionError(
+								i18n.t('db.messages.translate.error-relation-not-found',
+								{ name: relationPredicate.relation }),
 								nRaw.codeInfo
 							);
 						}
