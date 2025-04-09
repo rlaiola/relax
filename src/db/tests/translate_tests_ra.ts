@@ -67,6 +67,90 @@ QUnit.test('test relation', function (assert) {
 	assert.deepEqual(root.getResult(), relations.R.getResult());
 });
 
+QUnit.test('test dum relation 1', function (assert) {
+	const relations = getTestRelations();
+	const root = exec_ra(`pi 1->a {}`, relations);
+
+	const ref = exec_ra(`sigma a<1 {
+		a
+
+		10
+	}`, relations);
+
+	assert.deepEqual(root.getResult(), ref.getResult());
+});
+
+QUnit.test('test dum relation 2', function (assert) {
+	const relations = getTestRelations();
+	const root = exec_ra(`gamma count(*)->n {}`, relations);
+
+	const ref = exec_ra(`{
+		n
+
+		0
+	}`, relations);
+
+	assert.deepEqual(root.getResult(), ref.getResult());
+});
+
+QUnit.test('test dum relation 3', function (assert) {
+	const relations = getTestRelations();
+	const root = exec_ra(`R x {}`, relations);
+
+	const ref = exec_ra(`R - R`, relations);
+
+	assert.deepEqual(root.getResult(), ref.getResult());
+});
+
+QUnit.test('test dum relation 4', function (assert) {
+	const relations = getTestRelations();
+	const root = exec_ra(`{} x R`, relations);
+
+	const ref = exec_ra(`R - R`, relations);
+
+	assert.deepEqual(root.getResult(), ref.getResult());
+});
+
+QUnit.test('test dee relation 1', function (assert) {
+	const relations = getTestRelations();
+	const root = exec_ra(`pi 1->a {()}`, relations);
+
+	const ref = exec_ra(`{
+		a
+
+		1
+	}`, relations);
+
+	assert.deepEqual(root.getResult(), ref.getResult());
+});
+
+QUnit.test('test dee relation 2', function (assert) {
+	const relations = getTestRelations();
+	const root = exec_ra(`gamma count(*)->n {()}`, relations);
+
+	const ref = exec_ra(`{
+		n
+
+		1
+	}`, relations);
+
+	assert.deepEqual(root.getResult(), ref.getResult());
+});
+
+QUnit.test('test dee relation 3', function (assert) {
+	const relations = getTestRelations();
+	const root = exec_ra(`R x {()}`, relations);
+
+	assert.deepEqual(root.getResult(), relations.R.getResult());
+});
+
+QUnit.test('test dee relation 4', function (assert) {
+	const relations = getTestRelations();
+	const root = exec_ra(`{()} x R`, relations);
+
+	assert.deepEqual(root.getResult(), relations.R.getResult());
+});
+
 QUnit.test('test inline-relation', function (assert) {
 	const relations = getTestRelations();
 	const root = exec_ra(`{
@@ -254,6 +338,24 @@ QUnit.test('test selection with xor', function (assert) {
 	assert.deepEqual(root.getResult(), ref.getResult());
 });
 
+QUnit.test('test projection[*](R)', function (assert) {
+	const relations = getTestRelations();
+	const query = 'pi * (R)';
+	const root = exec_ra(query, relations);
+
+	const ref = exec_ra(`{
+		R.a, R.b, R.c
+
+		1, 'a', 'd'
+		3, 'c', 'c'
+		4, 'd', 'f'
+		5, 'd', 'b'
+		6, 'e', 'f'
+	}`, relations);
+
+	assert.deepEqual(root.getResult(), ref.getResult());
+});
+
 QUnit.test('test projection[a, b](R)', function (assert) {
 	const relations = getTestRelations();
 	const query = 'pi a, b (R)';
@@ -299,6 +401,22 @@ QUnit.test('test projection[b, a, a, b](R)', function (assert) {
 	catch (e) {
 		assert.ok(true);
 	}
+});
+
+QUnit.test('test (pi * (R)) inner join [R.b = S.b] (pi * (S))', function (assert) {
+	const relations = getTestRelations();
+	const root = exec_ra('(pi * R) inner join R.b = S.b (pi * S)', relations);
+	const ref = exec_ra(`{
+		R.a:number, R.b:string, R.c:string, S.b:string, S.d:number
+
+		1,          'a',        'd',        'a',        100
+		3,          'c',        'c',        'c',        400
+		4,          'd',        'f',        'd',        200
+		5,          'd',        'b',        'd',        200
+		6,          'e',        'f',        'e',        150
+	}`, relations);
+
+	assert.deepEqual(root.getResult(), ref.getResult());
 });
 
 QUnit.test('test (R) inner join [R.b = S.b] join (S)', function (assert) {
