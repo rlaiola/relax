@@ -276,16 +276,6 @@ columnName
 		};
 	}
 
-columnAsterisk
-= relAlias:(relationName '.')? '*'
-	{
-		return {
-			type: 'column',
-			name: '*',
-			relAlias: relAlias ? relAlias[0] : null
-		};
-	}
-
 // operator names:
 pi
 = _ o:('π' { return getNodeInfo('pi'); }) _
