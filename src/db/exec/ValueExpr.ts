@@ -387,7 +387,9 @@ export class ValueExprGeneric extends ValueExpr {
 
 			case 'date':
 				// Check wether the date format is valid
-				this._parseIsoDate(this._args[0]._args[0]);
+				if (this?._args?.[0]?._args?.[0] !== undefined) {
+					this._parseIsoDate(this._args[0]._args[0]);
+				}
 				return this._checkArgsDataType(schemaA, schemaB, ['string']);
 
 			case 'adddate':
@@ -948,9 +950,9 @@ export class ValueExprGeneric extends ValueExpr {
 					if (this._dataType === 'null' && dataType !== 'null') {
 						this._dataTypeCalculated = dataType;
 					}
-					else if (dataType !== 'null' && this._dataType !== dataType) {
-						this.throwExecutionError(i18n.t('db.messages.exec.error-function-expects-arguments-of-same-type', {func: 'CONCAT()'}));
-					}
+					// else if (dataType !== 'null' && this._dataType !== dataType) {
+					// 	this.throwExecutionError(i18n.t('db.messages.exec.error-function-expects-arguments-of-same-type', {func: 'CONCAT()'}));
+					// }
 				}
 				break;
 			default:

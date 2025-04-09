@@ -242,6 +242,16 @@ unqualifiedColumnName
 		return a;
 	}
 
+columnAsterisk
+= relAlias:(relationName '.')? '*'
+	{
+		return {
+			type: 'column',
+			name: '*',
+			relAlias: relAlias ? relAlias[0] : null
+		};
+	}
+
 columnName
 = relAlias:(relationName '.')? name:unqualifiedColumnName
 	{
@@ -1239,9 +1249,36 @@ tableRow
 		return t;
 	}
 
+tableDum
+= '{' _ '}' // relation of degree zero and cardinality zero
+	{
+		return {
+			type: 'table',
+			name: '_inlineRelation'+(inlineTableNum++),
+			columns: [],
+			rows: [],
+
+			codeInfo: getCodeInfo()
+		};
+	}
+
+tableDee
+= '{' _ '(' _ ')' _ '}' // relation of degree zero and cardinality one
+	{
+		return {
+			type: 'table',
+			name: '_inlineRelation'+(inlineTableNum++),
+			columns: [],
+			rows: [[]],
+
+			codeInfo: getCodeInfo()
+		};
+	}
 
 table
-= '{' _ cols:tableHeader _sl trows:(endOfLine _ tableRow _sl)* _ '}'
+= tableDum
+/ tableDee
+/ '{' _ cols:tableHeader _sl trows:(endOfLine _ tableRow _sl)* _ '}'
 	{
 		var numCols = cols.length;
 
@@ -1811,7 +1848,7 @@ RESERVED_KEYWORD_RELALG
 / 'right'i
 / 'outer'i
 / 'full'i
-/ 'natual'i
+/ 'natural'i
 / 'semi'i
 / 'anti'i
 / 'desc'i
