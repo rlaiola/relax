@@ -242,6 +242,16 @@ unqualifiedColumnName
 		return a;
 	}
 
+columnAsterisk
+= relAlias:(relationName '.')? '*'
+	{
+		return {
+			type: 'column',
+			name: '*',
+			relAlias: relAlias ? relAlias[0] : null
+		};
+	}
+
 columnName
 = relAlias:(relationName '.')? name:unqualifiedColumnName
 	{
@@ -441,6 +451,11 @@ namedColumnExpr
 / a:columnName
 	{
 		return a;
+	}
+/ col:columnAsterisk
+	{
+		col.alias = null;
+		return col;
 	}
 
 // list of columns (kd.id, kd.name, test) e.g. for the projection
@@ -1823,7 +1838,7 @@ RESERVED_KEYWORD_RELALG
 / 'right'i
 / 'outer'i
 / 'full'i
-/ 'natual'i
+/ 'natural'i
 / 'semi'i
 / 'anti'i
 / 'desc'i
