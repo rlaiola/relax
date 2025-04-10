@@ -82,6 +82,7 @@ export const langKR = {
 	'calc.maintainer-groups.temp': '임시',
 	'calc.maintainer-groups.uibk': 'Innsbruck 대학교',
 	'calc.maintainer-groups.ufes': '에스피리토 산토 연방대학교',
+	'calc.maintainer-groups.savben': 'Savoia Benincasa 고등교육기관',
 	'calc.editors.button-history': '기록',
 	'calc.editors.insert-relation-title': 'Insert',
 	'calc.editors.insert-relation-tooltip': 'Insert relation or column names',

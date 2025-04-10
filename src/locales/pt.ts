@@ -140,6 +140,7 @@ export const langPT = {
     'calc.menu.datasets': 'Datasets',
     'calc.maintainer-groups.uibk': 'University of Innsbruck',
     'calc.maintainer-groups.ufes': 'Universidade Federal do Esp\u00edrito Santo',
+    'calc.maintainer-groups.savben': 'Istituto di Istruzione Superiore Savoia Benincasa',
     'calc.editors.ra.toolbar.natural-join': 'natural join / \u03b8-join',
     'db.messages.translate.warning-distinct-missing':
       'DISTINCT est\u00e1 faltando',
