@@ -39,6 +39,7 @@
 	"db.messages.exec.error-case-when-condition-must-be-boolean": "",
 	"db.messages.exec.error-case-when-expects-results-of-same-type": "",
 	"db.messages.exec.error-invalid-date-format": "",
+	"db.messages.exec.error-cast-failed": "",
 	"db.messages.translate.error-relation-not-found": "",
 	"db.messages.translate.warning-distinct-missing": " \uad00\uacc4 \ub300\uc218\ub294 \uc554\uc2dc\uc801\uc778 \uc911\ubcf5 \uc81c\uac70\ub97c \uc0ac\uc6a9\ud568",
 	"db.messages.translate.warning-ignored-all-on-set-operators": " \uad00\uacc4 \ub300\uc218\ub294 \uc554\uc2dc\uc801\uc778 \uc911\ubcf5 \uc81c\uac70\ub97c \uc0ac\uc6a9\ud568",

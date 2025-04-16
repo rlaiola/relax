@@ -25,7 +25,7 @@ export const langES: Partial<typeof langEN> = {
   'db.messages.parser.error-sql-having-without-group-by': 'se ha encontrado pero no se encuentra "group by" ó agregación',
   'db.messages.parser.error-sql-negative-limit': 'el límite dado debe ser >= 0',
   'db.messages.parser.error-sqldump-invalid-column-number': 'número inválido de columnas en línea {{line}}',
-  'db.messages.parser.error-sqldump-invalid-type': 'tipo inválido en línea  {{line}}',
+  'db.messages.parser.error-sqldump-invalid-type': 'tipo inválido en línea {{line}}',
   'db.messages.parser.error-sqldump-insert-wrong-number-columns': 'número de valores != número de columnas',
   'db.messages.parser.error-valueexpr-like-operand-no-string': 'operando derecho de LIKE debe ser una cadena literal',
 
@@ -51,7 +51,7 @@ export const langES: Partial<typeof langEN> = {
   'db.messages.exec.error-case-when-condition-must-be-boolean': 'la condición de un CASE WHEN debe ser de tipo booleano',
   'db.messages.exec.error-case-when-expects-results-of-same-type': '<i>CASE WHEN condition THEN result END</i> espera todos <i>results<i/> ser del mismo tipo',
   'db.messages.exec.error-invalid-date-format': '"{{str}}"  no es una fecha válido; formato esperado: YYYY-MM-DD',
-
+  'db.messages.exec.error-cast-failed': '"{{expr}}" no se pudo convertir a tipo \"{{type}}"',
   'db.messages.translate.error-relation-not-found': 'no se pudo encontrar relación "{{name}}"',
   'db.messages.translate.warning-distinct-missing': 'DISTINCT está ausente; la algebra relacional utiliza eliminacion de duplicados implícitamente',
   'db.messages.translate.warning-ignored-all-on-set-operators': 'ignorado ALL en operación establecida; la algebra relacional utiliza eliminacion de duplicados implícitamente',

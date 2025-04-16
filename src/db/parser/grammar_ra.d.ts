@@ -381,6 +381,11 @@ declare module relalgAst {
 		| 'floor'
 		| 'ceil'
 		| 'round'
+		| 'sqrt'
+		| 'power'
+		| 'exp'
+		| 'ln'
+		| 'log'
 		| 'date'
 		| 'year'
 		| 'month'
@@ -403,10 +408,12 @@ declare module relalgAst {
 		| '<='
 		| '>'
 		| '<'
-    | "regexp"
-    | "rlike"
-    | "replace"
-    | "repeat"
-    | "reverse"
+		| "regexp"
+		| "rlike"
+		| "replace"
+		| "repeat"
+		| "reverse"
+		| "substring"
+		| "cast"
 	);
 }
