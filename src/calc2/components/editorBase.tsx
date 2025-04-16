@@ -40,13 +40,33 @@ require('codemirror/addon/display/autorefresh.js');
 require('codemirror/mode/sql/sql.js');
 require('handsontable/dist/handsontable.full.css');
 
+const RELATIONAL_ALGEBRA_SNIPPETS = [
+	{ prefix: 'pi', symbol: 'π', description: 'Projection (π)' },
+	{ prefix: 'sigma', symbol: 'σ', description: 'Selection (σ)' },
+	{ prefix: 'rho', symbol: 'ρ', description: 'Rename relation (ρ)' },
+	{ prefix: 'tau', symbol: 'τ', description: 'Order by (τ)' },
+	{ prefix: 'gamma', symbol: 'γ', description: 'Group by (γ)' },
+	{ prefix: 'intersection', symbol: '∩', description: 'Intersection (∩)' },
+	{ prefix: 'union', symbol: '∪', description: 'Union (∪)' },
+	{ prefix: 'subtraction', symbol: '−', description: 'Subtraction (−)' },
+	{ prefix: 'division', symbol: '÷', description: 'Division (÷)' },
+	{ prefix: 'crossjoin', symbol: '⨯', description: 'Cross join (⨯)' },
+	{ prefix: 'naturaljoin', symbol: '⨝', description: 'Natural join (⨝)' },
+	{ prefix: 'leftouterjoin', symbol: '⟕', description: 'Left outer join (⟕)' },
+	{ prefix: 'rightouterjoin', symbol: '⟖', description: 'Right outer join (⟖)' },
+	{ prefix: 'fullouterjoin', symbol: '⟗', description: 'Full outer join (⟗)' },
+	{ prefix: 'leftsemijoin', symbol: '⋉', description: 'Left semi join (⋉)' },
+	{ prefix: 'rightsemijoin', symbol: '⋊', description: 'Right semi join (⋊)' },
+	{ prefix: 'antijoin', symbol: '▷', description: 'Anti join (▷)' },
+];
+
 CodeMirror.defineMode('relalg', function () {
 	const keywords = [
-		'pi', 'sigma', 'rho', 'tau', '<-', '->', 'intersect', 'union', 'except', '/', '-', '\\\\', 'x', 'cross join', 'join',
+		'pi', 'sigma', 'rho', 'tau', 'gamma', '<-', '->', 'intersect', 'union', 'except', '/', '-', '\\\\', 'x', 'cross join', 'join',
 		'inner join', 'natural join', 'left join', 'right join', 'left outer join', 'right outer join',
 		'left semi join', 'right semi join', 'anti join', 'anti semi join', 'and', 'or', 'xor',
 	];
-	const keywordsMath = ['π', 'σ', 'ρ', 'τ', '←', '→', '∩', '∪', '÷', '-', '⨯', '⨝', '⟕', '⟖', '⟗', '⋉', '⋊', '▷'];
+	const keywordsMath = ['π', 'σ', 'ρ', 'τ', '←', '→', '∩', '∪', '÷', '-', '⨯', '⨝', '⟕', '⟖', '⟗', '⋉', '⋊', '▷', 'γ'];
 	const operators = ['<-', '->', '>=', '<=', '=', '∧', '∨', '⊻', '⊕', '≠', '=', '¬', '>', '<', '≥', '≤'];
 	const matchAny = (
 		stream: CodeMirror.StringStream,
@@ -151,11 +171,11 @@ CodeMirror.defineMode('relalg', function () {
 
 CodeMirror.defineMode('bagalg', function () {
 	const keywords = [
-		'delta', 'pi', 'sigma', 'rho', 'tau', '<-', '->', 'intersect', 'union', 'except', '/', '-', '\\\\', 'x', 'cross join', 'join',
+		'delta', 'pi', 'sigma', 'rho', 'tau', 'gamma', '<-', '->', 'intersect', 'union', 'except', '/', '-', '\\\\', 'x', 'cross join', 'join',
 		'inner join', 'natural join', 'left join', 'right join', 'left outer join', 'right outer join',
 		'left semi join', 'right semi join', 'anti join', 'anti semi join', 'and', 'or', 'xor',
 	];
-	const keywordsMath = ['∂', 'π', 'σ', 'ρ', 'τ', '←', '→', '∩', '∪', '÷', '-', '⨯', '⨝', '⟕', '⟖', '⟗', '⋉', '⋊', '▷'];
+	const keywordsMath = ['∂', 'π', 'σ', 'ρ', 'τ', '←', '→', '∩', '∪', '÷', '-', '⨯', '⨝', '⟕', '⟖', '⟗', '⋉', '⋊', '▷', 'γ'];
 	const operators = ['<-', '->', '>=', '<=', '=', '∧', '∨', '⊻', '⊕', '≠', '=', '¬', '>', '<', '≥', '≤'];
 	const matchAny = (
 		stream: CodeMirror.StringStream,
@@ -1370,72 +1390,65 @@ export class EditorBase extends React.Component<Props, State> {
 
 	genericHint(cm: CodeMirror.Editor) {
 		const { getHintsFunction } = this.props;
-
 		const cur = cm.getDoc().getCursor();
 		const token = cm.getTokenAt(cur);
-		const getObj = (text: string, category = 'unknown') => ({
-			text,
-			displayText: text,
-			className: `hint-${category}`,
-		});
 
-		let unfiltered: CodeMirror.Hint[] = [];
+		// create snippet hints
+		const snippetHints = RELATIONAL_ALGEBRA_SNIPPETS.map(snippet => ({
+			text: snippet.symbol,
+			displayText: `${snippet.prefix} → ${snippet.symbol} - ${snippet.description}`,
+			className: 'hint-snippet',
+			from: CodeMirror.Pos(cur.line, token.start),
+			to: CodeMirror.Pos(cur.line, token.end),
+			hint: (cm: CodeMirror.Editor, _data: any, cur: CodeMirror.Hint) => {
+				if (cur.from && cur.to) {
+					cm.replaceRange(snippet.symbol, cur.from, cur.to);
+				}
+			}
+		}));
 
+		let unfiltered: CodeMirror.Hint[] = [... snippetHints];
+
+		// handle regular hint
 		if (this.hinterCache.changed === true) {
-			// recreate unfiltered hints
-			const unfilteredObj: { [key: string]: ReturnType<typeof getObj> } = {}; // use object to eliminate duplicates
-
+			const unfilteredObj: { [key: string]: CodeMirror.Hint } = {};
 			const hints = getHintsFunction ? getHintsFunction() : [];
 
-
 			// add keywords
-			for (let i = 0; i < hints.length; i++) {
-				unfilteredObj[hints[i]] = getObj(hints[i]);
-			}
-
+			hints.forEach(hintText => {
+				unfilteredObj[hintText] = {
+					text: hintText,
+					displayText: hintText,
+					className: 'hint-keyword'
+				};
+			});
 
 			// add hints from linter
-			for (let i = 0; i < this.hinterCache.hintsFromLinter.length; i++) {
-				const hintText = this.hinterCache.hintsFromLinter[i];
+			this.hinterCache.hintsFromLinter.forEach(hintText => {
+				unfilteredObj[hintText] = {
+					text: hintText,
+					displayText: hintText,
+					className: 'hint-linter'
+				};
+			});
 
-				unfilteredObj[hintText] = getObj(hintText);
-			}
-
-
-			// copy to array
-			const unfiltered: CodeMirror.Hint[] = [];
-			for (const hintText in unfilteredObj) {
-				if (!unfilteredObj.hasOwnProperty(hintText)) {
-					continue;
-				}
-
-				unfiltered.push(unfilteredObj[hintText]);
-			}
-
-			this.hinterCache.hints = unfiltered;
+			// update cache
+			this.hinterCache.hints = Object.values(unfilteredObj);
 			this.hinterCache.changed = false;
 		}
-		else {
-			unfiltered = this.hinterCache.hints;
-		}
 
+		// combine hints
+		unfiltered = [...snippetHints, ...this.hinterCache.hints];
 
 		// filter
-		let filtered: CodeMirror.Hint[] = [];
-		const tokenText = token.string;
-
-		if (tokenText.length > 0) {
-			for (let i = 0; i < unfiltered.length; i++) {
-				const kwText = unfiltered[i].text;
-				if (kwText.length > tokenText.length && kwText.indexOf(tokenText) === 0) {
-					filtered.push(unfiltered[i]);
-				}
-			}
-		}
-		else {
-			// no text => full hint list
-			filtered = unfiltered;
-		}
+		const tokenText = token.string.toLowerCase();
+		const filtered = tokenText
+			? unfiltered.filter(hint => {
+				const displayText = hint.displayText?.toLowerCase() || '';
+				const symbolText = hint.text.toLowerCase();
+				return displayText.includes(tokenText) || symbolText.includes(tokenText);
+			})
+			: unfiltered;
 
 		return {
 			list: filtered,

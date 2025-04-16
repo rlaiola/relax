@@ -2192,12 +2192,6 @@ export class Help extends React.Component<Props> {
 								</tr>
 
 								<tr>
-									<td><code>strlen(a:string)</code></td>
-									<td>number</td>
-									<td>number of characters of the string</td>
-								</tr>
-
-								<tr>
 									<td><code>abs(a:number)</code></td>
 									<td>number</td>
 									<td>the absolute value of the given number</td>
