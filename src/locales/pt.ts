@@ -174,6 +174,8 @@ export const langPT = {
       '<div><b>(</b> A <b class="math">) \u25b7 (</b> B <b>)</b></div>',
     'db.messages.exec.error-invalid-date-format':
       '"{{str}}" n\u00e3o \u00e9 uma data v\u00e1lida; formato esperado: YYYY-MM-DD',
+    'db.messages.exec.error-cast-failed':
+      '"{{expr}}" n\u00e3o pode ser convertido para tipo {{type}}',
     'calc.editors.ra.toolbar.multi-line-comment-content':
       '<b>/* este \u00e9 um coment\u00e1rio longo,<br>muito longo*/</b><br><span class="math">&pi;</span> a, b A',
     'db.messages.parser.error-sql-negative-limit':

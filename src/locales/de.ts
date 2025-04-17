@@ -48,6 +48,7 @@ export const langDE: Partial<typeof langEN> = {
 	'db.messages.exec.error-case-when-condition-must-be-boolean': 'Die Bedingung für ein CASE WHEN muss ein boolscher Ausdruck sein',
 	'db.messages.exec.error-case-when-expects-results-of-same-type': '<i>CASE WHEN condition THEN result END</i> erwartet dass alle <i>results</> vom selben Typ sind',
 	'db.messages.exec.error-invalid-date-format': '"{{str}}" ist kein gültiges Datum; erwartetes Format: YYYY-MM-DD',
+	'db.messages.exec.error-cast-failed': '"{{expr}}" konnte nicht in Typ {{type}} umgewandelt werden',
 	'db.messages.translate.error-relation-not-found': 'Relation "{{name}}" nicht gefunden',
 	'db.messages.translate.warning-distinct-missing': 'DISTINCT fehlt; Duplikate werden in relationaler Algebra automatisch entfernt',
 	'db.messages.translate.warning-ignored-all-on-set-operators': 'ALL bei Mengenoperatoren wurde ignoriert; Duplikate werden in relationaler Algebra automatisch entfernt',

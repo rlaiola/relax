@@ -39,6 +39,7 @@
 	"db.messages.exec.error-case-when-condition-must-be-boolean": "CASE WHEN \uc870\uac74\uc740 \ubd88\ub9b0 \ud0c0\uc785\uc774\uc5b4\uc57c \ud568",
 	"db.messages.exec.error-case-when-expects-results-of-same-type": "<i>CASE WHEN condition THEN result END</i>\ub294 \ubaa8\ub4e0 <i>\uacb0\uacfc<i/>\uac00 \uac19\uc740 \ud0c0\uc785\uc73c\ub85c \uae30\ub300\ud568",
 	"db.messages.exec.error-invalid-date-format": "\"__str__\"  \ub294 \uc720\ud6a8\ud558\uc9c0 \uc54a\uc740 \ub0a0\uc9dc; \ud615\uc2dd: YYYY-MM-DD",
+	"db.messages.exec.error-cast-failed": "\"{{expr}}\"\uC744(\uB97C) {{type}}(\uC73C)\uB85C \uBCC0\uD658\uD560 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4",
 	"db.messages.translate.error-relation-not-found": "\ub9b4\ub808\uc774\uc158  \"{{name}}\"\uc744 \ucc3e\uc744 \uc218 \uc5c6\uc74c",
 	"db.messages.translate.warning-distinct-missing": "DISTINCT \uc5c6\uc74c",
 	"db.messages.translate.warning-ignored-all-on-set-operators": "\uc9d1\ud569 \uc5f0\uc0b0\uc5d0\uc11c \ubb34\uc2dc\ub41c ALL",

@@ -381,6 +381,11 @@ declare module bagsAst {
 		| 'floor'
 		| 'ceil'
 		| 'round'
+		| 'sqrt'
+		| 'power'
+		| 'exp'
+		| 'ln'
+		| 'log'
 		| 'date'
 		| 'year'
 		| 'month'
@@ -408,5 +413,7 @@ declare module bagsAst {
 		| "repeat"
 		| "replace"
 		| "reverse"
+		| "substring"
+		| "cast"
 	);
 }

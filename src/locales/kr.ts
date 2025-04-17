@@ -38,6 +38,7 @@ export const langKR = {
 	'db.messages.exec.error-case-when-condition-must-be-boolean': 'CASE WHEN 조건은 불린 타입이어야 함',
 	'db.messages.exec.error-case-when-expects-results-of-same-type': '<i>CASE WHEN condition THEN result END</i>는 모든 <i>결과<i/>가 같은 타입으로 기대함',
 	'db.messages.exec.error-invalid-date-format': '"__str__"  는 유효하지 않은 날짜; 형식: YYYY-MM-DD',
+	'db.messages.exec.error-cast-failed': '"{{expr}}"을(를) {{type}}(으)로 변환할 수 없습니다',
 	'db.messages.translate.error-relation-not-found': '릴레이션  "{{name}}"을 찾을 수 없음',
 	'db.messages.translate.warning-distinct-missing': 'DISTINCT 없음; 관계 대수는 암시적인 중복 제거를 사용함',
 	'db.messages.translate.warning-ignored-all-on-set-operators': '집합 연산에서 무시된 ALL; 관계 대수는 암시적인 중복 제거를 사용함',

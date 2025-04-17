@@ -39,6 +39,7 @@
 	"db.messages.exec.error-case-when-condition-must-be-boolean": "la condizione di un CASE WHEN deve essere di tipo booleano",
 	"db.messages.exec.error-case-when-expects-results-of-same-type": "<i>CASE WHEN condizione THEN risultato END</i> si aspetta che tutti i <i>risultati<i/> siano dello stesso tipo",
 	"db.messages.exec.error-invalid-date-format": "\"{{str}}\" non \u00e8 una data valida; formato previsto: AAAA-MM-GG",
+	"db.messages.exec.error-cast-failed": "\"{{expr}}\" non pu\u00f2 essere convertito in tipo \"{{type}}\"",
 	"db.messages.translate.error-relation-not-found": "Impossibile trovare la relazione \"{{name}}\"",
 	"db.messages.translate.warning-distinct-missing": "DISTINCT mancante",
 	"db.messages.translate.warning-ignored-all-on-set-operators": "Ignorato ALL nell'operazione di set",

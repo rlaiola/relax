@@ -2192,6 +2192,31 @@ export class Help extends React.Component<Props> {
 								</tr>
 
 								<tr>
+									<td>
+										<code>substring(str:string, pos:number [, length:number])</code>
+										<code>substring(str:string FROM pos:number [FOR length:number])</code>
+									</td>
+									<td>string</td>
+									<td>returns the substring of the given string starting at the given position and having the given length.
+										<br />The first character in the string has index 1, and in case no length is specified, the substring extends to the end of the string.
+										<br />Zero start position is treated as 1. If <code>pos</code> is greater than the length of the string, an empty string is returned.
+										It is also possible to use a negative start position (like in <a
+								href="https://dev.mysql.com/doc/refman/8.4/en/string-functions.html#function_substring">MySQL</a>). In this case, the beginning of the substring is <code>pos</code> characters from the end of the string, rather than the beginning.
+										<br />If <code>length</code> is less than or equal to 0, an empty string is returned (same as in MySQL). If it is greater than the length of the string, the substring extends to the end of the string.
+									</td>
+								</tr>
+
+								<tr>
+									<td><code>cast(expr AS type)</code></td>
+									<td>type</td>
+									<td>specifies a run-time type conversion from one data type to another. The type can be any of the types supported 
+										(i.e., <i>string</i>, <i>number</i>, <i>date</i> or <i>boolean</i>). <br />
+									
+										If the value of <code>expr</code> is null, then the result of the cast expression is also null.
+									</td>
+								</tr>
+
+								<tr>
 									<td><code>abs(a:number)</code></td>
 									<td>number</td>
 									<td>the absolute value of the given number</td>
@@ -2214,6 +2239,46 @@ export class Help extends React.Component<Props> {
 										modulo of the given numbers
 									</td>
 								</tr>
+
+								<tr>
+									<td><code>sqrt(a:number)</code></td>
+									<td>number</td>
+									<td>
+										the square root of the given number. <br />
+										The return value will be null when the number is less than 0.
+									</td>
+								</tr>
+
+								<tr>
+									<td><code>exp(a:number)</code></td>
+									<td>number</td>
+									<td>compute <i>e</i> (the base of natural logarithms) raised to the power of <code>a</code></td>
+								</tr>
+
+								<tr>
+									<td><code>power(a:number, b:number)</code></td>
+									<td>number</td>
+									<td>compute <code>a</code> raised to the power <code>b</code></td>
+								</tr>
+
+								<tr>
+									<td><code>ln(a:number)</code></td>
+									<td>number</td>
+									<td>the natural logarithm of the given number. <br />
+										The return value will be null when the value of the number is less than or equal to 0.
+									</td>
+								</tr>
+
+								<tr>
+									<td><code>log(a:number, b:number)</code></td>
+									<td>number</td>
+									<td>
+										the logarithm, base <code>a</code>, of <code>b</code>. <br />
+										The base can be any positive value other than 0 or 1 and <code>b</code> can be any positive value. <br />
+										The return value will be null when the value of <code>b</code> is less than or equal to 0.
+									</td>
+								</tr>
+
 								<tr>
 									<td>
 										<code>round(a)
