@@ -416,8 +416,8 @@ export class Landing extends React.Component {
 						<ul>
 							<li>v0.33 – Released 15.04.2025
 								<ul>
-									<li>Add Tuple Relational Calculus(TRC) support | #232</li>
-									<li>Added substring, cast and some useful math functions | #241</li>
+									<li>Added Tuple Relational Calculus (TRC) support | #232</li>
+									<li>Implemented substring, cast, and additional math functions | #241</li>
 								</ul>
 							</li>
 							<li>v0.32 – Released 15.04.2025
