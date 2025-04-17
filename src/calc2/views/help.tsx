@@ -183,6 +183,38 @@ export class Help extends React.Component<Props> {
 								<li>Thus, <code className="">S ∪ S</code> ≠ <code className="">S</code> in general.</li>
 							</ul>
 
+							<h4 id="tutorial-user-dum-dee">dum and dee</h4>
+
+							<p><a href="https://dn-uni.com/wp-content/uploads/2018/12/An-Introduction-to-Relational-Database-Theory.pdf">
+								Tutorial D</a> proposes two special relations, which have been given the pet names
+								TableDum and TableDee (abbreviated to just Dum and Dee, respectively). TableDum
+								denotes a relation of degree zero (no attributes) and cardinality zero (no tuples),
+								whereas TableDee represents a relation of degree zero and cardinality one (there is
+								one single tuple!).</p>
+
+							<p>A predicate represented by a relation of degree zero is <i>niladic</i> (has no
+								parameters). In other words, it must be a proposition, <i>p</i>. If TableDee
+								represents <i>p</i>, then <i>p</i> is true (identity relation under join operators);
+								otherwise TableDum represents <i>p</i> and <i>p</i> is false. People often ask,
+								<i>"What purpose can relations of degree zero possibly serve? They seem to be
+								of little or no value."</i> The answer is that they represent answers to queries
+								of the form <i>"Is it true that ...?"</i> or <i>"Are there any ...?</i> where the
+								answer is just yes or no.</p>
+
+							<p>Dum and Dee relations can be represented as follows:</p>
+
+							<code className="example block">
+							Dum = {`{}`}   -- inline relation with empty heading and no tuples<br/>
+							Dee = {`{()}`} -- inline relation with empty heading but one tuple of degree zero<br/>
+							</code>
+
+							<p>Given a relation R with <i>n</i> (<i>n</i> {'> 0'}) attributes and <i>t</i> (<i>t</i> {'> 0'}) tuples</p>
+
+							<code className="example block">
+							R x Dum -- returns a relation with the same schema of R but no tuples<br/>
+							R x Dee -- returns the very same relation R<br/>
+							</code>
+
 							<h3 id="tutorial-user-plain-text-notation">Alternative plain text notation</h3>
 
 							<p>Before we introduce how to use the operators this should be a quick introduction of a very handy feature
@@ -692,8 +724,10 @@ export class Help extends React.Component<Props> {
 										and the names of the attributes/columns are not affected by assignment:
 										<code className="block example">X = R
 				X join S</code>
-										The attributes of the relation R are only accessible with its original names (R.a, R.b, ..),
-										and are not affected by the assignment.
+										The attributes of the relation R are accessible with either its original names (R.a, R.b, ..)
+										or the variable name used in the assignment:
+										<code className="block example">X = R
+				pi X.a (X join S)</code>
 									</p>
 
 									<p>There is a known problem when the last assignment ends with a natural join and the query consists
@@ -1025,7 +1059,7 @@ export class Help extends React.Component<Props> {
 										</tr>
 										<tr>
 											<th>alternative syntax</th>
-											<td>pi</td>
+											<td>sigma</td>
 										</tr>
 										<tr>
 											<th>example</th>
@@ -2119,9 +2153,12 @@ export class Help extends React.Component<Props> {
 								</tr>
 
 								<tr>
-									<td><code>concat(a:string [, ...])</code></td>
+									<td><code>concat(a:"any" [, ...])</code></td>
 									<td>string</td>
-									<td>concatenates the given strings</td>
+									<td>returns the string that results from concatenating the arguments.
+										<br />May have one or more arguments. A non-string argument is implicitly converted to its equivalent string form and then concatenated. Returns null if any argument is null (like in <a
+								href="https://dev.mysql.com/doc/refman/8.0/en/string-functions.html#function_concat">MySQL</a>).
+									</td>
 								</tr>
 								<tr>
 									<td><code>upper(a:string)
@@ -2152,12 +2189,6 @@ export class Help extends React.Component<Props> {
 									<td><code>reverse(a:string)</code></td>
 									<td>string</td>
 									<td>returns the given string with the order of the characters reversed.</td>
-								</tr>
-
-								<tr>
-									<td><code>strlen(a:string)</code></td>
-									<td>number</td>
-									<td>number of characters of the string</td>
 								</tr>
 
 								<tr>
