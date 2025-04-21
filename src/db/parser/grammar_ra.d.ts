@@ -42,7 +42,9 @@ declare module relalgAst {
 	type assignment = {
 		type: 'assignment',
 		name: string,
-		child: relalgOperation,
+		child: {
+			assignmentName?: string,
+		} & relalgOperation
 		child2?: undefined,
 		assignments?: undefined,
 
@@ -236,8 +238,12 @@ declare module relalgAst {
 	}
 
 	interface binaryRelalgOperation {
-		child: relalgOperation,
-		child2: relalgOperation,
+		child: {
+			assignmentName?: string,
+		} & relalgOperation,
+		child2: {
+			assignmentName?: string,
+		} & relalgOperation,
 		assignments?: undefined,
 
 		wrappedInParentheses?: boolean,
