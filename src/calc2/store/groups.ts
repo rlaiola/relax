@@ -245,27 +245,34 @@ export function loadStaticGroups() {
 		source: GroupSourceType,
 		id: string,
 	}[] = [
-		{
+			{
 				maintainerGroup: t('calc.maintainer-groups.misc'),
+				maintainer: '',
+
+				source: 'local',
+				id: 'misc',
+			},
+			{
+				maintainerGroup: t('calc.maintainer-groups.uibk'),
 				maintainer: '',
 
 				source: 'local',
 				id: 'uibk',
 			},
-			{
-				maintainerGroup: t('calc.maintainer-groups.uibk'),
-				maintainer: '<a href="https://github.com/mtschu">mtschu</a>',
-
-				source: 'gist',
-				id: '2923a30a474fdcb46bee',
-			},
-			{
-				maintainerGroup: t('calc.maintainer-groups.uibk'),
-				maintainer: '<a href="https://gist.github.com/woolfg">Wolfgang Gassler</a>',
-
-				source: 'gist',
-				id: '7d1871f79a8bcb4788de',
-			},
+			// {
+			// 	maintainerGroup: t('calc.maintainer-groups.uibk'),
+			// 	maintainer: '<a href="https://github.com/mtschu">mtschu</a>',
+			//
+			// 	source: 'gist',
+			// 	id: '2923a30a474fdcb46bee',
+			// },
+			// {
+			// 	maintainerGroup: t('calc.maintainer-groups.uibk'),
+			// 	maintainer: '<a href="https://gist.github.com/woolfg">Wolfgang Gassler</a>',
+			//
+			// 	source: 'gist',
+			// 	id: '7d1871f79a8bcb4788de',
+			// },
 			{
 				maintainerGroup: t('calc.maintainer-groups.karlsruhe'),
 				maintainer: '<a href="https://github.com/jstoess">Jan Stoess</a>',
