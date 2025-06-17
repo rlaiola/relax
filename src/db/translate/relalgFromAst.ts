@@ -4,6 +4,7 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import * as i18n from 'i18next';
+import deepEqual from 'fast-deep-equal';
 import { CodeInfo } from '../exec/CodeInfo';
 import { Column } from '../exec/Column';
 import { Difference } from '../exec/Difference';
@@ -89,7 +90,7 @@ export function relalgFromTRCAstRoot(astRoot: trcAst.TRC_Expr | null, relations:
 					vars.push(...root.variables)
 					return rec(root.formula)
 				}
-				case 'RelationPredicate': return 
+				case 'RelationPredicate': return
 				case 'Negation': return rec(root.formula)
 				case 'QuantifiedExpression': {
 					vars.push(root.variable)
@@ -103,7 +104,7 @@ export function relalgFromTRCAstRoot(astRoot: trcAst.TRC_Expr | null, relations:
 				default: return null
 			}
 		}
-		
+
 		rec(root)
 
 		return vars
@@ -129,7 +130,7 @@ export function relalgFromTRCAstRoot(astRoot: trcAst.TRC_Expr | null, relations:
 				default: return null
 			}
 		}
-		
+
 		rec(root)
 
 		return relPreds
@@ -460,9 +461,9 @@ export function relalgFromTRCAstRoot(astRoot: trcAst.TRC_Expr | null, relations:
 				if (nRaw.formula.type === 'RelationPredicate') {
 					throw new ExecutionError(
 						i18n.t('db.messages.translate.error-trc-unsafe-formula',
-						{ 
+						{
 							relation: nRaw.formula.relation,
-							variable: nRaw.formula.variable 
+							variable: nRaw.formula.variable
 						}),
 						nRaw.codeInfo
 					);
@@ -902,8 +903,29 @@ export function relalgFromRelalgAstRoot(astRoot: relalgAst.rootRelalg, relations
  * @returns {Object} an actual RA-expression
  */
 export function relalgFromRelalgAstNode(astNode: relalgAst.relalgOperation, relations: { [key: string]: Relation }): RANode {
-	function recRANode(n: relalgAst.relalgOperation): RANode {
+	function recRANode(n: relalgAst.relalgOperation, localRelations = relations): RANode {
 		switch (n.type) {
+			case 'recursiveAssignment': {
+				// Parte âncora
+				const anchor = recRANode(n.child);
+				let result = anchor;
+				let previousResult: RANode | null = null;
+
+				// Loop de ponto fixo
+				while (!deepEqual(result, previousResult)) {
+					previousResult = result;
+					// Parte recursiva: avalia usando o resultado atual
+					const relationResult = result instanceof Relation ? result : new Relation(n.name, result);
+					const recursiveStep = recRANode(n.child2, { ...relations, [n.name]: relationResult });
+					// União dos resultados (simulando UNION)
+					result = new Union(anchor, recursiveStep);
+					// Elimina duplicatas (comportamento padrão do UNION)
+					result = new EliminateDuplicates(result);
+				}
+
+				return result;
+			}
+
 			case 'relation':
 				{
 					if (typeof (relations[n.name]) === 'undefined') {
@@ -1043,15 +1065,15 @@ export function relalgFromRelalgAstNode(astNode: relalgAst.relalgOperation, rela
 									}
 								}
 								else // normal columns
-									projections.push(new Column(el.name, el.relAlias));	
+									projections.push(new Column(el.name, el.relAlias));
 							}
 							// project all columns
 							else if (child.getMetaData('fromVariable') &&
 											 child.getMetaData('fromVariable') === el.relAlias) {
-								projections.push(new Column(el.name, null));	
+								projections.push(new Column(el.name, null));
 							}
 							else {
-								projections.push(new Column(el.name, el.relAlias));	
+								projections.push(new Column(el.name, el.relAlias));
 							}
 						}
 						else if (el.type === 'columnName') {

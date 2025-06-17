@@ -22,8 +22,8 @@
 			text: text()
 		};
 	}
-	
-	/** merges the codeInfo objects of a binary operation 
+
+	/** merges the codeInfo objects of a binary operation
 	 * it is assumed that the right node follows the left one
 	 */
 	function mergeCodeInfo(left, right){
@@ -34,15 +34,15 @@
 			},
 			text: left.text + right.text,
 		};
-		
+
 		// start = min of both ends
 		if(left.location.end.offset <= right.location.start.offset === false){
 			console.error("mergeCodeInfo: nodes not next to each other (+- whitespace): ", left, right);
 		}
-		
+
 		return out;
 	}
-	
+
 	function getNodeInfo(nodeName){
 		return {
 			type: 'nodeInfo',
@@ -121,7 +121,7 @@
 			const groupHeader = groups[i].headers.find(g => g.name === 'group');
 			if(!groupHeader){
 				continue;
-				
+
 			}
 			const name = groupHeader.text;
 
@@ -410,6 +410,20 @@ fullOuterJoinOperator
 
 // arguments
 
+// a recursive assignment: e.g. $x := expression union $x
+recursive_assignment
+= "recursive" _ n:relationName !{ usedRelationNames.push(n); } assignmentOperator a:expression _ u:unionOperator _ r:expression
+	{
+		console.log(n, a, r, getCodeInfo())
+		return {
+			type: 'recursiveAssignment',
+			name: n,
+			child: a,
+			child2: r,
+			codeInfo: getCodeInfo()
+		};
+	}
+
 // a assignment: e.g. $x := expression
 assignment
 = n:relationName !{ usedRelationNames.push(n); } assignmentOperator e:expression
@@ -625,7 +639,7 @@ booleanExprWithTrailingWhitspace
 
 // multiple (optional) assignments followed by a expression (using the variables)
 root
-= _ a2:(assignment __?)* a:assignment _ //toDo: checken, ob whitespace zwingend nötig oder nicht
+= _ a2:(recursive_assignment / assignment __?)* a:(recursive_assignment / assignment) _ //toDo: checken, ob whitespace zwingend nötig oder nicht
 	{
 		var assignments = [a];
 		for(var i in a2){
@@ -642,7 +656,7 @@ root
 			codeInfo: getCodeInfo()
 		};
 	}
-/ _ a:(assignment __?)* e:expression? _ //toDo: checken, ob whitespace zwingend nötig oder nicht
+/ _ a:(recursive_assignment / assignment __?)* e:expression? _ //toDo: checken, ob whitespace zwingend nötig oder nicht
 	{
 		var assignments = [];
 		for(var i = 0; i < a.length; i++){
@@ -664,7 +678,7 @@ groupRoot
 = _nc a:(_nc tableGroup)+ _nc
 	{
 		var groups = [];
-		
+
 		for(var i = 0; i < a.length; i++){
 			groups.push(a[i][1]);
 		}
@@ -682,7 +696,7 @@ tableGroupHeaders
 = a:tableGroupHeader b:(__? tableGroupHeader)* //toDo: checken, ob whitespace zwingend nötig oder nicht
 	{
 		var headers = [];
-		
+
 		headers.push(a);
 
 		b.map(function(e){
@@ -694,7 +708,7 @@ tableGroupHeaders
 		return headers;
 	}
 
-isoLanguageCode 
+isoLanguageCode
 = 'en'
 / 'de'
 / 'es'
@@ -708,14 +722,14 @@ exampleSql
  = a:('exampleSql' + ' - {') query:$[0-9 * a-z A-Z ( ) \n = . , ; - / \t]+ '}'
 {
 	return query;
-}  
+}
 
 
 exampleQueryRelAlg
  = ('exampleRelAlg' + ' - {') query:$[0-9 * a-z A-Z ( ) \n = . , ; - / \t]+ '}'
 {
 	return query;
-}  
+}
 
 tableGroupHeader
 = &([a-z@]+ ':') name:$[a-z]+ lang:('@' isoLanguageCode)? ':' text:$(!(endOfLine) .)*
@@ -728,7 +742,7 @@ tableGroupHeader
 	}
 / &([a-z@]+ '[[') name:$[a-z]+ lang:('@' isoLanguageCode)? '[[' text:$('\\]]' / (!(']]') .))* ']]'
 	{
-		
+
 
 		text = text.replace(/\\]]/g, ']]');
 		text = text.replace(/\\\\]]/g, '\\]]');
@@ -743,8 +757,8 @@ tableGroupHeader
 tableGroup
 = _ headers:tableGroupHeaders s:(__? exampleSql)* r:(__? exampleQueryRelAlg)* a:(__? assignment)+ //toDo: checken, ob whitespace zwingend nötig oder nicht
 	{
-	
-	
+
+
 		var assignments = [];
 		for(var i = 0; i < a.length; i++){
 			assignments.push(a[i][1]);
@@ -756,7 +770,7 @@ tableGroup
 			const header = headers[i];
 
 			if(
-				header.name !== 'group' 
+				header.name !== 'group'
 				&& header.name !== 'description'
 				&& header.name !== 'category'
 			){
@@ -788,7 +802,7 @@ tableGroup
 			}
 		}
 		exampleSql = exampleSql.trim();
-		
+
 		// check for exampleRelAlg
 		let exampleRelAlg = '';
 		if(r && r.length > 0) {
@@ -797,7 +811,7 @@ tableGroup
     	}
     }
 		exampleRelAlg = exampleRelAlg.trim();
-		
+
 
 		return {
 			type: 'tableGroup',
