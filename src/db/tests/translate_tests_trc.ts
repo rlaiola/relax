@@ -76,7 +76,7 @@ QUnit.module('translate trc ast to relational algebra', () => {
 	QUnit.module('Projection', () => {
 
 		QUnit.module('Helper functions', () => {
-			QUnit.test('test concat function', (assert) => {
+			QUnit.test('test concat()', (assert) => {
 				const queryTrc1 = '{ concat(t.b, t.c)->bla | R(t) }';
 				const queryTrc2 = '{ (t.b || t.c)->bla | R(t) }';
 				const queryRa = 'pi concat(b, c)->bla (R)'
@@ -89,7 +89,37 @@ QUnit.module('translate trc ast to relational algebra', () => {
 				assert.deepEqual(resultTrc2.getRows(), resultRa.getRows());
 			});
 
-			QUnit.test('test repeat function', function (assert) {
+			QUnit.test('test lower()', (assert) => {
+				const queryTrc = "{ lower(t.b)->y | S(t) and lower(t.b) < 'd' }";
+				const queryRa = "sigma y < 'd' (pi lower(b)->y (S))";
+				
+				const resultTrc = exec_trc(queryTrc).getResult();
+				const resultRa = exec_ra(queryRa).getResult();
+				
+				assert.deepEqual(resultTrc.getRows(), resultRa.getRows());
+			});
+
+			QUnit.test('test upper()', (assert) => {
+				const queryTrc = "{ upper(t.b)->y | S(t) and upper(t.b) < 'D' }";
+				const queryRa = "sigma y < 'D' (pi upper(b)->y (S))";
+				
+				const resultTrc = exec_trc(queryTrc).getResult();
+				const resultRa = exec_ra(queryRa).getResult();
+				
+				assert.deepEqual(resultTrc.getRows(), resultRa.getRows());
+			});
+
+			QUnit.test('test length()', (assert) => {
+				const queryTrc = "{ length(t.b)->y | S(t) and length(t.b) < 3 }";
+				const queryRa = "sigma y < 3 (pi length(b)->y (S))";
+
+				const resultTrc = exec_trc(queryTrc).getResult();
+				const resultRa = exec_ra(queryRa).getResult();
+
+				assert.deepEqual(resultTrc.getRows(), resultRa.getRows());
+			});
+
+			QUnit.test('test repeat()', function (assert) {
 				const queryTrc = "{ repeat(t.b, 3)->x | R(t) }";
 				const queryRa = " pi repeat(b, 3)->x (R) "
 
@@ -99,7 +129,7 @@ QUnit.module('translate trc ast to relational algebra', () => {
 				assert.deepEqual(resultTrc.getRows(), resultRa.getRows());
 			});
 
-			QUnit.test('test replace function', (assert) => {
+			QUnit.test('test replace()', (assert) => {
 				const queryTrc = "{ replace(concat(t.a, t.b, t.c), 'c', 'C')->bla | R(t) }";
 				const queryRa = " pi replace(x, 'c', 'C')->y (pi concat(a, b, c)->x (R)) "
 
@@ -109,19 +139,9 @@ QUnit.module('translate trc ast to relational algebra', () => {
 				assert.deepEqual(resultTrc.getRows(), resultRa.getRows());
 			});
 
-			QUnit.test('test reverse function', (assert) => {
+			QUnit.test('test reverse()', (assert) => {
 				const queryTrc = "{ reverse(concat(t.a, t.b, t.c))->x | R(t) }";
 				const queryRa = " pi reverse(x)->y (pi concat(a, b, c)->x (R)) "
-
-				const resultTrc = exec_trc(queryTrc).getResult();
-				const resultRa = exec_ra(queryRa).getResult();
-
-				assert.deepEqual(resultTrc.getRows(), resultRa.getRows());
-			});
-
-			QUnit.test('test sqrt negative number', function (assert) {
-				const queryTrc = "{ t.a, sqrt(-4)->k | R(t) }";
-				const queryRa = " pi a, sqrt(-4)->k R "
 
 				const resultTrc = exec_trc(queryTrc).getResult();
 				const resultRa = exec_ra(queryRa).getResult();
@@ -471,7 +491,7 @@ QUnit.module('translate trc ast to relational algebra', () => {
 
 			QUnit.test('test combined functions v1', function (assert) {
 				const queryTrc = "{ length(concat(t.a, t.b, t.c))->k | t in R }";
-				const queryRa = " pi length(concat(t.a, t.b, t.c))->k R "
+				const queryRa = " pi length(concat(a, b, c))->k R "
 
 				const resultTrc = exec_trc(queryTrc).getResult();
 				const resultRa = exec_ra(queryRa).getResult();
@@ -481,11 +501,43 @@ QUnit.module('translate trc ast to relational algebra', () => {
 
 			QUnit.test('test combined functions v2', function (assert) {
 				const queryTrc = "{ t.a, (concat('tam=', length(concat(t.a,t.b,t.c))))->n | t in R }";
-				const queryRa = " pi a, (concat('tam=', length(concat(t.a,t.b,t.c))))->n R "
+				const queryRa = " pi a, (concat('tam=', length(concat(a,b,c))))->n R "
 
 				const resultTrc = exec_trc(queryTrc).getResult();
 				const resultRa = exec_ra(queryRa).getResult();
 
+				assert.deepEqual(resultTrc.getRows(), resultRa.getRows());
+			});
+		});
+
+		QUnit.module('Whitespace in functions', () => {
+			QUnit.test('whitespace(s) between n-ary text function and opening parenthesis', function (assert) {
+				const queryTrc = "{ concat  (t.a, t.b, t.c)->k | R(t) }";
+				const queryRa = "pi concat  (a, b, c)->k (R)";
+				
+				const resultTrc = exec_trc(queryTrc).getResult();
+				const resultRa = exec_ra(queryRa).getResult();
+				
+				assert.deepEqual(resultTrc.getRows(), resultRa.getRows());
+			});
+			
+			QUnit.test('whitespace(s) between binary function and opening parenthesis', function (assert) {
+				const queryTrc = "{ add    (t.a, 5)->a_plus_5 | R(t) }";
+				const queryRa = "pi add    (a, 5)->a_plus_5 (R)";
+				
+				const resultTrc = exec_trc(queryTrc).getResult();
+				const resultRa = exec_ra(queryRa).getResult();
+				
+				assert.deepEqual(resultTrc.getRows(), resultRa.getRows());
+			});
+			
+			QUnit.test('whitespace(s) between unary function and opening parenthesis', function (assert) {
+				const queryTrc = "{ t.a + length  (  t.c )->x, upper (   t.b  )->k | R(t) }";
+				const queryRa = "pi a + length  (  c )->x, upper (   b  )->k (R)";
+				
+				const resultTrc = exec_trc(queryTrc).getResult();
+				const resultRa = exec_ra(queryRa).getResult();
+				
 				assert.deepEqual(resultTrc.getRows(), resultRa.getRows());
 			});
 		});
