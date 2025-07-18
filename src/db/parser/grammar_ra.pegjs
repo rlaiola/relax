@@ -412,14 +412,14 @@ fullOuterJoinOperator
 
 // a recursive assignment: e.g. $x := expression union $x
 recursive_assignment
-= "recursive" _ n:relationName !{ usedRelationNames.push(n); } assignmentOperator a:expression _ u:unionOperator _ r:expression
+= "recursive"i __ n:relationName !{ usedRelationNames.push(n); } assignmentOperator e:recursiveExpression
 	{
-		console.log(n, a, r, getCodeInfo())
+		console.log(n, e, 'rec')
 		return {
 			type: 'recursiveAssignment',
 			name: n,
-			child: a,
-			child2: r,
+			child: e.child,
+			child2: e.child2,
 			codeInfo: getCodeInfo()
 		};
 	}
@@ -428,6 +428,7 @@ recursive_assignment
 assignment
 = n:relationName !{ usedRelationNames.push(n); } assignmentOperator e:expression
 	{
+		console.log(n, e, 'assignment')
 		e.assignmentName = n;
 		return {
 			type: 'assignment',
@@ -438,6 +439,17 @@ assignment
 		};
 	}
 
+recursiveExpression
+= first:expression_precedence3 _ (u:unionOperator / 'union'i) _ second:expression_precedence3
+	{
+		console.log(first, second, 'recursiveExpression')
+		return {
+			type: 'recursiveExpression',
+			child: first,
+			child2: second,
+			codeInfo: getCodeInfo()
+		};
+	}
 
 namedColumnExpr
 = a:valueExpr arrowRight dst:unqualifiedColumnName

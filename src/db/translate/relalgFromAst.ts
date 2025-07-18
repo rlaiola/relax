@@ -4,7 +4,6 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import * as i18n from 'i18next';
-import deepEqual from 'fast-deep-equal';
 import { CodeInfo } from '../exec/CodeInfo';
 import { Column } from '../exec/Column';
 import { Difference } from '../exec/Difference';
@@ -31,6 +30,8 @@ import { Selection } from '../exec/Selection';
 import { Union } from '../exec/Union';
 import * as ValueExpr from '../exec/ValueExpr';
 import { EliminateDuplicates } from '../exec/EliminateDuplicates';
+import { deepEqual } from './utils';
+import { Table } from '../exec/Table';
 
 function parseJoinCondition(condition: relalgAst.booleanExpr | string[] | null): JoinCondition {
 	if (condition === null) {
@@ -906,24 +907,50 @@ export function relalgFromRelalgAstNode(astNode: relalgAst.relalgOperation, rela
 	function recRANode(n: relalgAst.relalgOperation, localRelations = relations): RANode {
 		switch (n.type) {
 			case 'recursiveAssignment': {
-				// Parte âncora
-				const anchor = recRANode(n.child);
-				let result = anchor;
-				let previousResult: RANode | null = null;
+				// const recursiveNode = n as relalgAst.recursiveAssignment;
 
-				// Loop de ponto fixo
-				while (!deepEqual(result, previousResult)) {
-					previousResult = result;
-					// Parte recursiva: avalia usando o resultado atual
-					const relationResult = result instanceof Relation ? result : new Relation(n.name, result);
-					const recursiveStep = recRANode(n.child2, { ...relations, [n.name]: relationResult });
-					// União dos resultados (simulando UNION)
-					result = new Union(anchor, recursiveStep);
-					// Elimina duplicatas (comportamento padrão do UNION)
-					result = new EliminateDuplicates(result);
-				}
+				// // Create initial empty relation with same schema as the first expression
+				// const initialExpr = recRANode(recursiveNode.child, localRelations);
+				// initialExpr.check();
+				// const initialSchema = initialExpr.getSchema();
 
-				return result;
+				// // Create empty relation as starting point
+				// let resultTable = new Table();
+				// resultTable.setSchema(initialSchema.copy());
+
+				// let previousResultTable: Table;
+				// let iteration = 0;
+				// const maxIterations = 1000; // Prevent infinite loops
+
+				// do {
+				// 	previousResultTable = resultTable.copy();
+
+				// 	// Always wrap the table in a Relation for the recursive reference
+				// 	const currentRelation = new Relation(recursiveNode.name, resultTable);
+
+				// 	const iterationRelations = {
+				// 		...localRelations,
+				// 		[recursiveNode.name]: currentRelation
+				// 	};
+
+				// 	// Evaluate the union expression with current state
+				// 	const unionExpr = recRANode(recursiveNode.child2, iterationRelations);
+				// 	setAdditionalData(recursiveNode, unionExpr);
+				// 	unionExpr.check();
+
+				// 	resultTable = unionExpr.getResult(true); // eliminate duplicates
+
+				// 	iteration++;
+				// 	if (iteration > maxIterations) {
+				// 		throw new Error(`Recursive assignment exceeded maximum iterations (${maxIterations})`);
+				// 	}
+
+				// } while (!deepEqual(resultTable, previousResultTable));
+
+				// // Create final relation and return it
+				// const finalRelation = new Relation(recursiveNode.name, resultTable);
+				// setAdditionalData(recursiveNode, finalRelation);
+				// return finalRelation;
 			}
 
 			case 'relation':
@@ -1469,12 +1496,12 @@ export function relalgFromRelalgAstNode(astNode: relalgAst.relalgOperation, rela
 					}
 					if (child2.getMetaData('fromVariable')) {
 						node.setMetaData(
-							'fromVariable',
-							(
-								node.getMetaData('fromVariable') ?
-									node.getMetaData('fromVariable') + ' ' : ''
-							) +
-							child2.getMetaData('fromVariable'));
+								'fromVariable',
+								(
+									node.getMetaData('fromVariable') ?
+										node.getMetaData('fromVariable') + ' ' : ''
+								) +
+								child2.getMetaData('fromVariable'));
 					}
 					setAdditionalData(n, node);
 					node._execTime = Date.now() - start;

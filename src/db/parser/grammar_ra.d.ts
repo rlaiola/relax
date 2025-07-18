@@ -43,11 +43,11 @@ declare module relalgAst {
 		type: 'recursiveAssignment',
 		name: string,
 		child: relalgOperation,
-    	child2: relalgOperation,
+		child2: relalgOperation,
 		assignments?: undefined,
-		codeInfo: CodeInfo
-
-
+		codeInfo: CodeInfo,
+		wrappedInParentheses?: boolean,
+		metaData?: { [key: string]: any },
 	}
 
 	type assignment = {
