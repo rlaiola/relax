@@ -413,15 +413,28 @@ fullOuterJoinOperator
 // a recursive assignment: e.g. $x := expression union $x
 recursive_assignment
 = "recursive"i __ n:relationName !{ usedRelationNames.push(n); } assignmentOperator e:recursiveExpression
-	{
-		return {
-			type: 'recursiveAssignment',
-			name: n,
-			child: e.child,
-			child2: e.child2,
-			codeInfo: getCodeInfo()
-		};
-	}
+    {
+        function containsInitialRelation(node, initialName) {
+            if (!node) return false;
+            if (node.type === 'relation' && node.name === initialName) return true;
+            if (node.child && containsInitialRelation(node.child, initialName)) return true;
+            if (node.child2 && containsInitialRelation(node.child2, initialName)) return true;
+            if (Array.isArray(node.args)) {
+                return node.args.some(arg => containsInitialRelation(arg, initialName));
+            }
+            return false;
+        }
+        if (!containsInitialRelation(e.child2, n)) {
+            error('A parte recursiva deve referenciar a tabela inicial: ' + n);
+        }
+        return {
+            type: 'recursiveAssignment',
+            name: n,
+            child: e.child,
+            child2: e.child2,
+            codeInfo: getCodeInfo()
+        };
+    }
 
 // a assignment: e.g. $x := expression
 assignment
