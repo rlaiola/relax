@@ -414,7 +414,6 @@ fullOuterJoinOperator
 recursive_assignment
 = "recursive"i __ n:relationName !{ usedRelationNames.push(n); } assignmentOperator e:recursiveExpression
 	{
-		console.log(n, e, 'rec')
 		return {
 			type: 'recursiveAssignment',
 			name: n,
@@ -428,7 +427,6 @@ recursive_assignment
 assignment
 = n:relationName !{ usedRelationNames.push(n); } assignmentOperator e:expression
 	{
-		console.log(n, e, 'assignment')
 		e.assignmentName = n;
 		return {
 			type: 'assignment',
@@ -442,7 +440,6 @@ assignment
 recursiveExpression
 = first:expression_precedence3 _ (u:unionOperator / 'union'i) _ second:expression_precedence3
 	{
-		console.log(first, second, 'recursiveExpression')
 		return {
 			type: 'recursiveExpression',
 			child: first,
@@ -651,7 +648,7 @@ booleanExprWithTrailingWhitspace
 
 // multiple (optional) assignments followed by a expression (using the variables)
 root
-= _ a2:(recursive_assignment / assignment __?)* a:(recursive_assignment / assignment) _ //toDo: checken, ob whitespace zwingend nötig oder nicht
+= _ a2:(recursive_assignment __? / assignment __?)* a:(recursive_assignment / assignment) _ //toDo: checken, ob whitespace zwingend nötig oder nicht
 	{
 		var assignments = [a];
 		for(var i in a2){
@@ -668,7 +665,7 @@ root
 			codeInfo: getCodeInfo()
 		};
 	}
-/ _ a:(recursive_assignment / assignment __?)* e:expression? _ //toDo: checken, ob whitespace zwingend nötig oder nicht
+/ _ a:(recursive_assignment __? / assignment __?)* e:expression? _ //toDo: checken, ob whitespace zwingend nötig oder nicht
 	{
 		var assignments = [];
 		for(var i = 0; i < a.length; i++){
