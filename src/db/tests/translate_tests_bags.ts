@@ -2206,7 +2206,7 @@ QUnit.test('pi with wrong date format', function (assert) {
 	}
 });
 
-QUnit.test('test sqrt negative number', function (assert) {
+QUnit.test('test sqrt of negative number', function (assert) {
 	const query = "pi a, sqrt(-4)->k R";
 	const root = exec_ra(query, getTestBags());
 
@@ -2413,7 +2413,7 @@ QUnit.test('test logarithm, base 2, of -1', function (assert) {
 });
 
 QUnit.test('test logarithm, base 2, of 0', function (assert) {
-	const query = "pi log(2, -1)->k R";
+	const query = "pi log(2, 0)->k R";
 	const root = exec_ra(query, getTestBags());
 
 	const ref = exec_ra(`{
@@ -2441,7 +2441,7 @@ QUnit.test('test logarithm, base 2, of 1', function (assert) {
 });
 
 QUnit.test('test logarithm, base -1, of 16', function (assert) {
-	const query = "pi log(2, -1)->k R";
+	const query = "pi log(-1, 16)->k R";
 	const root = exec_ra(query, getTestBags());
 
 	const ref = exec_ra(`{
@@ -2455,7 +2455,7 @@ QUnit.test('test logarithm, base -1, of 16', function (assert) {
 });
 
 QUnit.test('test logarithm, base 0, of 16', function (assert) {
-	const query = "pi log(2, -1)->k R";
+	const query = "pi log(0, 16)->k R";
 	const root = exec_ra(query, getTestBags());
 
 	const ref = exec_ra(`{
