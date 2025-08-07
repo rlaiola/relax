@@ -269,13 +269,13 @@
 	"calc.editors.ra.inline-editor.row-type": "Type",
 	"calc.editors.ra.inline-editor.input-relation-name": "Relation Name",
 	"calc.navigation.imprint": "Imprint",
-	"calc.editors.ra.button-download-csv": "",
-	"calc.editors.ra.button-download-jpg": "",
-	"calc.editors.ra.button-download-query": "",
-	"calc.editors.ra.button-zoom-center": "",
-	"calc.editors.ra.button-zoom-in": "",
-	"calc.editors.ra.button-zoom-out": "",
-	"calc.editors.ra.button-zoom-reset": "",
-	"calc.menu.recently-used": "",
-	"calc.result.exec.time": ""
+	"calc.editors.ra.button-download-csv": "Result (CSV)",
+	"calc.editors.ra.button-download-jpg": "Result (JPG)",
+	"calc.editors.ra.button-download-query": "Query",
+	"calc.editors.ra.button-zoom-center": "Zoom to fit",
+	"calc.editors.ra.button-zoom-in": "Zoom in",
+	"calc.editors.ra.button-zoom-out": "Zoom out",
+	"calc.editors.ra.button-zoom-reset": "Reset zoom",
+	"calc.menu.recently-used": "Recently used gists",
+	"calc.result.exec.time": "Execution time: "
 }
