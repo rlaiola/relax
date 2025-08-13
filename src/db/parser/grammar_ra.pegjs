@@ -297,15 +297,27 @@ rho
 
 arrowLeft
 = _ o:('←' { return getNodeInfo('arrowLeft'); }) _
-	{ return o; }
+	{
+		operatorPositions.push(o);
+		return o;
+	}
 / _ o:('<-' { return getNodeInfo('arrowLeft'); }) _
-	{ return o; }
+	{
+		operatorPositions.push(o);
+		return o;
+	}
 
 arrowRight
 = _ o:('→' { return getNodeInfo('arrowRight'); }) _
-	{ return o; }
+	{
+		operatorPositions.push(o);
+		return o;
+	}
 / _ o:('->' { return getNodeInfo('arrowRight'); }) _
-	{ return o; }
+	{ 
+		operatorPositions.push(o);
+		return o;
+	}
 
 psi
 = _ o:('ψ' { return getNodeInfo('psi'); }) _
@@ -1099,48 +1111,80 @@ comparisonOperatorEquals
 = '='
 
 comparisonOperatorNotEquals
-= ('!=' / '≠' / '<>')
-	{ return '!='; }
+= _ co:('!=' { return getNodeInfo('notEquals'); }) _
+	{
+		operatorPositions.push(co);
+		return '!=';
+	}
+/ _ co:('≠' { return getNodeInfo('notEquals'); }) _
+	{
+		operatorPositions.push(co);
+		return '!=';
+	}
+/ _ co:('<>' { return getNodeInfo('notEquals'); }) _
+	{
+		operatorPositions.push(co);
+		return '!=';
+	}
 
 comparisonOperatorGreaterEquals
-= ('>=' / '≥')
-	{ return '>='; }
+= _ co:('>=' { return getNodeInfo('GreaterThanOrEquals'); }) _
+	{
+		operatorPositions.push(co);
+		return '>=';
+	}
+/ _ co:('≥' { return getNodeInfo('GreaterThanOrEquals'); })
+	{
+		operatorPositions.push(co);
+		return '>=';
+	}
 
 comparisonOperatorGreater
 = '>'
 
 comparisonOperatorLesserEquals
-= ('<=' / '≤')
-	{ return '<='; }
+= _ co:('<=' { return getNodeInfo('LessThanOrEquals'); }) _
+	{
+		operatorPositions.push(co);
+		return '<=';
+	}
+/ _ co:('≤' { return getNodeInfo('LessThanOrEquals'); }) _
+	{
+		operatorPositions.push(co);
+		return '<=';
+	}
 
 comparisonOperatorLesser
 = '<'
 
 and 'logical AND'
-= __ 'and'i __
-/ _ '∧' _
+= __ lo:('and'i { return getNodeInfo('and'); }) __
+	{ return lo; }
+/ _ lo:('∧' { return getNodeInfo('and'); }) _
+	{ return lo; }
 
 xor 'logical XOR'
-= __ 'xor'i __
-/ _ ('⊻' / '⊕') _
+= __ lo:('xor'i { return getNodeInfo('xor'); }) __
+	{ return lo; }
+/ _ lo:('⊻' { return getNodeInfo('xor'); }) _
+	{ return lo; }
 
 or 'logical OR'
-= __ 'or'i __
-/ _ '∨' _
+= __ lo:('or'i { return getNodeInfo('or'); }) __
+	{ return lo; }
+/ _ lo:('∨' { return getNodeInfo('or'); }) _
+	{ return lo; }
 
 not 'logical NOT'
-= _ ('!' / '¬') _
+= _ lo:('!' { return getNodeInfo('not'); }) _
+	{ return lo; }
+/ _ lo:('¬' { return getNodeInfo('not'); }) _
+	{ return lo; }
+/ _ lo:('not'i { return getNodeInfo('not'); }) _
+	{ return lo; }
 
 
-
-
-
-
-
-/* this is a syntax for a constant table
-
-
-*/
+/* this is a syntax for a constant table */
 
 tableDelimiter 'delimiter'
 = _sl ',' _sl
@@ -1384,8 +1428,9 @@ booleanExpr 'boolean expression'
 = valueExpr
 
 expr_rest_boolean_disj
-= or right:expr_precedence8
+= lo:or right:expr_precedence8
 	{
+		operatorPositions.push(lo);
 		return {
 			type: 'valueExpr',
 			datatype: 'boolean',
@@ -1410,8 +1455,9 @@ expr_rest_string_concat
 	}
 
 expr_rest_boolean_xdisj
-= xor right:expr_precedence7
+= lo:xor right:expr_precedence7
 	{
+		operatorPositions.push(lo);
 		return {
 			type: 'valueExpr',
 			datatype: 'boolean',
@@ -1423,8 +1469,9 @@ expr_rest_boolean_xdisj
 	}
 
 expr_rest_boolean_conj
-= and right:expr_precedence6
+= lo:and right:expr_precedence6
 	{
+		operatorPositions.push(lo);
 		return {
 			type: 'valueExpr',
 			datatype: 'boolean',
@@ -1530,8 +1577,9 @@ expr_number_minus
 	}
 
 expr_boolean_negation
-= not a:expr_precedence0
+= lo:not a:expr_precedence0
 	{
+		operatorPositions.push(lo);
 		return {
 			type: 'valueExpr',
 			datatype: 'boolean',
