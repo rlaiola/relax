@@ -22,6 +22,7 @@ import { SemiJoin } from '../exec/joins/SemiJoin';
 import { OrderBy } from '../exec/OrderBy';
 import { Projection, ProjectionColumn } from '../exec/Projection';
 import { RANode } from '../exec/RANode';
+import { RecursiveAssignment } from '../exec/RecursiveAssignment';
 import { Relation } from '../exec/Relation';
 import { RenameColumns } from '../exec/RenameColumns';
 import { RenameRelation } from '../exec/RenameRelation';
@@ -30,7 +31,6 @@ import { Selection } from '../exec/Selection';
 import { Union } from '../exec/Union';
 import * as ValueExpr from '../exec/ValueExpr';
 import { EliminateDuplicates } from '../exec/EliminateDuplicates';
-import { deepEqual } from './utils';
 import { Table } from '../exec/Table';
 
 function parseJoinCondition(condition: relalgAst.booleanExpr | string[] | null): JoinCondition {
@@ -894,6 +894,7 @@ function setAdditionalData<T extends RANode>(astNode: relalgAst.relalgOperation,
 // translates a RA-AST or a BA-AST to RA
 export function relalgFromRelalgAstRoot(astRoot: relalgAst.rootRelalg, relations: { [key: string]: Relation }) {
 	// root is the real root node! of a statement
+	console.log(astRoot)
 	return relalgFromRelalgAstNode(astRoot.child, relations);
 }
 
@@ -905,53 +906,19 @@ export function relalgFromRelalgAstRoot(astRoot: relalgAst.rootRelalg, relations
  */
 export function relalgFromRelalgAstNode(astNode: relalgAst.relalgOperation, relations: { [key: string]: Relation }): RANode {
 	function recRANode(n: relalgAst.relalgOperation, localRelations = relations): RANode {
+		console.log(n.type)
 		switch (n.type) {
-			case 'recursiveAssignment': {
-				// const recursiveNode = n as relalgAst.recursiveAssignment;
+			case 'recursiveAssignment':
+				const initialNode = recRANode(n.child, localRelations);
+				const recursiveNode = recRANode(n.child2, localRelations);
 
-				// // Create initial empty relation with same schema as the first expression
-				// const initialExpr = recRANode(recursiveNode.child, localRelations);
-				// initialExpr.check();
-				// const initialSchema = initialExpr.getSchema();
+				console.log('teste')
 
-				// // Create empty relation as starting point
-				// let resultTable = new Table();
-				// resultTable.setSchema(initialSchema.copy());
+				const node = new RecursiveAssignment(initialNode, recursiveNode);
 
-				// let previousResultTable: Table;
-				// let iteration = 0;
-				// const maxIterations = 1000; // Prevent infinite loops
+				setAdditionalData(n, node);
+				return node;
 
-				// do {
-				// 	previousResultTable = resultTable.copy();
-
-				// 	// Always wrap the table in a Relation for the recursive reference
-				// 	const currentRelation = new Relation(recursiveNode.name, resultTable);
-
-				// 	const iterationRelations = {
-				// 		...localRelations,
-				// 		[recursiveNode.name]: currentRelation
-				// 	};
-
-				// 	// Evaluate the union expression with current state
-				// 	const unionExpr = recRANode(recursiveNode.child2, iterationRelations);
-				// 	setAdditionalData(recursiveNode, unionExpr);
-				// 	unionExpr.check();
-
-				// 	resultTable = unionExpr.getResult(true); // eliminate duplicates
-
-				// 	iteration++;
-				// 	if (iteration > maxIterations) {
-				// 		throw new Error(`Recursive assignment exceeded maximum iterations (${maxIterations})`);
-				// 	}
-
-				// } while (!deepEqual(resultTable, previousResultTable));
-
-				// // Create final relation and return it
-				// const finalRelation = new Relation(recursiveNode.name, resultTable);
-				// setAdditionalData(recursiveNode, finalRelation);
-				// return finalRelation;
-			}
 
 			case 'relation':
 				{
