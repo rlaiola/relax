@@ -58,6 +58,9 @@ export class FullOuterJoin extends Join {
 	}
 
 	getResult(doEliminateDuplicateRows: boolean = true, session?: Session) {
+		if (this._resultTable) {
+			return this._resultTable;
+		}
 		session = this._returnOrCreateSession(session);
 
 		if (this._joinConditionEvaluator === null || this._rowCreatorMatched === null || this._rowCreatorNotMatched === null) {
@@ -99,7 +102,7 @@ export class FullOuterJoin extends Join {
 			resultTable.eliminateDuplicateRows();
 		}
 		this.setResultNumRows(resultTable.getNumRows());
-
+		this._resultTable = resultTable;
 		return resultTable;
 	}
 }

@@ -9,13 +9,90 @@ import { Result } from 'calc2/components/result';
 import { Item } from 'calc2/components/toolbar';
 import { t, T } from 'calc2/i18n';
 import { Group } from 'calc2/store/groups';
+import { deserializeFromParsedObj } from 'calc2/utils/worker-serde/deserializer';
 import * as CodeMirror from 'codemirror';
 import { Relation } from 'db/exec/Relation';
+import dbExecClasses from 'db/exec/classes';
 import { AutoreplaceOperatorsMode, parseRelalg, queryWithReplacedOperatorsFromAst, relalgFromRelalgAstRoot, replaceVariables } from 'db/relalg';
 import * as React from 'react';
-import { faCalendarAlt, faTable, faMagic, faExternalLinkAlt, faPaste } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarAlt, faTable, faMagic, faPaste } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+// worker import
+// @ts-ignore 
+import editorRelalgWorker from './editorRelalg.worker';
+import { getSerializeValueWithClassName } from '../utils/worker-serde/serializer';
+
+type WorkerProcessResp = { success: null, error: string | Error } | {
+	success: {
+		ast: ReturnType<typeof parseRelalg>,
+		root: ReturnType<typeof relalgFromRelalgAstRoot>
+	}, error: null
+}
+
+/**
+ * class to abstract the communication between our main thread and the
+ * editorRelalgWorker, this exposes the available operations at it
+ * in a async behavior, to offload our main thread.
+ */
+class EditorRelalgWorker {
+	resolveById: Record<string, [(resp: any) => void, (err: Error) => void]> = {}
+	cachedRelationsByGroupName: Record<string, boolean> = {}
+	worker: Worker;
+	constructor(worker: Worker) {
+		this.worker = worker
+		this.worker.onmessage = this._onMessage.bind(this);
+		this.worker.onerror = console.log
+	}
+	_onMessage(response: MessageEvent<{ id: string } & (WorkerProcessResp)>) {
+		const { id, ...resp } = response.data
+		const [resolveFn, rejectFn] = this.resolveById[id];
+		if (resolveFn) {
+			if (resp.success) {
+				resp.success.root = deserializeFromParsedObj(resp.success.root as any, dbExecClasses, {})
+				resolveFn(resp.success);
+			} else {
+				if (typeof resp.error === "string") {
+					rejectFn(new Error(t(resp.error as any)))
+				} else {
+					rejectFn(resp.error)
+				}
+			}
+			delete this.resolveById[id]
+		}
+	}
+
+	cacheRelations(groupName: string, relations: { [name: string]: Relation }) {
+		if (this.cachedRelationsByGroupName[groupName]) {
+			return
+		}
+		this.worker.postMessage({
+			type: "cacheRelations",
+			payload: {
+				groupName,
+				relations: getSerializeValueWithClassName(relations)
+			}
+		});
+		this.cachedRelationsByGroupName[groupName] = true;
+	}
+
+	async exec(text: string, groupName: string) {
+		const id = window.crypto.randomUUID();
+		const resolveById = this.resolveById;
+		return await new Promise<{
+			ast: ReturnType<typeof parseRelalg>,
+			root: ReturnType<typeof relalgFromRelalgAstRoot>
+		}>((resolve, reject) => {
+			resolveById[id] = [resolve, reject];
+			this.worker.postMessage({
+				type: "exec",
+				payload: { text, groupName, id }
+			});
+		})
+	}
+}
+
+const EDITOR_RELALG_WORKER = new EditorRelalgWorker(editorRelalgWorker() as any)
 
 const NUM_TREE_LABEL_COLORS = 6;
 export const KEYWORDS_RELALG = [
@@ -31,63 +108,83 @@ type Props = {
 };
 type State = {
 	autoreplaceOperatorsMode: AutoreplaceOperatorsMode,
+	relations: { [name: string]: Relation },
+	groupName: string
 };
-
 
 export class EditorRelalg extends React.Component<Props, State> {
 	private editorBase: EditorBase | null = null;
-
 	constructor(props: Props) {
 		super(props);
-
 		this.state = {
 			autoreplaceOperatorsMode: 'none',
+			relations: props.group.tables.reduce((acc, table) => {
+				acc[table.tableName] = table.relation
+				return acc
+			}, {} as { [name: string]: Relation }),
+			groupName: props.group.groupName.fallback
 		};
-
+		EDITOR_RELALG_WORKER.cacheRelations(this.state.groupName, this.state.relations);
 		this.replaceText = this.replaceText.bind(this);
 	}
 
-	
-	
-	
+	static getDerivedStateFromProps(nextProps: Props, prevState: State): State | null {
+		if (prevState.groupName === nextProps.group.groupName.fallback) {
+			return null;
+		} else {
+			const updatedState = {
+				...prevState,
+				relations: nextProps.group.tables.reduce((acc, table) => {
+					acc[table.tableName] = table.relation
+					return acc
+				}, {} as { [name: string]: Relation }),
+				groupName: nextProps.group.groupName.fallback
+			}
+			EDITOR_RELALG_WORKER.cacheRelations(updatedState.groupName, updatedState.relations);
+			return updatedState
+		}
+	}
 
 	render() {
 		const { group } = this.props;
 		const { autoreplaceOperatorsMode } = this.state;
-		// TODO: move to state
-		const relations: { [name: string]: Relation } = {};
-		group.tables.forEach(table => {
-			relations[table.tableName] = table.relation;
-		});
 
 		return (
 			<EditorBase
 				exampleRA={group.exampleRA}
 				exampleBags={group.exampleBags}
 				exampleSql={group.exampleSQL}
-				textChange={(cm: CodeMirror.Editor) => { } }
+				textChange={(cm: CodeMirror.Editor) => { }}
 				ref={ref => {
 					if (ref) {
 						this.editorBase = ref;
 					}
 				}}
 				mode="relalg"
-				execFunction={(self: EditorBase, text: string, offset) => {
-					const ast = parseRelalg(text, Object.keys(relations));
-					replaceVariables(ast, relations);
+				execFunction={async (self: EditorBase, text: string, offset) => {
+					let ast: ReturnType<typeof parseRelalg>;
+					let root: ReturnType<typeof relalgFromRelalgAstRoot>;
+					if (EDITOR_RELALG_WORKER.worker) {
+						const resp = await EDITOR_RELALG_WORKER.exec(text, this.state.groupName);
+						ast = resp.ast
+						root = resp.root
+					} else {
+						ast = parseRelalg(text, Object.keys(this.state.relations));
+						replaceVariables(ast, this.state.relations);
 
-					if (ast.child === null) {
-						if (ast.assignments.length > 0) {
-							throw new Error(t('calc.messages.error-query-missing-assignments-found'));
+						if (ast.child === null) {
+							if (ast.assignments.length > 0) {
+								throw new Error(t('calc.messages.error-query-missing-assignments-found'));
+							}
+							else {
+								throw new Error(t('calc.messages.error-query-missing'));
+							}
 						}
-						else {
-							throw new Error(t('calc.messages.error-query-missing'));
-						}
+
+
+						root = relalgFromRelalgAstRoot(ast, this.state.relations);
+						root.check();
 					}
-
-
-					const root = relalgFromRelalgAstRoot(ast, relations);
-					root.check();
 
 
 					self.historyAddEntry(text);
@@ -110,46 +207,68 @@ export class EditorRelalg extends React.Component<Props, State> {
 					};
 				}}
 				tab="relalg"
-				linterFunction={(self: EditorBase, editor: CodeMirror.Editor, text: string) => {
-					const hints = [];
+				linterFunction={async (self: EditorBase, editor: CodeMirror.Editor, text: string) => {
+					const hints: string[] = [];
 
-					const ast = parseRelalg(text, Object.keys(relations));
-					replaceVariables(ast, relations);
-
-					for (let i = 0; i < ast.assignments.length; i++) {
-						hints.push(ast.assignments[i].name);
-					}
-
-					if (ast.child === null) {
-						if (ast.assignments.length > 0) {
-							throw new Error(t('calc.messages.error-query-missing-assignments-found'));
+					if (EDITOR_RELALG_WORKER.worker) {
+						const resp = await EDITOR_RELALG_WORKER.exec(text, this.state.groupName);
+						const ast = resp.ast;
+						for (let i = 0; i < ast.assignments.length; i++) {
+							hints.push(ast.assignments[i].name);
 						}
-						else {
-							throw new Error(t('calc.messages.error-query-missing'));
+						if (editor.getDoc().somethingSelected() === false) {
+							const cursorOld: { line: number, ch: number } = editor.getDoc().getCursor();
+							const { query, cursor } = queryWithReplacedOperatorsFromAst(text, ast.operatorPositions, { line: cursorOld.line + 1, column: cursorOld.ch + 1 }, autoreplaceOperatorsMode);
+							if (query !== text) {
+								editor.setValue(query);
+								editor.getDoc().setCursor({ line: cursor.line - 1, ch: cursor.column - 1 });
+							}
 						}
-					}
 
 
-					const root = relalgFromRelalgAstRoot(ast, relations);
-					root.check();
-
-					// replace text (text-magic)
-					if (editor.getDoc().somethingSelected() === false) {
-						const cursorOld: { line: number, ch: number } = editor.getDoc().getCursor();
-						const { query, cursor } = queryWithReplacedOperatorsFromAst(text, ast.operatorPositions, { line: cursorOld.line + 1, column: cursorOld.ch + 1 }, autoreplaceOperatorsMode);
-						if (query !== text) {
-							editor.setValue(query);
-							editor.getDoc().setCursor({ line: cursor.line - 1, ch: cursor.column - 1 });
+						if (self.props.enableInlineRelationEditor) {
+							self.addInlineRelationMarkers(ast);
 						}
-					}
+					} else {
+						const ast = parseRelalg(text, Object.keys(this.state.relations));
+						replaceVariables(ast, this.state.relations);
+
+						for (let i = 0; i < ast.assignments.length; i++) {
+							hints.push(ast.assignments[i].name);
+						}
+
+						if (ast.child === null) {
+							if (ast.assignments.length > 0) {
+								throw new Error(t('calc.messages.error-query-missing-assignments-found'));
+							}
+							else {
+								throw new Error(t('calc.messages.error-query-missing'));
+							}
+						}
 
 
-					if (self.props.enableInlineRelationEditor) {
-						self.addInlineRelationMarkers(ast);
+						const root = relalgFromRelalgAstRoot(ast, this.state.relations);
+						root.check();
+
+						// replace text (text-magic)
+						if (editor.getDoc().somethingSelected() === false) {
+							const cursorOld: { line: number, ch: number } = editor.getDoc().getCursor();
+							const { query, cursor } = queryWithReplacedOperatorsFromAst(text, ast.operatorPositions, { line: cursorOld.line + 1, column: cursorOld.ch + 1 }, autoreplaceOperatorsMode);
+							if (query !== text) {
+								editor.setValue(query);
+								editor.getDoc().setCursor({ line: cursor.line - 1, ch: cursor.column - 1 });
+							}
+						}
+
+
+						if (self.props.enableInlineRelationEditor) {
+							self.addInlineRelationMarkers(ast);
+						}
+						hints.concat(getColumnNamesFromRaRoot(root))
 					}
 
 					// use columns from all calculated schemas for hints
-					return hints.concat(getColumnNamesFromRaRoot(root));
+					return hints;
 				}}
 				getHintsFunction={() => {
 					const hints: string[] = [
@@ -381,7 +500,7 @@ export class EditorRelalg extends React.Component<Props, State> {
 								tooltip: 'calc.editors.ra.toolbar.inline-relation-editor-content',
 							},
 							{
-								label: <FontAwesomeIcon icon={faCalendarAlt  as IconProp} />,
+								label: <FontAwesomeIcon icon={faCalendarAlt as IconProp} />,
 								onClick: item => this.replaceText(item, `date('1970-01-01')`),
 								tooltipTitle: 'calc.editors.ra.toolbar.insert-date',
 								tooltip: 'calc.editors.ra.toolbar.insert-date-content',
@@ -389,7 +508,7 @@ export class EditorRelalg extends React.Component<Props, State> {
 							{
 								className: 'showOnSM',
 								label: <FontAwesomeIcon className="editorButtonOnSM" icon={faPaste as IconProp} />,
-								onClick:  () => { this.props.relInsertModalToggle(); },
+								onClick: () => { this.props.relInsertModalToggle(); },
 								tooltipTitle: 'calc.editors.insert-relation-title',
 								tooltip: 'calc.editors.insert-relation-tooltip',
 							},
@@ -400,7 +519,7 @@ export class EditorRelalg extends React.Component<Props, State> {
 							{
 								className: 'dropdownToolbarButton',
 								type: 'dropdown',
-								label: <FontAwesomeIcon className="editorButtonOnSM" icon={faMagic  as IconProp} />,
+								label: <FontAwesomeIcon className="editorButtonOnSM" icon={faMagic as IconProp} />,
 								tooltipTitle: 'calc.editors.ra.toolbar.autoreplace-operators.title',
 								tooltip: 'calc.editors.ra.toolbar.autoreplace-operators.header',
 								elements: [
@@ -429,7 +548,7 @@ export class EditorRelalg extends React.Component<Props, State> {
 									this.setState({
 										autoreplaceOperatorsMode: value as AutoreplaceOperatorsMode,
 									}, () => {
-										if(this.editorBase){
+										if (this.editorBase) {
 											this.editorBase.forceLinterRun();
 										}
 									});

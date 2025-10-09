@@ -44,9 +44,9 @@ module.exports = (env, options) => {
 		plugins: [
 			// https://github.com/johnagan/clean-webpack-plugin
 			new CleanWebpackPlugin({
-					dry: !isProduction,
-					verbose: false,
-				}),
+				dry: !isProduction,
+				verbose: false,
+			}),
 
 			// generate index.html
 			new HtmlWebpackPlugin({
@@ -158,6 +158,10 @@ module.exports = (env, options) => {
 					// https://github.com/eploko/pegjs-loader
 					test: /grammar_trc\.pegjs$/,
 					loader: 'pegjs-loader?cache=true&trace=false&allowedStartRules[]=start&allowedStartRules[]=dbDumpStart',
+				},
+				{
+					test: /\.worker\.(js|ts)$/,
+					use: { loader: "worker-loader" },
 				},
 				{
 					// normal js and ts code

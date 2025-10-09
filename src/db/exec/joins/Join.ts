@@ -48,6 +48,7 @@ export abstract class Join extends RANodeBinary {
 	_rowCreatorNotMatched: null | ((rowA: Data[], rowB: Data[]) => Data[]) = null; // used for outer joins
 	_executionStart: any;
 	_executedEnd: any;
+	_resultTable: Table | null = null;
 
 	constructor(
 		child: RANode,
@@ -304,7 +305,9 @@ export abstract class Join extends RANodeBinary {
 
 	_getResult(doEliminateDuplicateRows: boolean = true, session: Session | undefined) {
 		session = this._returnOrCreateSession(session);
-
+		if (this._resultTable) {
+			return this._resultTable;
+		}
 		
 
 		if (this._joinConditionEvaluator === null) {
@@ -369,11 +372,13 @@ export abstract class Join extends RANodeBinary {
 
 			this.setResultNumRows(newResultTable.getNumRows());
 			this._executedEnd = Date.now() - this._executionStart;
+			this._resultTable = newResultTable;
 			return newResultTable;
 		}
 		else {
 			// Regular path
 			this._executedEnd = Date.now() - this._executionStart;
+			this._resultTable = resultTable;
 			return resultTable;
 		}
 	}
