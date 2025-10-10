@@ -1604,6 +1604,7 @@ export class EditorBase extends React.Component<Props, State> {
 			throw new Error(`editor not initialized yet`);
 		}
 		this.setState({
+			isExecutionDisabled: true,
 			execResult:
 				(<div className="spinner">
 					<div className="rect1"></div>
@@ -1657,6 +1658,8 @@ export class EditorBase extends React.Component<Props, State> {
 				if (this.props.enableInlineRelationEditor) {
 					this.clearInlineRelationMarkers();
 				}
+			} finally {
+				this.setState({ isExecutionDisabled: false })
 			}
 		});
 	}
