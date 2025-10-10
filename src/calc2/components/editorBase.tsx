@@ -1099,7 +1099,7 @@ export class EditorBase extends React.Component<Props, State> {
 												label: (
 													<>
 														<small className="muted text-muted">{h.time.toLocaleTimeString()}</small>
-														<div>{h.code}</div>
+														<div>{h.code.slice(0, 30) + (h.code.length > 30 ? '...' : '')}</div>
 														{/*
 														// colorize the code
 														codeNode.addClass('colorize');
