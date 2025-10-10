@@ -61,11 +61,11 @@ interface DeserializeOptions {
 
 const REGEXP_BEGIN_WITH_CLASS = /^\s*class\s+/;
 
-function deserializeFromParsedObj(parsedObj:any, classes:Array<any>, options:DeserializeOptions): any {
+function deserializeFromParsedObj(parsedObj: any, classes: Array<any>, options: DeserializeOptions): any {
   return deserializeFromParsedObjWithClassMapping(parsedObj, getClassMappingFromClassArray(classes), options);
 }
 
-function deserializeFromParsedObjWithClassMapping(parsedObj:any, classMapping:object, options:DeserializeOptions={}): any {
+function deserializeFromParsedObjWithClassMapping(parsedObj: any, classMapping: object, options: DeserializeOptions = {}): any {
   if (notObject(parsedObj)) {
     return parsedObj;
   }
@@ -74,31 +74,39 @@ function deserializeFromParsedObjWithClassMapping(parsedObj:any, classMapping:ob
     return _deserializeArray(parsedObj, classMapping);
   }
 
-  const classNameInParsedObj:string = parsedObj[CLASS_NAME_FIELD];
+  const classNameInParsedObj: string = parsedObj[CLASS_NAME_FIELD];
   const deserializedValueForBuiltinType = _deserializeBuiltinTypes(classNameInParsedObj, parsedObj, classMapping);
   if (deserializedValueForBuiltinType !== ESSERIALIZER_NULL) {
     return deserializedValueForBuiltinType;
   }
 
-  if (classNameInParsedObj && !classMapping[classNameInParsedObj]) {
+  const classNameInParsedObj1 = parsedObj[`${CLASS_NAME_FIELD}1`];
+  if (classNameInParsedObj1) {
+    const deserializedValueForBuiltinType1 = _deserializeBuiltinTypes(classNameInParsedObj1, parsedObj, classMapping);
+    if (deserializedValueForBuiltinType1 !== ESSERIALIZER_NULL) {
+      return deserializedValueForBuiltinType1;
+    }
+  }
+
+  if ((classNameInParsedObj && !classMapping[classNameInParsedObj]) && (!classNameInParsedObj || !classMapping[classNameInParsedObj1])) {
     throw new Error(`Class ${classNameInParsedObj} not found`);
   }
 
   let constructorParameters = [];
   if (options.fieldsForConstructorParameters) {
-    constructorParameters = options.fieldsForConstructorParameters.map((field)=>{
+    constructorParameters = options.fieldsForConstructorParameters.map((field) => {
       if (field in parsedObj) {
         return parsedObj[field];
       }
       return {}; // Prevent passing undefined to constructor
     });
   }
-
-  const deserializedObj:object = deserializeClassProperty(classMapping[classNameInParsedObj], constructorParameters);
+  const classFromMapping = classMapping[classNameInParsedObj] || (classNameInParsedObj1 && classMapping[classNameInParsedObj1])
+  const deserializedObj: object = deserializeClassProperty(classFromMapping, constructorParameters);
   return deserializeValuesWithClassMapping(deserializedObj, parsedObj, classMapping, options);
 }
 
-function _deserializeArray(parsedObj, classMapping:object) {
+function _deserializeArray(parsedObj, classMapping: object) {
   return parsedObj.map((item) => {
     return deserializeFromParsedObjWithClassMapping(item, classMapping)
   });
@@ -237,7 +245,7 @@ function _deserializeIntlInstance(parsedObj, IntlClass) {
 function deserializeRegExp(parsedObj) {
   const regExpStr = parsedObj[TO_STRING_FIELD];
   const lastIndexOfSlash = regExpStr.lastIndexOf('/');
-  return new RegExp(regExpStr.substring(1, lastIndexOfSlash), regExpStr.substring(lastIndexOfSlash+1));
+  return new RegExp(regExpStr.substring(1, lastIndexOfSlash), regExpStr.substring(lastIndexOfSlash + 1));
 }
 
 function _deserializeSet(parsedObj, classMapping) {
@@ -273,7 +281,7 @@ function deserializeError(parsedObj, ErrorClass) {
   return error;
 }
 
-function deserializeClassProperty(classObj, constructorParameters:Array<any>) {
+function deserializeClassProperty(classObj, constructorParameters: Array<any>) {
   if (!classObj) {
     return {};
   }
@@ -321,7 +329,7 @@ function createDeserializedObj(classObj, allConstructorParameters) {
   return deserializedObj;
 }
 
-function deserializeValuesWithClassMapping(deserializedObj, parsedObj, classMapping, options:DeserializeOptions) {
+function deserializeValuesWithClassMapping(deserializedObj, parsedObj, classMapping, options: DeserializeOptions) {
   for (const k in parsedObj) {
     const v = parsedObj[k];
 
@@ -348,7 +356,7 @@ function deserializeValuesWithClassMapping(deserializedObj, parsedObj, classMapp
 }
 
 function canSkipCopyingValue(keyOfParsedObj, valueOfParsedObj, descriptorOfDeserializedObjProperty) {
-  if (keyOfParsedObj === CLASS_NAME_FIELD) {
+  if (keyOfParsedObj === CLASS_NAME_FIELD || (keyOfParsedObj === CLASS_NAME_FIELD + '1')) {
     return true;
   }
   return descriptorOfDeserializedObjProperty && (
@@ -360,7 +368,7 @@ function canSkipCopyingValue(keyOfParsedObj, valueOfParsedObj, descriptorOfDeser
 function assignWritableField(targetObj, sourceObj, classMapping) {
   for (const field in sourceObj) {
     const descriptor = Object.getOwnPropertyDescriptor(targetObj, field);
-    if (descriptor && !(descriptor.writable===true || typeof descriptor.set === 'function')) {
+    if (descriptor && !(descriptor.writable === true || typeof descriptor.set === 'function')) {
       continue;
     }
     targetObj[field] = deserializeFromParsedObjWithClassMapping(sourceObj[field], classMapping);
@@ -372,19 +380,28 @@ function assignWritableField(targetObj, sourceObj, classMapping) {
  * @param classes It's an array of Class definition. "any" is used in code only
  * because there is no TypeScript type definition for Class.
  */
-function getClassMappingFromClassArray(classes:Array<any> = []): object {
-  const classMapping:object = {};
+function getClassMappingFromClassArray(classes: Array<any> = []): object {
+  const classMapping: object = {};
   classes.forEach((c) => {
     if (!isClass(c)) {
       return;
     }
-    const className:string = c.name;
+    const className: string = c.name;
     const previousClass = classMapping[className];
     if (previousClass && previousClass !== c) {
       console.warn('WARNING: Found class definition with the same name: ' + className);
     }
     // @ts-ignore
     classMapping[className] = c;
+
+    // workaround for how webpack generates the class name
+    const classNameWithoutFilePrefix = className.split('_').slice(1).join('_')
+    const previousClassWithoutFilePrefix = classMapping[classNameWithoutFilePrefix]
+    if (previousClassWithoutFilePrefix && previousClassWithoutFilePrefix !== c) {
+      console.warn('WARNING: Found class definition with the same name: ' + className);
+    }
+    // @ts-ignore
+    classMapping[classNameWithoutFilePrefix] = c;
   });
 
   return classMapping;
@@ -395,7 +412,7 @@ function getClassMappingFromClassArray(classes:Array<any> = []): object {
  * @param classObj It's a Class definition. "any" is used in code only
  * because there is no TypeScript type definition for Class.
  */
-function getParentClassName(classObj:any): string {
+function getParentClassName(classObj: any): string {
   return classObj.prototype.__proto__.constructor.name;
 }
 

@@ -49,7 +49,7 @@ class EditorRelalgWorker {
 		const [resolveFn, rejectFn] = this.resolveById[id];
 		if (resolveFn) {
 			if (resp.success) {
-				resp.success.root = deserializeFromParsedObj(resp.success.root as any, dbExecClasses, {})
+				resp.success.root = deserializeFromParsedObj(resp.success.root as any, dbExecClasses, {});
 				resolveFn(resp.success);
 			} else {
 				if (typeof resp.error === "string") {

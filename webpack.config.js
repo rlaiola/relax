@@ -13,7 +13,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CompressionPlugin = require("compression-webpack-plugin")
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = (env, options) => {
 	const mode = (
@@ -26,6 +26,16 @@ module.exports = (env, options) => {
 	console.log(`build-mode: ${mode}`);
 
 	return {
+		optimization: {
+			minimizer: [
+				new UglifyJsPlugin({
+					uglifyOptions: {
+						keep_fnames: true,
+						keep_classnames: true
+					}
+				})
+			]
+		},
 		mode: isProduction ? 'production' : 'development',
 		entry: {
 			'calc': [
@@ -40,6 +50,7 @@ module.exports = (env, options) => {
 			filename: isProduction ? "js/[name].[hash].bundle.js" : "js/[name].bundle.js",
 			publicPath: isProduction ? "/relax/" : "/",
 		},
+
 		devtool: isProduction ? '' : 'cheap-module-eval-source-map',
 		plugins: [
 			// https://github.com/johnagan/clean-webpack-plugin

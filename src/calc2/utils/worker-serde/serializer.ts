@@ -24,14 +24,14 @@ import {
   TIMESTAMP_FIELD,
   TO_STRING_FIELD, BUILTIN_TYPE_BIG_INT, ESSERIALIZER_NULL, ARRAY_FIELD, BUILTIN_CLASS_INTL_LOCALE
 } from './constant';
-import {notObject} from './general';
+import { notObject } from './general';
 
 interface SerializeOptions {
   ignoreProperties?: Array<string>,
   interceptProperties?: Record<string, Function>
 }
 
-function getSerializeValueWithClassName(target:any, options:SerializeOptions = {}): any {
+function getSerializeValueWithClassName(target: any, options: SerializeOptions = {}): any {
   const serializeValueForBuiltinTypes = _getSerializeValueForBuiltinTypes(target);
   if (serializeValueForBuiltinTypes !== ESSERIALIZER_NULL) {
     return serializeValueForBuiltinTypes;
@@ -73,13 +73,17 @@ function copySerializedProperties(source, dest) {
 }
 
 function appendClassInfoAndAssignDataForBuiltinType(target: any, serializedObj) {
-  let className:string = target.__proto__.constructor.name;
+  let className: string = target.__proto__.constructor.name;
   if (className === 'Object') {
     className = target.constructor.name; // In case object's constructor is not in its prototype, such as Big in big.js
   }
   if (className !== 'Object') {
     // @ts-ignore
     serializedObj[CLASS_NAME_FIELD] = className;
+    const classNameWithoutFilePrefix = className.split('_').slice(1).join('_');
+    if (classNameWithoutFilePrefix) {
+      serializedObj[`${CLASS_NAME_FIELD}1`] = classNameWithoutFilePrefix
+    }
 
     if (className === BUILTIN_CLASS_ARRAYBUFFER || className === BUILTIN_CLASS_SHAREDARRAYBUFFER) {
       serializedObj[ARRAY_FIELD] = _serializeArray(Array.from(new Uint8Array(target)));
@@ -160,7 +164,7 @@ function _serializeArray(arr) {
 }
 
 function _shouldIgnoreEnumerableProperties(target) {
-  const className:string = target.__proto__.constructor.name;
+  const className: string = target.__proto__.constructor.name;
   return CLASSNAMES_WHOSE_ENUMERABLE_PROPERTIES_SHOULD_BE_IGNORED.includes(className);
 }
 

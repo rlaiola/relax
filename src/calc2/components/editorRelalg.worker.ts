@@ -1,7 +1,7 @@
 import { Relation } from "db/exec/Relation";
 import { parseRelalg, relalgFromRelalgAstRoot, replaceVariables } from 'db/relalg';
 import { getSerializeValueWithClassName } from "calc2/utils/worker-serde/serializer";
-import { deserializeFromParsedObj } from "calc2/utils/worker-serde/deserializer"
+import { deserializeFromParsedObj } from "calc2/utils/worker-serde/deserializer";
 import classes from "db/exec/classes";
 
 /**
