@@ -76,17 +76,18 @@ class EditorRelalgWorker {
 		this.cachedRelationsByGroupName[groupName] = true;
 	}
 
-	async exec(text: string, groupName: string) {
+	async exec(text: string, groupName: string, withResult: boolean) {
 		const id = window.crypto.randomUUID();
 		const resolveById = this.resolveById;
 		return await new Promise<{
 			ast: ReturnType<typeof parseRelalg>,
-			root: ReturnType<typeof relalgFromRelalgAstRoot>
+			root: ReturnType<typeof relalgFromRelalgAstRoot>,
+			result: ReturnType<ReturnType<typeof relalgFromRelalgAstRoot>['getResult']> | null
 		}>((resolve, reject) => {
 			resolveById[id] = [resolve, reject];
 			this.worker.postMessage({
 				type: "exec",
-				payload: { text, groupName, id }
+				payload: { text, groupName, id, withResult }
 			});
 		})
 	}
@@ -165,7 +166,7 @@ export class EditorRelalg extends React.Component<Props, State> {
 					let ast: ReturnType<typeof parseRelalg>;
 					let root: ReturnType<typeof relalgFromRelalgAstRoot>;
 					if (EDITOR_RELALG_WORKER.worker) {
-						const resp = await EDITOR_RELALG_WORKER.exec(text, this.state.groupName);
+						const resp = await EDITOR_RELALG_WORKER.exec(text, this.state.groupName, true);
 						ast = resp.ast
 						root = resp.root
 					} else {
@@ -211,7 +212,7 @@ export class EditorRelalg extends React.Component<Props, State> {
 					const hints: string[] = [];
 
 					if (EDITOR_RELALG_WORKER.worker) {
-						const resp = await EDITOR_RELALG_WORKER.exec(text, this.state.groupName);
+						const resp = await EDITOR_RELALG_WORKER.exec(text, this.state.groupName, false);
 						const ast = resp.ast;
 						for (let i = 0; i < ast.assignments.length; i++) {
 							hints.push(ast.assignments[i].name);

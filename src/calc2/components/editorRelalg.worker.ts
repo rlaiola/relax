@@ -15,7 +15,7 @@ import classes from "db/exec/classes";
  */
 const ctx: Worker = self as any;
 const relationsCache: Map<string, { [name: string]: Relation }> = new Map();
-function execRelalgText(text: string, relations: { [name: string]: Relation }) {
+function execRelalgText(text: string, relations: { [name: string]: Relation }, withResult: boolean) {
   try {
     const ast = parseRelalg(text, Object.keys(relations));
     replaceVariables(ast, relations);
@@ -30,7 +30,8 @@ function execRelalgText(text: string, relations: { [name: string]: Relation }) {
     }
     const root = relalgFromRelalgAstRoot(ast, relations);
     root.check();
-    return { success: { root: getSerializeValueWithClassName(root), ast }, error: null }
+    const result = withResult ? root.getResult(true) : null
+    return { success: { root: getSerializeValueWithClassName(root), ast, result }, error: null }
   } catch (error) {
     return { success: null, error }
   }
@@ -38,7 +39,7 @@ function execRelalgText(text: string, relations: { [name: string]: Relation }) {
 
 type MessageRelalg = {
   type: "exec",
-  payload: { text: string, id: string, groupName: string }
+  payload: { text: string, id: string, groupName: string, withResult: boolean }
 } | {
   type: "cacheRelations",
   payload: {
@@ -51,7 +52,7 @@ ctx.addEventListener("message", (event: MessageEvent<MessageRelalg>) => {
   if (!event) return;
   if (event.data.type === "exec") {
     const relations = relationsCache.get(event.data.payload.groupName);
-    const result = execRelalgText(event.data.payload.text, relations || {})
+    const result = execRelalgText(event.data.payload.text, relations || {}, event.data.payload.withResult)
     postMessage({
       ...result,
       id: event.data.payload.id
