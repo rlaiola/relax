@@ -265,7 +265,7 @@ export class EditorRelalg extends React.Component<Props, State> {
 						if (self.props.enableInlineRelationEditor) {
 							self.addInlineRelationMarkers(ast);
 						}
-						hints.concat(getColumnNamesFromRaRoot(root))
+						hints.push(...getColumnNamesFromRaRoot(root));
 					}
 
 					// use columns from all calculated schemas for hints
