@@ -924,7 +924,7 @@ export class EditorBase extends React.Component<Props, State> {
 
 	// setting example queries..
 	componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>, snapshot?: any) {
-		if (prevProps.mode != this.props.mode) {
+		if (prevProps.mode !== this.props.mode) {
 			this.setState({ history: loadHistoryFromStorage(window.localStorage, this.props.mode) })
 		}
 		if (prevState.editor) {
