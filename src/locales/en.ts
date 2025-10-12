@@ -34,6 +34,7 @@ export const langEN = {
 	'db.messages.exec.error-schemas-not-unifiable': 'schemas are not unifiable: types are different or size is different: {{schemaA{{  and }}schemaB}}',
 	'db.messages.exec.error-column-not-in-both-schemas': 'column "{{column}}" can not be found in both schemas of join',
 	'db.messages.exec.error-condition-must-be-boolean': 'condition must be a boolean expression',
+	'db.messages.exec.error-cross-join-expensive-operation': 'cross join operation very expensive, result table with inferred size of {{resultRowsMaxSize}}, optimize the size of the tables used',
 	'db.messages.exec.error-func-not-defined-for-column-type': '{{func{{ not defined for type }}colType}}',
 	'db.messages.exec.error-join-would-produce-non-unique-columns': 'join would result in non unique column names; the following columns appear in both relations: {{conflicts}}',
 	'db.messages.exec.error-no-columns-match-alias-star': 'no columns match "{{alias}}.*"',
@@ -138,10 +139,10 @@ export const langEN = {
 	'calc.editors.ra.button-zoom-reset': 'Reset zoom',
 	'calc.editors.ra.button-zoom-center': 'Zoom to fit',
 	'calc.editors.ra.toolbar.duplicate-elimination': 'duplicate elimination',
-  'calc.editors.ra.toolbar.duplicate-elimination-content': [
-    '<b class="math">∂</b> <b>(</b> A <b>)</b>',
-    '<br><b>delta</b> A',
-  ].join('\n'),
+	'calc.editors.ra.toolbar.duplicate-elimination-content': [
+		'<b class="math">∂</b> <b>(</b> A <b>)</b>',
+		'<br><b>delta</b> A',
+	].join('\n'),
 	'calc.editors.ra.toolbar.projection': 'projection',
 	'calc.editors.ra.toolbar.projection-content': `
 		<b class=\"math\">&pi;</b> a, b <b>(</b> A <b>)</b>

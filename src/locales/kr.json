@@ -28,6 +28,7 @@
 	"db.messages.exec.error-schemas-not-unifiable": "\uc2a4\ud0a4\ub9c8\ub4e4\uc740 \ud1b5\ud569\ub420 \uc218 \uc5c6\uc74c: \ud0c0\uc785\ub4e4\uc740 \ub2e4\ub974\uac70\ub098 \uc0ac\uc774\uc988\ub4e4\uc774 \ub2e4\ub974\ub2e4: __schemaA__  \uc640 __schemaB__",
 	"db.messages.exec.error-column-not-in-both-schemas": "\uc5f4 \"__column__\"\uc740 \ub450 \uc2a4\ud0a4\ub9c8\uc758 \uc870\uc778\uc5d0\uc11c \ucc3e\uc744 \uc218 \uc5c6\uc74c",
 	"db.messages.exec.error-condition-must-be-boolean": "\uc870\uac74\uc740 \ubd88\ub9b0 \ub300\uc218\uc5ec\uc57c\ub9cc \ud568",
+	"db.messages.exec.error-cross-join-expensive-operation": "cross join operation very expensive, result table with inferred size of {{resultRowsMaxSize}}, optimize the size of the tables used",
 	"db.messages.exec.error-func-not-defined-for-column-type": "__func_ _\uc740 \ud0c0\uc785 __colType__ \uc744 \uc704\ud574 \uc815\uc758\ub420 \uc218 \uc5c6\uc74c",
 	"db.messages.exec.error-join-would-produce-non-unique-columns": "\uc870\uc778\uc740 \uace0\uc720\ud558\uc9c0 \uc54a\uc740 \uc5f4 \uc774\ub984\uc5d0\uc11c \uacb0\uacfc\ub97c \ub0c4  \uc870\uc778\uc740 \uace0\uc720\ud558\uc9c0 \uc54a\uc740 \uc5f4 \uc774\ub984\uc5d0\uc11c \uacb0\uacfc\ub97c \ub0c4  \uc774 \uc5f4\ub4e4\uc740 \ub450 \ub9b4\ub808\uc774\uc158 \uc0ac\uc774\uc5d0\uc11c \ub098\ud0c0\ub0a8: __conflicts__",
 	"db.messages.exec.error-no-columns-match-alias-star": "\"__alias__.*\"\uc640 \uc77c\uce58\ud558\ub294 \uc5f4\uc774 \uc5c6\uc74c",

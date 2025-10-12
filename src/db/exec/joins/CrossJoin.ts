@@ -9,6 +9,7 @@ import { RANode, Session } from '../RANode';
 import { Schema } from '../Schema';
 import * as ValueExpr from '../ValueExpr';
 import { Join } from './Join';
+import { Table } from '../Table';
 
 
 /**
@@ -23,6 +24,17 @@ export class CrossJoin extends Join {
 			type: 'theta',
 			joinExpression: joinCondition,
 		}, false);
+		this._tableValidatorBeforeNestedLoopJoin = this._checkJoinedTables.bind(this);
+	}
+
+	_checkJoinedTables(tableA: Table, tableB: Table): void {
+		const tableARowsSize = tableA.getNumRows();
+		const tableBRowsSize = tableB.getNumRows();
+		const resultRowsMaxSize = tableARowsSize * tableBRowsSize;
+		const ROWS_MAX_SIZE = 50_000_000;
+		if (resultRowsMaxSize > ROWS_MAX_SIZE) {
+			this.throwExecutionError(i18n.t('db.messages.exec.error-cross-join-expensive-operation', { resultRowsMaxSize, rowsMaxSize: ROWS_MAX_SIZE }));
+		}
 	}
 
 	_checkSchema(schemaA: Schema, schemaB: Schema): void {

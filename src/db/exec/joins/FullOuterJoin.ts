@@ -81,6 +81,7 @@ export class FullOuterJoin extends Join {
 			this._joinConditionEvaluator,
 			this._rowCreatorMatched,
 			this._rowCreatorNotMatched,
+			this._tableValidatorBeforeNestedLoopJoin
 		);
 
 		// right join
@@ -96,6 +97,7 @@ export class FullOuterJoin extends Join {
 			// this._rowCreatorMatched,	
 			null,
 			this._rowCreatorNotMatched,
+			this._tableValidatorBeforeNestedLoopJoin
 		);
 
 		if (doEliminateDuplicateRows === true) {

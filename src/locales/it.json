@@ -28,6 +28,7 @@
 	"db.messages.exec.error-schemas-not-unifiable": "Gli schemi non sono unificabili: i tipi sono diversi o le dimensioni sono diverse: {{schemaA}} e {{schemaB}}",
 	"db.messages.exec.error-column-not-in-both-schemas": "La colonna \"{{column}}\" non pu\u00f2 essere trovata in entrambi gli schemi di join",
 	"db.messages.exec.error-condition-must-be-boolean": "La condizione deve essere un'espressione booleana",
+	"db.messages.exec.error-cross-join-expensive-operation": "cross join operation very expensive, result table with inferred size of {{resultRowsMaxSize}}, optimize the size of the tables used",
 	"db.messages.exec.error-func-not-defined-for-column-type": "{{func}} non definito per il tipo {{colType}}",
 	"db.messages.exec.error-join-would-produce-non-unique-columns": "join darebbe origine a nomi di colonna non univoci {{conflicts}}",
 	"db.messages.exec.error-no-columns-match-alias-star": "nessuna colonna corrisponde a \"{{alias}}.*\"",
