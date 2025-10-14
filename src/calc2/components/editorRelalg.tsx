@@ -30,6 +30,8 @@ type WorkerProcessResp = { success: null, error: string | Error } | {
 	}, error: null
 }
 
+const QUERY_EXEC_TIMEOUT_MS = 10_000;
+
 /**
  * class to abstract the communication between our main thread and the
  * editorRelalgWorker, this exposes the available operations at it
@@ -37,13 +39,36 @@ type WorkerProcessResp = { success: null, error: string | Error } | {
  */
 class EditorRelalgWorker {
 	resolveById: Record<string, [(resp: any) => void, (err: Error) => void]> = {}
-	cachedRelationsByGroupName: Record<string, boolean> = {}
+	cachedRelationsByGroupName: Record<string, { [name: string]: Relation }> = {}
 	worker: Worker;
 	constructor(worker: Worker) {
-		this.worker = worker
-		this.worker.onmessage = this._onMessage.bind(this);
-		this.worker.onerror = console.log
+		this.worker = worker;
+		this.setupHandlers();
 	}
+
+	setupHandlers() {
+		this.worker.onmessage = this._onMessage.bind(this);
+		this.worker.onerror = console.log;
+	}
+
+	reinitializeWorker() {
+		console.log(' reinitializing worker ')
+		const oldWorker = this.worker;
+		const worker = editorRelalgWorker();
+		if (oldWorker) {
+			oldWorker.onmessage = null;
+			oldWorker.onerror = null;
+			try { oldWorker.terminate(); } catch (err) { console.error(err); }
+		}
+		this.worker = worker;
+		this.setupHandlers();
+		setTimeout(() => {
+			for (const [groupName, relations] of Object.entries(this.cachedRelationsByGroupName)) {
+				this.cacheRelations(groupName, relations);
+			}
+		}, 0);
+	}
+
 	_onMessage(response: MessageEvent<{ id: string } & (WorkerProcessResp)>) {
 		const { id, ...resp } = response.data
 		const [resolveFn, rejectFn] = this.resolveById[id];
@@ -73,13 +98,13 @@ class EditorRelalgWorker {
 				relations: getSerializeValueWithClassName(relations)
 			}
 		});
-		this.cachedRelationsByGroupName[groupName] = true;
+		this.cachedRelationsByGroupName[groupName] = relations;
 	}
 
 	async exec(text: string, groupName: string, withResult: boolean) {
 		const id = window.crypto.randomUUID();
 		const resolveById = this.resolveById;
-		return await new Promise<{
+		const execPromise = new Promise<{
 			ast: ReturnType<typeof parseRelalg>,
 			root: ReturnType<typeof relalgFromRelalgAstRoot>,
 			result: ReturnType<ReturnType<typeof relalgFromRelalgAstRoot>['getResult']> | null
@@ -89,7 +114,35 @@ class EditorRelalgWorker {
 				type: "exec",
 				payload: { text, groupName, id, withResult }
 			});
-		})
+		});
+		// let checkMemoryInterval: undefined | ReturnType<typeof setInterval>;
+		const timeout = withResult ? setTimeout(() => {
+			// clearInterval(checkMemoryInterval);
+			this.reinitializeWorker();
+			if (resolveById[id]) {
+				const [_, reject] = resolveById[id];
+				reject(new Error(t('calc.messages.error-query-execution-timeout', { execTimeout: (QUERY_EXEC_TIMEOUT_MS / 1000).toLocaleString(undefined, { style: 'unit', unit: 'second', unitDisplay: 'narrow' }) })));
+			}
+		}, QUERY_EXEC_TIMEOUT_MS) : undefined;
+		// checkMemoryInterval = withResult ? setInterval(() => {
+		// 	if (window.crossOriginIsolated && !!performance.measure) {
+		// 		performance.measureUserAgentSpecificMemory().then((memusage: any) => {
+		// 			console.log(memusage)
+		// 			if (false) {
+		// 				this.reinitializeWorker();
+		// 				if (resolveById[id]) {
+		// 					const [_, reject] = resolveById[id];
+		// 					reject(new Error(t('calc.messages.error-query-execution-timeout', { execTimeout: (QUERY_EXEC_TIMEOUT_MS / 1000).toLocaleString(undefined, { style: 'unit', unit: 'second', unitDisplay: 'narrow' }) })));
+		// 				}
+		// 			}
+		// 		})
+		// 	}
+		// }, 500) : undefined;
+		return execPromise.then((response) => {
+			clearTimeout(timeout);
+			// clearInterval(checkMemoryInterval);
+			return response;
+		});
 	}
 }
 

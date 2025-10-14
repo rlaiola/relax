@@ -28,7 +28,6 @@
 	"db.messages.exec.error-schemas-not-unifiable": "",
 	"db.messages.exec.error-column-not-in-both-schemas": "",
 	"db.messages.exec.error-condition-must-be-boolean": "",
-	"db.messages.exec.error-cross-join-expensive-operation": "",
 	"db.messages.exec.error-func-not-defined-for-column-type": "",
 	"db.messages.exec.error-join-would-produce-non-unique-columns": " \uc774 \uc5f4\ub4e4\uc740 \ub450 \ub9b4\ub808\uc774\uc158 \uc0ac\uc774\uc5d0\uc11c \ub098\ud0c0\ub0a8: __conflicts__",
 	"db.messages.exec.error-no-columns-match-alias-star": "",

@@ -46,7 +46,6 @@ export abstract class Join extends RANodeBinary {
 	_schema: Schema | null = null;
 	_rowCreatorMatched: null | ((rowA: Data[], rowB: Data[]) => Data[]) = null;
 	_rowCreatorNotMatched: null | ((rowA: Data[], rowB: Data[]) => Data[]) = null; // used for outer joins
-	_tableValidatorBeforeNestedLoopJoin: null | ((tableA: Table, tableB: Table) => void);
 	_executionStart: any;
 	_executedEnd: any;
 	_resultTable: Table | null = null;
@@ -329,8 +328,7 @@ export abstract class Join extends RANodeBinary {
 			this._isAntiJoin,
 			this._joinConditionEvaluator,
 			this._rowCreatorMatched,
-			this._rowCreatorNotMatched,
-			this._tableValidatorBeforeNestedLoopJoin
+			this._rowCreatorNotMatched
 		);
 
 		// can be omitted if join is known to produce no new duplicates (e.g semi join) 
@@ -431,13 +429,11 @@ export abstract class Join extends RANodeBinary {
 		isAntiJoin: boolean,
 		evalJoinCondition: (rowA: Data[], rowB: Data[], rowNumberA: number, session: Session) => boolean,
 		createRowToAddIfMatched: null | ((rowA: Data[], rowB: Data[]) => Data[]),
-		createRowToAddIfNOTMatched: null | ((rowA: Data[], rowB: Data[]) => Data[]),
-		tableValidatorBeforeNestedLoopJoin: null | ((tableA: Table, tableB: Table) => void)
+		createRowToAddIfNOTMatched: null | ((rowA: Data[], rowB: Data[]) => Data[])
 	): void {
 
 		const orgA = childA.getResult(doEliminateDuplicateRows, session);
 		const orgB = childB.getResult(doEliminateDuplicateRows, session);
-		tableValidatorBeforeNestedLoopJoin?.(orgA, orgB);
 		const numRowsA = orgA.getNumRows();
 		const numRowsB = orgB.getNumRows();
 		const numColsA = orgA.getNumCols();

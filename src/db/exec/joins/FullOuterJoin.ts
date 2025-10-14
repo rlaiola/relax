@@ -80,8 +80,7 @@ export class FullOuterJoin extends Join {
 			false,
 			this._joinConditionEvaluator,
 			this._rowCreatorMatched,
-			this._rowCreatorNotMatched,
-			this._tableValidatorBeforeNestedLoopJoin
+			this._rowCreatorNotMatched
 		);
 
 		// right join
@@ -96,8 +95,7 @@ export class FullOuterJoin extends Join {
 			// Should not create matched rows twice in case of a multiset (left join already did the job)
 			// this._rowCreatorMatched,	
 			null,
-			this._rowCreatorNotMatched,
-			this._tableValidatorBeforeNestedLoopJoin
+			this._rowCreatorNotMatched
 		);
 
 		if (doEliminateDuplicateRows === true) {

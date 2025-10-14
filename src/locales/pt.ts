@@ -40,8 +40,6 @@ export const langPT = {
     'calc.editors.ra.inline-editor.row-type': 'Tipo',
     'db.messages.exec.error-condition-must-be-boolean':
       'condi\u00e7\u00e3o deve ser uma express\u00e3o booleana',
-    'db.messages.exec.error-cross-join-expensive-operation':
-      'operac\u00e7\u00e3o de jun\u00e7\u00e3o cruzada muito custosa, tabela de resultados com tamanho inferido de {{resultRowsMaxSize}}, tamanho maximo permitido {{rowsMaxSize}}<b/>, otimize o tamanho das tabelas utilizadas',
     'calc.editors.ra.toolbar.union-content':
       '<div><b>(</b> A <b>) <span class="math">&cup;</span> (</b> B <b>)</b></div>',
     'calc.editors.ra.toolbar.equals': 'igual',

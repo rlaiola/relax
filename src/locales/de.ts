@@ -37,7 +37,6 @@ export const langDE: Partial<typeof langEN> = {
 	'db.messages.exec.error-schemas-not-unifiable': 'Schemas sind nicht unifiable: Typen oder Anzahl der Attribute ist unterschiedlich: {{schemaA{{  and }}schemaB}}',
 	'db.messages.exec.error-column-not-in-both-schemas': 'Spalte "{{column}}" kann nicht in beiden Schemas des Joins gefunden werden',
 	'db.messages.exec.error-condition-must-be-boolean': 'Bedingung muss ein boolscher Ausdruck sein',
-	'db.messages.exec.error-cross-join-expensive-operation': "Cross-Join-Operation sehr teuer, Ergebnistabelle mit abgeleiteter Größe von {{resultRowsMaxSize}}, Optimieren Sie die Größe der verwendeten Tabellen",
 	'db.messages.exec.error-func-not-defined-for-column-type': '{{func{{ ist nicht für Datentyp }}colType}} definiert',
 	'db.messages.exec.error-join-would-produce-non-unique-columns': 'Join würde nicht eindeutige Spaltennamen erzeugen; Die folgenden Spalten sind teil beider Relationen: {{conflicts}}',
 	'db.messages.exec.error-no-columns-match-alias-star': 'Keine Spalten gefunden für "{{alias}}.*"',
