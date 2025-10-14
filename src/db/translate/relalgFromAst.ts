@@ -22,7 +22,8 @@ import { SemiJoin } from '../exec/joins/SemiJoin';
 import { OrderBy } from '../exec/OrderBy';
 import { Projection, ProjectionColumn } from '../exec/Projection';
 import { RANode } from '../exec/RANode';
-import { RecursiveAssignment } from '../exec/RecursiveAssignment';
+import { RecursiveAssignment } from 'db/exec/RecursiveAssignment';
+import { RecursiveRef } from 'db/exec/RecursiveRef';
 import { Relation } from '../exec/Relation';
 import { RenameColumns } from '../exec/RenameColumns';
 import { RenameRelation } from '../exec/RenameRelation';
@@ -893,8 +894,17 @@ function setAdditionalData<T extends RANode>(astNode: relalgAst.relalgOperation,
 
 // translates a RA-AST or a BA-AST to RA
 export function relalgFromRelalgAstRoot(astRoot: relalgAst.rootRelalg, relations: { [key: string]: Relation }) {
+	for (const a of astRoot.assignments) {
+        if (a.type === 'assignment') {
+            const built = relalgFromRelalgAstNode(a.child as any, relations);
+            relations[a.name] = built as any;
+        } else if ((a as any).type === 'recursiveAssignment') {
+            const built = relalgFromRelalgAstNode(a as any, relations);
+            relations[(a as any).name] = built as any;
+        }
+    }
+
 	// root is the real root node! of a statement
-	console.log(astRoot)
 	return relalgFromRelalgAstNode(astRoot.child, relations);
 }
 
@@ -905,28 +915,53 @@ export function relalgFromRelalgAstRoot(astRoot: relalgAst.rootRelalg, relations
  * @returns {Object} an actual RA-expression
  */
 export function relalgFromRelalgAstNode(astNode: relalgAst.relalgOperation, relations: { [key: string]: Relation }): RANode {
-	function recRANode(n: relalgAst.relalgOperation, localRelations = relations): RANode {
-		console.log(n.type)
+	function recRANode(n: relalgAst.relalgOperation, localRelations = relations, recursionContext?: string): RANode {
 		switch (n.type) {
-			case 'recursiveAssignment':
+			case 'recursiveAssignment': {
+                if (!(localRelations as any)[n.name] || !((localRelations as any)[n.name] instanceof RecursiveRef)) {
+					(localRelations as any)[n.name] = new RecursiveRef(n.name);
+				}
 				const initialNode = recRANode(n.child, localRelations);
-				const recursiveNode = recRANode(n.child2, localRelations);
-
-				console.log('teste')
-
-				const node = new RecursiveAssignment(initialNode, recursiveNode);
-
+				const recursiveNode = recRANode(n.child2, localRelations, n.name);
+				const node = new RecursiveAssignment(n.name, initialNode, recursiveNode);
 				setAdditionalData(n, node);
+				(localRelations as any)[n.name] = node;
 				return node;
-
+            }
 
 			case 'relation':
 				{
-					if (typeof (relations[n.name]) === 'undefined') {
-						throw new ExecutionError(i18n.t('db.messages.translate.error-relation-not-found', { name: n.name }), n.codeInfo);
+					if (recursionContext && n.name === recursionContext) {
+						const ph = (localRelations as any)[n.name];
+						if (ph instanceof RecursiveRef) return ph;
+						return new RecursiveRef(n.name);
 					}
+
+					const entry =
+						(localRelations as any)[n.name] ??
+						(relations as any)[n.name];
+
+					if (!entry) {
+						throw new ExecutionError(
+							i18n.t('db.messages.translate.error-relation-not-found', { name: n.name }),
+							n.codeInfo
+						);
+					}
+
 					const start = Date.now();
-					const node = relations[n.name].copy();
+
+					let node: RANode;
+                    if (entry instanceof RecursiveAssignment) {
+						console.log(`Usando RecursiveAssignment para: ${n.name}, entry =`, entry);
+                        node = entry;
+                    }
+                    else if (typeof (entry as any).copy === 'function') {
+                        node = (entry as any).copy();
+                    }
+                    else {
+                        node = entry;
+                    }
+
 					// Passing metadata from inner relation/expression to output relation
 					if (n.metaData && n.metaData.fromVariable) {
 						let relAlias = n.metaData.fromVariable;
