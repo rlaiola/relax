@@ -35,7 +35,8 @@ import {
 	faTable,
 	faFileDownload,
 	faImage,
-	faFileCsv
+	faFileCsv,
+	faSpinner
 } from '@fortawesome/free-solid-svg-icons';
 
 require('codemirror/lib/codemirror.css');
@@ -529,6 +530,7 @@ type State = {
 	isSelectionSelected: boolean,
 	execSuccessful: boolean,
 	isExecutionDisabled: boolean,
+	isExecutionLoading: boolean,
 	execResult: JSX.Element | null,
 	relationEditorName: string,
 	replSelStart: any,
@@ -806,6 +808,7 @@ export class EditorBase extends React.Component<Props, State> {
 				execSuccessful: false,
 				execErrors: [],
 				isExecutionDisabled: false,
+				isExecutionLoading: false,
 				execResult: null,
 				modal: false,
 				inlineRelationModal: false,
@@ -1004,6 +1007,7 @@ export class EditorBase extends React.Component<Props, State> {
 			history,
 			execSuccessful,
 			isExecutionDisabled,
+			isExecutionLoading,
 			execResult,
 			execTime,
 			queryResult,
@@ -1048,7 +1052,7 @@ export class EditorBase extends React.Component<Props, State> {
 								? <span><FontAwesomeIcon icon={faPlayCircle as IconProp} /> <T id={execButtonLabel} /></span>
 								: (
 									<>
-										<span className="glyphicon glyphicon-play"></span> <span className="query"><FontAwesomeIcon icon={faPlay as IconProp} /> <T id="calc.editors.ra.button-execute-query" /></span><span className="selection"><T id="calc.editors.ra.button-execute-selection" /></span>
+										<span className="glyphicon glyphicon-play"></span> <span className="query"><FontAwesomeIcon icon={(isExecutionLoading ? faSpinner : faPlay) as IconProp} /> <T id="calc.editors.ra.button-execute-query" /></span><span className="selection"><T id="calc.editors.ra.button-execute-selection" /></span>
 									</>
 								)
 							}
@@ -1605,6 +1609,7 @@ export class EditorBase extends React.Component<Props, State> {
 		}
 		this.setState({
 			isExecutionDisabled: true,
+			isExecutionLoading: true,
 			execResult:
 				(<div className="spinner">
 					<div className="rect1"></div>
@@ -1659,7 +1664,7 @@ export class EditorBase extends React.Component<Props, State> {
 					this.clearInlineRelationMarkers();
 				}
 			} finally {
-				this.setState({ isExecutionDisabled: false })
+				this.setState({ isExecutionDisabled: false, isExecutionLoading: false })
 			}
 		});
 	}

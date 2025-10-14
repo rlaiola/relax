@@ -217,6 +217,7 @@ export class EditorRelalg extends React.Component<Props, State> {
 				mode="relalg"
 				execFunction={async (self: EditorBase, text: string, offset) => {
 					self.historyAddEntry(text);
+					self.clearExecutionAlerts();
 					let ast: ReturnType<typeof parseRelalg>;
 					let root: ReturnType<typeof relalgFromRelalgAstRoot>;
 					if (EDITOR_RELALG_WORKER.worker) {
