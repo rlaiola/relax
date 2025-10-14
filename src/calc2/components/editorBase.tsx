@@ -495,7 +495,7 @@ type Props = {
 
 	enableInlineRelationEditor: boolean,
 
-	/** defaults to 10 */
+	/** defaults to 20 */
 	historyMaxEntries?: number,
 
 	/** defaults to 20 */
@@ -704,7 +704,7 @@ function appendHistoryToStorage(entry: HistoryEntry, historyMaxEntries: number, 
 	const updatedHistory = [
 		entry,
 		...history
-	].slice(-historyMaxEntries)
+	].slice(0, historyMaxEntries)
 	storage.setItem(getHistoryStorageKey(editorMode), JSON.stringify(updatedHistory));
 	return updatedHistory;
 }
@@ -1191,7 +1191,7 @@ export class EditorBase extends React.Component<Props, State> {
 	}
 
 	historyAddEntry(code: string) {
-		const { historyMaxEntries = 10, historyMaxLabelLength = 20 } = this.props;
+		const { historyMaxEntries = 20, historyMaxLabelLength = 20 } = this.props;
 
 		const entry = {
 			time: new Date(),
