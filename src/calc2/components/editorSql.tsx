@@ -22,7 +22,7 @@ const KEYWORDS_SQL = [
 	'distinct', 'select distinct', 'from', 'where', 'order by', 'asc', 'desc',
 	'inner join', 'inner', 'join', 'natural', 'union', 'intersect', 'outer join', 'natural join', 'left join', 'right join', 'left outer join',
 	'right outer join', 'full outer join', 'group by', 'having', 'limit', 'offset',
-	'and', 'or', 'xor', '||',
+	'and', 'or', 'xor', '||', 'not between', 'between',
 ];
 
 interface Props {
