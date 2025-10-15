@@ -30,7 +30,7 @@ type WorkerProcessResp = { success: null, error: string | Error } | {
 	}, error: null
 }
 
-const QUERY_EXEC_TIMEOUT_MS = 10_000;
+const QUERY_EXEC_TIMEOUT_MS = 15_000;
 
 /**
  * class to abstract the communication between our main thread and the
@@ -52,21 +52,22 @@ class EditorRelalgWorker {
 	}
 
 	reinitializeWorker() {
-		console.log(' reinitializing worker ')
 		const oldWorker = this.worker;
 		const worker = editorRelalgWorker();
 		if (oldWorker) {
+			oldWorker.postMessage({ type: 'terminated' });
 			oldWorker.onmessage = null;
 			oldWorker.onerror = null;
 			try { oldWorker.terminate(); } catch (err) { console.error(err); }
 		}
 		this.worker = worker;
 		this.setupHandlers();
-		setTimeout(() => {
+		const cacheRelations = function () {
 			for (const [groupName, relations] of Object.entries(this.cachedRelationsByGroupName)) {
-				this.cacheRelations(groupName, relations);
+				this.cacheRelations(groupName, relations, true);
 			}
-		}, 0);
+		}.bind(this);
+		setTimeout(cacheRelations, 0);
 	}
 
 	_onMessage(response: MessageEvent<{ id: string } & (WorkerProcessResp)>) {
@@ -87,8 +88,8 @@ class EditorRelalgWorker {
 		}
 	}
 
-	cacheRelations(groupName: string, relations: { [name: string]: Relation }) {
-		if (this.cachedRelationsByGroupName[groupName]) {
+	cacheRelations(groupName: string, relations: { [name: string]: Relation }, force = false) {
+		if (this.cachedRelationsByGroupName[groupName] && !force) {
 			return
 		}
 		this.worker.postMessage({
@@ -115,32 +116,15 @@ class EditorRelalgWorker {
 				payload: { text, groupName, id, withResult }
 			});
 		});
-		// let checkMemoryInterval: undefined | ReturnType<typeof setInterval>;
 		const timeout = withResult ? setTimeout(() => {
-			// clearInterval(checkMemoryInterval);
 			this.reinitializeWorker();
 			if (resolveById[id]) {
 				const [_, reject] = resolveById[id];
 				reject(new Error(t('calc.messages.error-query-execution-timeout', { execTimeout: (QUERY_EXEC_TIMEOUT_MS / 1000).toLocaleString(undefined, { style: 'unit', unit: 'second', unitDisplay: 'narrow' }) })));
 			}
 		}, QUERY_EXEC_TIMEOUT_MS) : undefined;
-		// checkMemoryInterval = withResult ? setInterval(() => {
-		// 	if (window.crossOriginIsolated && !!performance.measure) {
-		// 		performance.measureUserAgentSpecificMemory().then((memusage: any) => {
-		// 			console.log(memusage)
-		// 			if (false) {
-		// 				this.reinitializeWorker();
-		// 				if (resolveById[id]) {
-		// 					const [_, reject] = resolveById[id];
-		// 					reject(new Error(t('calc.messages.error-query-execution-timeout', { execTimeout: (QUERY_EXEC_TIMEOUT_MS / 1000).toLocaleString(undefined, { style: 'unit', unit: 'second', unitDisplay: 'narrow' }) })));
-		// 				}
-		// 			}
-		// 		})
-		// 	}
-		// }, 500) : undefined;
 		return execPromise.then((response) => {
 			clearTimeout(timeout);
-			// clearInterval(checkMemoryInterval);
 			return response;
 		});
 	}

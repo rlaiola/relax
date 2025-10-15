@@ -14,12 +14,16 @@ import { t } from "../i18n";
  * - https://v4.webpack.js.org/loaders/worker-loader/
  * - https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API
  */
-const ctx: Worker = self as any;
+const ctx: Worker & { terminated?: boolean } = self as any;
 const MAX_NUM_ROWS_ON_RESULT = 50_000_000;
-const MAX_MEM_USAGE = 1073741824;
 
 const relationsCache: Record<string, { [name: string]: Relation }> = {};
-function execRelalgText(text: string, relations: { [name: string]: Relation }, withResult: boolean) {
+
+function timeout(milliseconds: number) {
+  return new Promise((resolve) => setTimeout(resolve, milliseconds))
+}
+
+async function execRelalgText(text: string, relations: { [name: string]: Relation }, withResult: boolean) {
   try {
     // const start = performance.now();
     const ast = parseRelalg(text, Object.keys(relations));
@@ -36,19 +40,13 @@ function execRelalgText(text: string, relations: { [name: string]: Relation }, w
     const root = relalgFromRelalgAstRoot(ast, relations);
     root.check();
     const result = withResult ? root.getResult(true) : null
-    // const took = performance.now() - start;
-    // if (result) {
-    //   const memoryUsage = result.getEstimatedMemoryUsage();
-    //   console.log({
-    //     action: 'queryExecutionInfo',
-    //     query: text,
-    //     tookMs: took,
-    //     memoryUsage
-    //   })
-    //   if (result.getNumRows() > MAX_NUM_ROWS_ON_RESULT || memoryUsage > MAX_MEM_USAGE) {
-    //     return { success: null, error: 'calc.messages.error-query-large-memory-usage' }
-    //   }
-    // }
+    // this is used as a way to allow any terminate message to be processed before we 
+    await timeout(0);
+    if (result) {
+      if (ctx.terminated || ((result.getNumRows() * result.getNumCols()) > MAX_NUM_ROWS_ON_RESULT)) {
+        return { success: null, error: 'calc.messages.error-query-large-memory-usage' }
+      }
+    }
     return { success: { root: getSerializeValueWithClassName(root), ast, result }, error: null }
   } catch (error) {
     return { success: null, error }
@@ -64,13 +62,18 @@ type MessageRelalg = {
     relations: { [name: string]: Relation },
     groupName: string,
   }
+} | {
+  type: "terminated"
 }
 
-ctx.addEventListener("message", (event: MessageEvent<MessageRelalg>) => {
+ctx.addEventListener("message", async (event: MessageEvent<MessageRelalg>) => {
   if (!event) return;
+  if (event.data.type === "terminated") {
+    ctx.terminated = true;
+  }
   if (event.data.type === "exec") {
     const relations = relationsCache[event.data.payload.groupName];
-    const result = execRelalgText(event.data.payload.text, relations || {}, event.data.payload.withResult)
+    const result = await execRelalgText(event.data.payload.text, relations || {}, event.data.payload.withResult)
     postMessage({
       ...result,
       id: event.data.payload.id
