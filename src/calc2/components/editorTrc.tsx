@@ -58,6 +58,7 @@ export class EditorTrc extends React.Component<Props, State> {
 				mode="trc"
 				// @ts-ignore
 				execFunction={(self: EditorBase, text: string, offset) => {
+					// add to history first
 					self.historyAddEntry(text);
 
 					const ast = parseTRCSelect(text);

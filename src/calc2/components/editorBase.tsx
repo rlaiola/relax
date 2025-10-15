@@ -1166,7 +1166,7 @@ export class EditorBase extends React.Component<Props, State> {
 			history: [
 				entry,
 				...this.state.history,
-			].slice(-historyMaxEntries),
+			].slice(0, historyMaxEntries),
 		});
 	}
 
