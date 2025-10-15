@@ -517,7 +517,9 @@ type Props = {
 
 	exampleBags?: string,
 
-	exampleRA?: string
+	exampleRA?: string,
+	queryTimeout?: number,
+	editQueryTimeout?: boolean,
 };
 
 type State = {
@@ -539,7 +541,8 @@ type State = {
 	execTime: any,
 	addedExampleSqlQuery: boolean,
 	addedExampleBagsQuery: boolean,
-	addedExampleRAQuery: boolean
+	addedExampleRAQuery: boolean,
+	queryTimeout: number | undefined
 };
 
 
@@ -819,7 +822,8 @@ export class EditorBase extends React.Component<Props, State> {
 				execTime: null,
 				addedExampleSqlQuery: false,
 				addedExampleBagsQuery: false,
-				addedExampleRAQuery: false
+				addedExampleRAQuery: false,
+				queryTimeout: this.props.queryTimeout
 			};
 		this.toggle = this.toggle.bind(this);
 		this.inlineRelationEditorOk = this.inlineRelationEditorOk.bind(this);
@@ -1011,13 +1015,15 @@ export class EditorBase extends React.Component<Props, State> {
 			execResult,
 			execTime,
 			queryResult,
+			queryTimeout
 		} = this.state;
 		const {
 			toolbar,
 			disableHistory = false,
 			execButtonLabel,
+			editQueryTimeout
 		} = this.props;
-
+		console.log(queryTimeout);
 		return (
 			<div>
 				<div className="editor-base">
@@ -1059,6 +1065,15 @@ export class EditorBase extends React.Component<Props, State> {
 						</button>
 
 						<div style={{ float: 'right' }}>
+							{editQueryTimeout ? <label> <span style={{ fontWeight: 'bold', fontSize: '0.5rem' }}>Timeout (ms)</span> <input style={{ fontSize: '0.6rem' }} type="number" value={queryTimeout} onChange={(ev) => {
+								let queryTimeout: number | undefined
+								try {
+									queryTimeout = Number(ev.target.value)
+								} catch (err) {
+									queryTimeout = undefined
+								}
+								this.setState({ queryTimeout });
+							}} /></label> : null}
 							<div className="btn-group history-container">
 								<DropdownList
 									label={<span><FontAwesomeIcon icon={faDownload as IconProp} /> <span className="hideOnSM"><T id="calc.editors.ra.button-download" /></span></span>}
@@ -1273,6 +1288,14 @@ export class EditorBase extends React.Component<Props, State> {
 		}
 
 		return editor.getValue();
+	}
+
+	getQueryTimeout() {
+		const { queryTimeout } = this.state;
+		if (!queryTimeout) {
+			console.warn(`no queryTimeout set, be careful with the executed query this may crash the page`);
+		}
+		return queryTimeout
 	}
 
 	focus() {

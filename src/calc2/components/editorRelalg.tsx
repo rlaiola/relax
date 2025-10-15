@@ -102,7 +102,7 @@ class EditorRelalgWorker {
 		this.cachedRelationsByGroupName[groupName] = relations;
 	}
 
-	async exec(text: string, groupName: string, withResult: boolean) {
+	async exec(text: string, groupName: string, withResult: boolean, timeoutMs: number | undefined) {
 		const id = window.crypto.randomUUID();
 		const resolveById = this.resolveById;
 		const execPromise = new Promise<{
@@ -116,13 +116,13 @@ class EditorRelalgWorker {
 				payload: { text, groupName, id, withResult }
 			});
 		});
-		const timeout = withResult ? setTimeout(() => {
+		const timeout = withResult && timeoutMs ? setTimeout(() => {
 			this.reinitializeWorker();
 			if (resolveById[id]) {
 				const [_, reject] = resolveById[id];
-				reject(new Error(t('calc.messages.error-query-execution-timeout', { execTimeout: (QUERY_EXEC_TIMEOUT_MS / 1000).toLocaleString(undefined, { style: 'unit', unit: 'second', unitDisplay: 'narrow' }) })));
+				reject(new Error(t('calc.messages.error-query-execution-timeout', { execTimeout: (timeoutMs / 1000).toLocaleString(undefined, { style: 'unit', unit: 'second', unitDisplay: 'narrow' }) })));
 			}
-		}, QUERY_EXEC_TIMEOUT_MS) : undefined;
+		}, timeoutMs) : undefined;
 		return execPromise.then((response) => {
 			clearTimeout(timeout);
 			return response;
@@ -189,6 +189,8 @@ export class EditorRelalg extends React.Component<Props, State> {
 
 		return (
 			<EditorBase
+				editQueryTimeout
+				queryTimeout={QUERY_EXEC_TIMEOUT_MS}
 				exampleRA={group.exampleRA}
 				exampleBags={group.exampleBags}
 				exampleSql={group.exampleSQL}
@@ -205,7 +207,7 @@ export class EditorRelalg extends React.Component<Props, State> {
 					let ast: ReturnType<typeof parseRelalg>;
 					let root: ReturnType<typeof relalgFromRelalgAstRoot>;
 					if (EDITOR_RELALG_WORKER.worker) {
-						const resp = await EDITOR_RELALG_WORKER.exec(text, this.state.groupName, true);
+						const resp = await EDITOR_RELALG_WORKER.exec(text, this.state.groupName, true, this.editorBase?.getQueryTimeout());
 						ast = resp.ast
 						root = resp.root
 					} else {
@@ -248,7 +250,7 @@ export class EditorRelalg extends React.Component<Props, State> {
 					const hints: string[] = [];
 
 					if (EDITOR_RELALG_WORKER.worker) {
-						const resp = await EDITOR_RELALG_WORKER.exec(text, this.state.groupName, false);
+						const resp = await EDITOR_RELALG_WORKER.exec(text, this.state.groupName, false, this.editorBase?.getQueryTimeout());
 						const ast = resp.ast;
 						for (let i = 0; i < ast.assignments.length; i++) {
 							hints.push(ast.assignments[i].name);
