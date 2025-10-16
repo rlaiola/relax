@@ -520,6 +520,7 @@ type Props = {
 	exampleRA?: string,
 	queryTimeout?: number,
 	editQueryTimeout?: boolean,
+	onQueryTimeoutChange?: (queryTimeout?: number) => void,
 };
 
 type State = {
@@ -1072,7 +1073,7 @@ export class EditorBase extends React.Component<Props, State> {
 								} catch (err) {
 									queryTimeout = undefined
 								}
-								this.setState({ queryTimeout });
+								this.setState({ queryTimeout }, () => this.props.onQueryTimeoutChange?.(queryTimeout));
 							}} /></label> : null}
 							<div className="btn-group history-container">
 								<DropdownList

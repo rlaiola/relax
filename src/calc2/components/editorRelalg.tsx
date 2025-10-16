@@ -32,6 +32,11 @@ type WorkerProcessResp = { success: null, error: string | Error } | {
 
 const QUERY_EXEC_TIMEOUT_MS = 15_000;
 
+function getInitialQueryExecTimeout() {
+	const queryTimeoutStr = localStorage.getItem('queryTimeout')
+	return queryTimeoutStr ? Number(queryTimeoutStr) : QUERY_EXEC_TIMEOUT_MS
+}
+
 /**
  * class to abstract the communication between our main thread and the
  * editorRelalgWorker, this exposes the available operations at it
@@ -190,7 +195,12 @@ export class EditorRelalg extends React.Component<Props, State> {
 		return (
 			<EditorBase
 				editQueryTimeout
-				queryTimeout={QUERY_EXEC_TIMEOUT_MS}
+				queryTimeout={getInitialQueryExecTimeout()}
+				onQueryTimeoutChange={(queryTimeout) => {
+					if (queryTimeout != undefined) {
+						localStorage.setItem('queryTimeout', queryTimeout.toString());
+					}
+				}}
 				exampleRA={group.exampleRA}
 				exampleBags={group.exampleBags}
 				exampleSql={group.exampleSQL}

@@ -71,7 +71,7 @@ export class FullOuterJoin extends Join {
 		resultTable.setSchema(this.getSchema());
 
 		// left join
-		Join.calcNestedLoopJoin(
+		let initialTime = Join.calcNestedLoopJoin(
 			doEliminateDuplicateRows,
 			session,
 			this.getChild(), this.getChild2(),
@@ -84,7 +84,7 @@ export class FullOuterJoin extends Join {
 		);
 
 		// right join
-		Join.calcNestedLoopJoin(
+		initialTime += Join.calcNestedLoopJoin(
 			doEliminateDuplicateRows,
 			session,
 			this.getChild(), this.getChild2(),
@@ -98,11 +98,13 @@ export class FullOuterJoin extends Join {
 			this._rowCreatorNotMatched
 		);
 
+		const start = performance.now()
 		if (doEliminateDuplicateRows === true) {
 			resultTable.eliminateDuplicateRows();
 		}
 		this.setResultNumRows(resultTable.getNumRows());
 		this._resultTable = resultTable;
+		this._execTime = (performance.now() - start) + initialTime;
 		return resultTable;
 	}
 }
