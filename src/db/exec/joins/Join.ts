@@ -46,8 +46,9 @@ export abstract class Join extends RANodeBinary {
 	_schema: Schema | null = null;
 	_rowCreatorMatched: null | ((rowA: Data[], rowB: Data[]) => Data[]) = null;
 	_rowCreatorNotMatched: null | ((rowA: Data[], rowB: Data[]) => Data[]) = null; // used for outer joins
-	_executionStart: any;
-	_executedEnd: any;
+	_executionStart?: ReturnType<typeof performance.now>;
+	_executedEnd?: ReturnType<typeof performance.now>;
+	_resultTable: Table | null = null;
 
 	constructor(
 		child: RANode,
@@ -161,7 +162,7 @@ export abstract class Join extends RANodeBinary {
 						continue;
 					}
 
-					for (let k = j+1; k < numCols[i]; k++) {
+					for (let k = j + 1; k < numCols[i]; k++) {
 						// If found a sibling column, cannot set relation alias
 						if (schemas[i].getColumn(j).getName() === schemas[i].getColumn(k).getName()) {
 							blacklist[i].push(schemas[i].getColumn(j).getName());
@@ -176,7 +177,7 @@ export abstract class Join extends RANodeBinary {
 			// 	allCols[0].filter(x => !blacklist[0].includes(x)),
 			// 	allCols[1].filter(x => !blacklist[1].includes(x)),
 			// ];
-			
+
 			// Generate all column combinations
 			// https://stackoverflow.com/questions/43241174/javascript-generating-all-combinations-of-elements-in-a-single-array-in-pairs
 			let combCols: any[][] = [];
@@ -304,8 +305,10 @@ export abstract class Join extends RANodeBinary {
 
 	_getResult(doEliminateDuplicateRows: boolean = true, session: Session | undefined) {
 		session = this._returnOrCreateSession(session);
+		if (this._resultTable) {
+			return this._resultTable;
+		}
 
-		
 
 		if (this._joinConditionEvaluator === null) {
 			throw new Error(`check not called`);
@@ -313,9 +316,9 @@ export abstract class Join extends RANodeBinary {
 
 		const resultTable = new Table();
 		resultTable.setSchema(this.getSchema());
-		this._executionStart = Date.now();
+		this._executionStart = performance.now();
 
-		Join.calcNestedLoopJoin(
+		const initialTime = Join.calcNestedLoopJoin(
 			doEliminateDuplicateRows,
 			session,
 			this.getChild(),
@@ -325,8 +328,10 @@ export abstract class Join extends RANodeBinary {
 			this._isAntiJoin,
 			this._joinConditionEvaluator,
 			this._rowCreatorMatched,
-			this._rowCreatorNotMatched,
+			this._rowCreatorNotMatched
 		);
+
+		const start = performance.now()
 
 		// can be omitted if join is known to produce no new duplicates (e.g semi join) 
 		if (doEliminateDuplicateRows === true) {
@@ -359,7 +364,7 @@ export abstract class Join extends RANodeBinary {
 							break;
 						}
 					}
-	
+
 					if (equals) {
 						newResultTable.addRow(rowA);
 						break;
@@ -368,12 +373,16 @@ export abstract class Join extends RANodeBinary {
 			}
 
 			this.setResultNumRows(newResultTable.getNumRows());
-			this._executedEnd = Date.now() - this._executionStart;
+			this._executedEnd = performance.now() - this._executionStart;
+			this._resultTable = newResultTable;
+			this._execTime = (performance.now() - start) + initialTime
 			return newResultTable;
 		}
 		else {
 			// Regular path
-			this._executedEnd = Date.now() - this._executionStart;
+			this._executedEnd = performance.now() - this._executionStart;
+			this._resultTable = resultTable;
+			this._execTime = (performance.now() - start) + initialTime
 			return resultTable;
 		}
 	}
@@ -424,11 +433,12 @@ export abstract class Join extends RANodeBinary {
 		isAntiJoin: boolean,
 		evalJoinCondition: (rowA: Data[], rowB: Data[], rowNumberA: number, session: Session) => boolean,
 		createRowToAddIfMatched: null | ((rowA: Data[], rowB: Data[]) => Data[]),
-		createRowToAddIfNOTMatched: null | ((rowA: Data[], rowB: Data[]) => Data[]),
-	): void {
+		createRowToAddIfNOTMatched: null | ((rowA: Data[], rowB: Data[]) => Data[])
+	): ReturnType<typeof performance.now> {
 
 		const orgA = childA.getResult(doEliminateDuplicateRows, session);
 		const orgB = childB.getResult(doEliminateDuplicateRows, session);
+		const start = performance.now();
 		const numRowsA = orgA.getNumRows();
 		const numRowsB = orgB.getNumRows();
 		const numColsA = orgA.getNumCols();
@@ -519,6 +529,7 @@ export abstract class Join extends RANodeBinary {
 				}
 			}
 		}
+		return performance.now() - start
 	}
 
 	getArgumentHtml(): string {
@@ -550,7 +561,7 @@ export abstract class Join extends RANodeBinary {
 		const numColsA = schemaA.getSize();
 		const conditions: ValueExpr.ValueExpr[] = [];
 		const hasDuplicateCols = Join.checkForDuplicates(schemaA) || Join.checkForDuplicates(schemaB);
-		
+
 
 		// find columns with the same name in schemaA and schemaB
 		for (let i = 0; i < numColsA; i++) {
@@ -559,7 +570,7 @@ export abstract class Join extends RANodeBinary {
 				// skip all but certain columns (for joins with USING())
 				continue;
 			}
-			
+
 			let indices = [];
 			if (hasDuplicateCols) {
 				indices = schemaB.getColumnIndexArray(a.getName(), a.getRelAlias());

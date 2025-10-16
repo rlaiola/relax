@@ -58,6 +58,9 @@ export class FullOuterJoin extends Join {
 	}
 
 	getResult(doEliminateDuplicateRows: boolean = true, session?: Session) {
+		if (this._resultTable) {
+			return this._resultTable;
+		}
 		session = this._returnOrCreateSession(session);
 
 		if (this._joinConditionEvaluator === null || this._rowCreatorMatched === null || this._rowCreatorNotMatched === null) {
@@ -68,7 +71,7 @@ export class FullOuterJoin extends Join {
 		resultTable.setSchema(this.getSchema());
 
 		// left join
-		Join.calcNestedLoopJoin(
+		let initialTime = Join.calcNestedLoopJoin(
 			doEliminateDuplicateRows,
 			session,
 			this.getChild(), this.getChild2(),
@@ -77,11 +80,11 @@ export class FullOuterJoin extends Join {
 			false,
 			this._joinConditionEvaluator,
 			this._rowCreatorMatched,
-			this._rowCreatorNotMatched,
+			this._rowCreatorNotMatched
 		);
 
 		// right join
-		Join.calcNestedLoopJoin(
+		initialTime += Join.calcNestedLoopJoin(
 			doEliminateDuplicateRows,
 			session,
 			this.getChild(), this.getChild2(),
@@ -92,14 +95,16 @@ export class FullOuterJoin extends Join {
 			// Should not create matched rows twice in case of a multiset (left join already did the job)
 			// this._rowCreatorMatched,	
 			null,
-			this._rowCreatorNotMatched,
+			this._rowCreatorNotMatched
 		);
 
+		const start = performance.now()
 		if (doEliminateDuplicateRows === true) {
 			resultTable.eliminateDuplicateRows();
 		}
 		this.setResultNumRows(resultTable.getNumRows());
-
+		this._resultTable = resultTable;
+		this._execTime = (performance.now() - start) + initialTime;
 		return resultTable;
 	}
 }
