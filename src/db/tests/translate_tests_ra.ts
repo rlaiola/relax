@@ -2506,7 +2506,7 @@ QUnit.test('test selection with explicit column(s) of relation', function (asser
 
 	const ref = exec_ra(`{
 		R.a, R.b, R.c
-		4,   d,   f 
+		4,   d,   f
 		5,   d,   b
 		6,   e,   f
 	}`, {});
@@ -2520,7 +2520,7 @@ QUnit.test('test selection with implicit column(s) of relation', function (asser
 
 	const ref = exec_ra(`{
 		R.a, R.b, R.c
-		4,   d,   f 
+		4,   d,   f
 		5,   d,   b
 		6,   e,   f
 	}`, {});
@@ -2535,7 +2535,7 @@ QUnit.test('test selection with implicit column(s) of relation from local variab
 
 	const ref = exec_ra(`{
 		R.a, R.b, R.c
-		4,   d,   f 
+		4,   d,   f
 		5,   d,   b
 		6,   e,   f
 	}`, {});
@@ -2549,7 +2549,7 @@ QUnit.test('test selection with explicit column(s) of relation from local variab
 
 	const ref = exec_ra(`{
 		R.a, R.b, R.c
-		4,   d,   f 
+		4,   d,   f
 		5,   d,   b
 		6,   e,   f
 	}`, {});
@@ -2563,7 +2563,7 @@ QUnit.test('test selection with explicit column(s) of local variable', function 
 
 	const ref = exec_ra(`{
 		R.a, R.b, R.c
-		4,   d,   f 
+		4,   d,   f
 		5,   d,   b
 		6,   e,   f
 	}`, {});
@@ -3114,7 +3114,7 @@ QUnit.test('test rename implicit column of local variable', function (assert) {
 		R.aa, R.b, R.c
 		1,   a,   d
 		3,   c,   c
-		4,   d,   f 
+		4,   d,   f
 		5,   d,   b
 		6,   e,   f
 	}`, {});
@@ -3130,7 +3130,7 @@ QUnit.test('test rename explicit column of relation from local variable', functi
 		R.aa, R.b, R.c
 		1,   a,   d
 		3,   c,   c
-		4,   d,   f 
+		4,   d,   f
 		5,   d,   b
 		6,   e,   f
 	}`, {});
@@ -3146,7 +3146,7 @@ QUnit.test('test rename explicit column of local variable', function (assert) {
 		R.aa, R.b, R.c
 		1,   a,   d
 		3,   c,   c
-		4,   d,   f 
+		4,   d,   f
 		5,   d,   b
 		6,   e,   f
 	}`, {});
@@ -3604,4 +3604,74 @@ QUnit.test('test cast function', function (assert) {
 	}`, {});
 
 	assert.deepEqual(root.getResult(), ref.getResult());
+});
+
+QUnit.module('recursive relational algebra');
+
+function getTestFlights(): { [key: string]: Relation } {
+  const root = relalgjs.executeRelalg(`{
+    flight.departure:string, flight.destination:string
+    'A', 'B'
+    'B', 'C'
+    'C', 'D'
+  }`, {});
+  return { flight: root as any };
+}
+
+QUnit.test('recursive transitive closure over flight edges', function (assert) {
+  const query = `
+    recursive path =
+      pi departure, destination (flight)
+      union
+      pi path.departure, f.destination (
+        path ⨝ path.destination = f.departure (rho f (flight))
+      )
+    path
+  `;
+  const root = exec_ra(query, getTestFlights());
+
+  const ref = exec_ra(`{
+    path.departure, path.destination
+    'A', 'B'
+    'B', 'C'
+    'C', 'D'
+    'A', 'C'
+    'B', 'D'
+    'A', 'D'
+  }`, {});
+
+  assert.deepEqual(root.getResult(true), ref.getResult(true), 'fixpoint de recursão bate com o fecho esperado');
+});
+
+QUnit.test('recursive alias propagation allows path.* in the recursive step', function (assert) {
+  const query = `
+    recursive path =
+      pi departure, destination (flight)
+      union
+      pi path.departure, f.destination (
+        path ⨝ path.destination = f.departure (rho f (flight))
+      )
+    path
+  `;
+  const root = exec_ra(query, getTestFlights());
+  const res = root.getResult(true);
+
+  const schema = res.getSchema();
+  assert.equal(schema.getColumn(0).getRelAlias(), 'path', 'primeira coluna qualificada com alias path');
+  assert.equal(schema.getColumn(1).getRelAlias(), 'path', 'segunda coluna qualificada com alias path');
+});
+
+QUnit.test('recursive: erro quando seed e passo têm schemas incompatíveis (check)', function (assert) {
+  const badQuery = `
+    recursive r =
+      flight
+      union
+      pi r.departure ( rho f (flight) )
+    r
+  `;
+  assert.throws(
+    () => exec_ra(badQuery, getTestFlights()).getResult(true),
+    /SyntaxError: A parte recursiva deve referenciar a tabela inicial: r/,
+    'lança erro de compatibilidade de union no check/execução'
+  );
 });

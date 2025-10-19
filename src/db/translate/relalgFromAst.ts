@@ -34,6 +34,14 @@ import * as ValueExpr from '../exec/ValueExpr';
 import { EliminateDuplicates } from '../exec/EliminateDuplicates';
 import { Table } from '../exec/Table';
 
+function getEntryCaseInsensitive(map: Record<string, any>, name: string) {
+	if (!map) return undefined;
+	if (name in map) return map[name];
+	const lower = name.toLowerCase();
+	const k = Object.keys(map).find(key => key.toLowerCase() === lower);
+	return k ? map[k] : undefined;
+  }
+
 function parseJoinCondition(condition: relalgAst.booleanExpr | string[] | null): JoinCondition {
 	if (condition === null) {
 		return {
@@ -924,6 +932,7 @@ export function relalgFromRelalgAstNode(astNode: relalgAst.relalgOperation, rela
 				const initialNode = recRANode(n.child, localRelations);
 				const recursiveNode = recRANode(n.child2, localRelations, n.name);
 				const node = new RecursiveAssignment(n.name, initialNode, recursiveNode);
+
 				setAdditionalData(n, node);
 				(localRelations as any)[n.name] = node;
 				return node;
@@ -931,15 +940,14 @@ export function relalgFromRelalgAstNode(astNode: relalgAst.relalgOperation, rela
 
 			case 'relation':
 				{
-					if (recursionContext && n.name === recursionContext) {
-						const ph = (localRelations as any)[n.name];
-						if (ph instanceof RecursiveRef) return ph;
-						return new RecursiveRef(n.name);
+					if (recursionContext && n.name.toLowerCase() === recursionContext.toLowerCase()) {
+						const ph = getEntryCaseInsensitive(localRelations as any, recursionContext);
+						return ph instanceof RecursiveRef ? ph : new RecursiveRef(recursionContext);
 					}
 
 					const entry =
-						(localRelations as any)[n.name] ??
-						(relations as any)[n.name];
+						getEntryCaseInsensitive(localRelations as any, n.name) ??
+						getEntryCaseInsensitive(relations as any, n.name);
 
 					if (!entry) {
 						throw new ExecutionError(
@@ -952,8 +960,7 @@ export function relalgFromRelalgAstNode(astNode: relalgAst.relalgOperation, rela
 
 					let node: RANode;
                     if (entry instanceof RecursiveAssignment) {
-						console.log(`Usando RecursiveAssignment para: ${n.name}, entry =`, entry);
-                        node = entry;
+                        node = new RenameRelation(entry, n.name);
                     }
                     else if (typeof (entry as any).copy === 'function') {
                         node = (entry as any).copy();

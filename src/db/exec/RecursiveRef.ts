@@ -25,7 +25,6 @@ export class RecursiveRef extends RANode {
     }
 
     getResult(_dedup: boolean = true, session?: Session): Table {
-        console.log(`RecursiveAssignment.getResult() chamado para: ${this._name}`);
         session = this._returnOrCreateSession(session);
         const t = session._recursiveVars?.[this._name];
         if (!t) {
