@@ -64,6 +64,7 @@ export class EditorSql extends React.Component<Props> {
 				mode="text/x-mysql"
 				// @ts-ignore
 				execFunction={(self: EditorBase, text: string, offset) => {
+					self.historyAddEntry(text);
 					const ast = parseSQLSelect(text);
 					replaceVariables(ast, relations);
 			
@@ -83,8 +84,6 @@ export class EditorSql extends React.Component<Props> {
 					if (root) {
 						root.check();
 						
-
-						self.historyAddEntry(text);
 
 						// calc.displayRaResult(root);
 						return {
