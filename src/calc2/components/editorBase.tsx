@@ -685,7 +685,34 @@ class Relation {
 
 const gutterClass = 'CodeMirror-table-edit-markers';
 const eventExecSuccessfulName = 'editor.execSuccessful';
+const HISTORY_STORAGE_KEY = "@editor/history"
 
+function getHistoryStorageKey(editorMode: string) {
+	return `${HISTORY_STORAGE_KEY}/${editorMode}`
+}
+
+function loadHistoryFromStorage(storage: Storage, editorMode: string): HistoryEntry[] {
+	const historyStr = storage.getItem(getHistoryStorageKey(editorMode))
+	if (!historyStr) {
+		return []
+	}
+	return (JSON.parse(historyStr) as (HistoryEntry & { time: string })[]).map(({ time, ...entry }) => ({ ...entry, time: new Date(time) }))
+}
+
+function appendHistoryToStorage(entry: HistoryEntry, historyMaxEntries: number, editorMode: string, storage: Storage) {
+	/**
+	 * append history to LocalStorage with max entries
+	 * preventing repeated code into it
+	 */
+	const history = loadHistoryFromStorage(storage, editorMode);
+	const historyWithoutCurrentEntry = history.filter((h) => h.code !== entry.code);
+	const updatedHistory = [
+		entry,
+		...historyWithoutCurrentEntry
+	].slice(0, historyMaxEntries);
+	storage.setItem(getHistoryStorageKey(editorMode), JSON.stringify(updatedHistory));
+	return updatedHistory;
+}
 
 export class EditorBase extends React.Component<Props, State> {
 	private hinterCache: {
@@ -779,7 +806,7 @@ export class EditorBase extends React.Component<Props, State> {
 		this.state = {
 			editor: null,
 			codeMirrorOptions,
-			history: [],
+				history: loadHistoryFromStorage(window.localStorage, props.mode),
 			isSelectionSelected: false,
 			execSuccessful: false,
 			execErrors: [],
@@ -902,21 +929,32 @@ export class EditorBase extends React.Component<Props, State> {
 	
 	// setting example queries..
 	componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>, snapshot?: any) {
-		if(prevState.editor) {
-			if(this.props.exampleSql && this.props.exampleSql !== '' && !this.state.addedExampleSqlQuery && this.props.tab === 'sql') {
+		if (prevProps.mode !== this.props.mode) {
+			this.setState({ history: loadHistoryFromStorage(window.localStorage, this.props.mode) })
+		}
+		if (prevState.editor) {
+			if (this.props.exampleSql && this.props.exampleSql !== '' && !this.state.addedExampleSqlQuery && this.props.tab === 'sql') {
 				this.replaceAll(this.props.exampleSql)
-				this.setState({addedExampleSqlQuery: true});
+				this.setState({ addedExampleSqlQuery: true });
 			}
-			if(this.props.exampleBags && this.props.exampleBags !== '' && !this.state.addedExampleBagsQuery && this.props.tab === 'bagalg') {
+			if (this.props.exampleBags && this.props.exampleBags !== '' && !this.state.addedExampleBagsQuery && this.props.tab === 'bagalg') {
 				this.replaceAll(this.props.exampleBags);
 				// TODO: maybe auto format / replace ?
-				this.setState({addedExampleBagsQuery: true});
+				this.setState({ addedExampleBagsQuery: true });
 			}
-			if(this.props.exampleRA && this.props.exampleRA !== '' && !this.state.addedExampleRAQuery && this.props.tab === 'relalg') {
+			if (this.props.exampleRA && this.props.exampleRA !== '' && !this.state.addedExampleRAQuery && this.props.tab === 'relalg') {
 				this.replaceAll(this.props.exampleRA);
 				// TODO: maybe auto format / replace ?
-				this.setState({addedExampleRAQuery: true});
+				this.setState({ addedExampleRAQuery: true });
 			}
+		}
+			}
+
+	onHistoryStorageChange(event: StorageEvent) {
+		if (event.storageArea === window.localStorage && event.key === getHistoryStorageKey(this.props.mode)) {
+			this.setState({
+				history: loadHistoryFromStorage(event.storageArea, this.props.mode)
+			});
 		}
 	}
 
@@ -955,9 +993,13 @@ export class EditorBase extends React.Component<Props, State> {
 			this.props.textChange(cm);
 		});
 	
-
+		window.addEventListener("storage", this.onHistoryStorageChange);
 	}
 
+
+	componentWillUnmount(): void {
+		window.removeEventListener("storage", this.onHistoryStorageChange);
+	}
 
 	render() {
 		const {
@@ -1154,19 +1196,16 @@ export class EditorBase extends React.Component<Props, State> {
 	}
 
 	historyAddEntry(code: string) {
-		const { historyMaxEntries = 10, historyMaxLabelLength = 20 } = this.props;
+		const { historyMaxEntries = 10, historyMaxLabelLength = 20, mode } = this.props;
 
 		const entry = {
 			time: new Date(),
 			label: code.length > historyMaxLabelLength ? code.substr(0, historyMaxLabelLength - 4) + ' ...' : code,
-			code,
+			code: code.trim(),
 		};
 
 		this.setState({
-			history: [
-				entry,
-				...this.state.history,
-			].slice(-historyMaxEntries),
+			history: appendHistoryToStorage(entry, historyMaxEntries, mode, window.localStorage),
 		});
 	}
 
