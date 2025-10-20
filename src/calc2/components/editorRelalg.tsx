@@ -249,7 +249,7 @@ export class EditorRelalg extends React.Component<Props, State> {
 								editorRef={this.editorBase!}
 								root={root}
 								numTreeLabelColors={NUM_TREE_LABEL_COLORS}
-								execTime={self.state.execTime == null ? 0 : self.state.execTime}
+								execTime={root._resTime || root._execTime || 0}
 								doEliminateDuplicates={true}
 							/>
 						),

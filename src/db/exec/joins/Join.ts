@@ -46,8 +46,6 @@ export abstract class Join extends RANodeBinary {
 	_schema: Schema | null = null;
 	_rowCreatorMatched: null | ((rowA: Data[], rowB: Data[]) => Data[]) = null;
 	_rowCreatorNotMatched: null | ((rowA: Data[], rowB: Data[]) => Data[]) = null; // used for outer joins
-	_executionStart?: ReturnType<typeof performance.now>;
-	_executedEnd?: ReturnType<typeof performance.now>;
 	_resultTable: Table | null = null;
 
 	constructor(
@@ -316,7 +314,7 @@ export abstract class Join extends RANodeBinary {
 
 		const resultTable = new Table();
 		resultTable.setSchema(this.getSchema());
-		this._executionStart = performance.now();
+		this._timer.start('_resTime');
 
 		const initialTime = Join.calcNestedLoopJoin(
 			doEliminateDuplicateRows,
@@ -373,16 +371,16 @@ export abstract class Join extends RANodeBinary {
 			}
 
 			this.setResultNumRows(newResultTable.getNumRows());
-			this._executedEnd = performance.now() - this._executionStart;
 			this._resultTable = newResultTable;
-			this._execTime = (performance.now() - start) + initialTime
+			this._execTime = this._timer.end('_execTime') + initialTime;
+			this._resTime = this._timer.end('_resTime');
 			return newResultTable;
 		}
 		else {
 			// Regular path
-			this._executedEnd = performance.now() - this._executionStart;
 			this._resultTable = resultTable;
-			this._execTime = (performance.now() - start) + initialTime
+			this._execTime = this._timer.end('_execTime') + initialTime;
+			this._resTime = this._timer.end('_resTime');
 			return resultTable;
 		}
 	}

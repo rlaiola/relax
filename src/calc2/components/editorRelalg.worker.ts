@@ -68,6 +68,7 @@ type MessageRelalg = {
 
 ctx.addEventListener("message", async (event: MessageEvent<MessageRelalg>) => {
   if (!event) return;
+  console.log(event);
   if (event.data.type === "terminated") {
     ctx.terminated = true;
   }

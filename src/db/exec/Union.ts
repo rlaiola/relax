@@ -42,12 +42,12 @@ export class Union extends RANodeBinary {
 		if (this._schema === null) {
 			throw new Error(`check not called`);
 		}
-
+		this._timer.start('_resTime');
 		const res = new Table();
 		const orgA = this.getChild().getResult(doEliminateDuplicateRows, session);
 		const orgB = this.getChild2().getResult(doEliminateDuplicateRows, session);
 		res.setSchema(this._schema);
-		const start = performance.now();
+		this._timer.start('_exeTime');
 		// copy
 		res.addRows(orgA.getRows());
 		res.addRows(orgB.getRows());
@@ -56,7 +56,8 @@ export class Union extends RANodeBinary {
 			res.eliminateDuplicateRows();
 		}
 		this.setResultNumRows(res.getNumRows());
-		this._execTime = performance.now() - start;
+		this._execTime = this._timer.end('_execTime');
+		this._resTime = this._timer.end('_resTime');
 		return res;
 	}
 

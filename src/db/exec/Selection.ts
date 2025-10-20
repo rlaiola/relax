@@ -37,10 +37,11 @@ export class Selection extends RANodeUnary {
 			return this._result;
 		}
 		session = this._returnOrCreateSession(session);
+		this._timer.start('_resTime');
 		const res = new Table();
 		const org = this.getChild().getResult(doEliminateDuplicateRows, session);
 		res.setSchema(org.getSchema());
-		const start = performance.now();
+		this._timer.start('_execTime')
 		// copy
 		const condition = this._condition;
 		const numRows = org.getNumRows();
@@ -53,7 +54,8 @@ export class Selection extends RANodeUnary {
 		}
 
 		this.setResultNumRows(res.getNumRows());
-		this._execTime = performance.now() - start; 
+		this._execTime = this._timer.end('_execTime');
+		this._resTime = this._timer.end('_resTime');
 		return res;
 	}
 

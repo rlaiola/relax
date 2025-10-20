@@ -707,7 +707,8 @@ function loadHistoryFromStorage(storage: Storage, editorMode: string): HistoryEn
 
 function appendHistoryToStorage(entry: HistoryEntry, historyMaxEntries: number, editorMode: string, storage: Storage) {
 	const history = loadHistoryFromStorage(storage, editorMode);
-	const updatedHistory = [
+
+	const updatedHistory = entry.code === history[0]?.code ? [entry, ...history.slice(1, historyMaxEntries)] : [
 		entry,
 		...history
 	].slice(0, historyMaxEntries)
@@ -1024,7 +1025,6 @@ export class EditorBase extends React.Component<Props, State> {
 			execButtonLabel,
 			editQueryTimeout
 		} = this.props;
-		console.log(queryTimeout);
 		return (
 			<div>
 				<div className="editor-base">
@@ -1216,7 +1216,7 @@ export class EditorBase extends React.Component<Props, State> {
 		const entry = {
 			time: new Date(),
 			label: code.length > historyMaxLabelLength ? code.substr(0, historyMaxLabelLength - 4) + ' ...' : code,
-			code,
+			code: code.trim()
 		};
 		this.setState({
 			history: appendHistoryToStorage(entry, historyMaxEntries, this.props.mode, window.localStorage)

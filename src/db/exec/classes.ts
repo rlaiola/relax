@@ -22,6 +22,7 @@ import { Join } from './joins/Join';
 import { LeftOuterJoin } from './joins/LeftOuterJoin';
 import { RightOuterJoin } from './joins/RightOuterJoin';
 import { SemiJoin } from './joins/SemiJoin';
+import Timer from 'calc2/utils/timer';
 
 export default [
   ValueExprColumnValue,
@@ -48,5 +49,6 @@ export default [
   Join,
   LeftOuterJoin,
   RightOuterJoin,
-  SemiJoin
+  SemiJoin,
+  Timer
 ]

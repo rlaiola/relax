@@ -60,6 +60,7 @@ export class Relation extends RANodeNullary {
 			return this._processedTable
 		}
 		this._returnOrCreateSession(session);
+		this._timer.start('_execTime');
 		const res = this._table.copy();
 
 		if (doEliminateDuplicateRows === true) {
@@ -67,6 +68,8 @@ export class Relation extends RANodeNullary {
 		}
 		this.setResultNumRows(res.getNumRows());
 		this._processedTable = res;
+		this._execTime = this._timer.end('_execTime');
+		this._resTime = this._execTime;
 		return res;
 	}
 

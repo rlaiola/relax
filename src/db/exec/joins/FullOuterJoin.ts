@@ -68,6 +68,7 @@ export class FullOuterJoin extends Join {
 		}
 
 		const resultTable = new Table();
+		this._timer.start('_resTime');
 		resultTable.setSchema(this.getSchema());
 
 		// left join
@@ -98,13 +99,14 @@ export class FullOuterJoin extends Join {
 			this._rowCreatorNotMatched
 		);
 
-		const start = performance.now()
+		this._timer.start('_execTime');
+
 		if (doEliminateDuplicateRows === true) {
 			resultTable.eliminateDuplicateRows();
 		}
 		this.setResultNumRows(resultTable.getNumRows());
 		this._resultTable = resultTable;
-		this._execTime = (performance.now() - start) + initialTime;
+		this._execTime = this._timer.end('_execTime') + initialTime;
 		return resultTable;
 	}
 }
