@@ -74,7 +74,10 @@ export class Projection extends RANodeUnary {
 			resRow = new Array(numCols);
 			for (j = 0; j < numCols; j++) {
 				if (_indices[j] === -1) {
-					resRow[j] = (this._columns[j] as ProjectionColumnExpr).child.evaluate(orgRow, [], i, session);
+					if (this._columns[j] instanceof Column)
+						resRow[j] = orgRow[j];
+					else
+						resRow[j] = (this._columns[j] as ProjectionColumnExpr).child.evaluate(orgRow, [], i, session);
 				}
 				else {
 					resRow[j] = orgRow[_indices[j]];
@@ -380,11 +383,17 @@ export class Projection extends RANodeUnary {
 			const index = _indices[i];
 
 			if (index === -1) {
-				const col = this._columns[i] as ProjectionColumnExpr;
+				if (this._columns[i] instanceof Column) {
+					const col = this._columns[i] as Column;
+					projectedSchema.addColumn(col.getName(), col.getRelAlias(), col.getType());
+				}
+				else {
+					const col = this._columns[i] as ProjectionColumnExpr;
 
-				// dataType 'null' (unknown) has been checked before
-				const dataType = col.child.getDataType() as 'string' | 'number' | 'boolean' | 'date';
-				projectedSchema.addColumn(col.name, col.relAlias, dataType);
+					// dataType 'null' (unknown) has been checked before
+					const dataType = col.child.getDataType() as 'string' | 'number' | 'boolean' | 'date';
+					projectedSchema.addColumn(col.name, col.relAlias, dataType);
+				}
 			}
 			else {
 				const col = unProjectedSchema.getColumn(index);
