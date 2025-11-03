@@ -416,5 +416,7 @@ declare module relalgAst {
 		| '<'
 		| "substring"
 		| "cast"
+		| 'between'
+		| 'notBetween'
 	);
 }
