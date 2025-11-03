@@ -2205,3 +2205,449 @@ QUnit.test('pi with wrong date format', function (assert) {
 		assert.ok(true);
 	}
 });
+
+QUnit.test('test sqrt of negative number', function (assert) {
+	const query = "pi a, sqrt(-4)->k R";
+	const root = exec_ra(query, getTestBags());
+
+	const ref = exec_ra(`{
+		R.a, k:number
+		1,   null
+		5,   null
+		1,   null
+	}`, {});
+
+	assert.deepEqual(root.getResult(false), ref.getResult(false));
+});
+
+QUnit.test('test sqrt of zero', function (assert) {
+	const query = "pi sqrt(0)->k {()}";
+	const root = exec_ra(query, getTestBags());
+
+	const ref = exec_ra(`{
+		k
+		0
+	}`, {});
+
+	assert.deepEqual(root.getResult(false), ref.getResult(false));
+});
+
+QUnit.test('test sqrt of one', function (assert) {
+	const query = "pi sqrt(1)->k {()}";
+	const root = exec_ra(query, getTestBags());
+
+	const ref = exec_ra(`{
+		k
+		1
+	}`, {});
+
+	assert.deepEqual(root.getResult(false), ref.getResult(false));
+});
+
+QUnit.test('test sqrt of one hundred', function (assert) {
+	const query = "pi a, sqrt(100)->k R";
+	const root = exec_ra(query, getTestBags());
+
+	const ref = exec_ra(`{
+		R.a, k:number
+		1,   10
+		5,   10
+		1,   10
+	}`, {});
+
+	assert.deepEqual(root.getResult(false), ref.getResult(false));
+});
+
+QUnit.test('test e raised to the power of 0', function (assert) {
+	const query = "pi a, exp(0)->k R";
+	const root = exec_ra(query, getTestBags());
+
+	const ref = exec_ra(`{
+		R.a, k:number
+		1,   1
+		5,   1
+		1,   1
+	}`, {});
+
+	assert.deepEqual(root.getResult(false), ref.getResult(false));
+});
+
+QUnit.test('test e raised to the power of 1', function (assert) {
+	const query = "pi a, exp(1)->k R";
+	const root = exec_ra(query, getTestBags());
+
+	const ref = exec_ra(`{
+		R.a, k:number
+		1,   2.718281828459045
+		5,   2.718281828459045
+		1,   2.718281828459045
+	}`, {});
+
+	assert.deepEqual(root.getResult(false), ref.getResult(false));
+});
+
+QUnit.test('test e raised to the power of 2', function (assert) {
+	const query = "pi a, exp(2)->k R";
+	const root = exec_ra(query, getTestBags());
+
+	const ref = exec_ra(`{
+		R.a, k:number
+		1,   7.38905609893065
+		5,   7.38905609893065
+		1,   7.38905609893065
+	}`, {});
+
+	assert.deepEqual(root.getResult(false), ref.getResult(false));
+});
+
+QUnit.test('test column raised to the power of 0', function (assert) {
+	const query = "pi a, power(a, 0)->k R";
+	const root = exec_ra(query, getTestBags());
+
+	const ref = exec_ra(`{
+		R.a, k:number
+		1,   1
+		5,   1
+		1,   1
+	}`, {});
+
+	assert.deepEqual(root.getResult(false), ref.getResult(false));
+});
+
+QUnit.test('test column raised to the power of 1', function (assert) {
+	const query = "pi a, power(a, 1)->k R";
+	const root = exec_ra(query, getTestBags());
+
+	const ref = exec_ra(`{
+		R.a, k:number
+		1,   1
+		5,   5
+		1,   1
+	}`, {});
+
+	assert.deepEqual(root.getResult(false), ref.getResult(false));
+});
+
+QUnit.test('test column raised to the power of 2', function (assert) {
+	const query = "pi a, power(a, 2)->k R";
+	const root = exec_ra(query, getTestBags());
+
+	const ref = exec_ra(`{
+		R.a, k:number
+		1,   1
+		5,   25
+		1,   1
+	}`, {});
+
+	assert.deepEqual(root.getResult(false), ref.getResult(false));
+});
+
+QUnit.test('test natural logarithm of a negative number', function (assert) {
+	const query = "pi a, ln(-1)->k R";
+	const root = exec_ra(query, getTestBags());
+
+	const ref = exec_ra(`{
+		R.a, k:number
+		1,   null
+		5,   null
+		1,   null
+	}`, {});
+
+	assert.deepEqual(root.getResult(false), ref.getResult(false));
+});
+
+QUnit.test('test natural logarithm of 0', function (assert) {
+	const query = "pi a, ln(0)->k R";
+	const root = exec_ra(query, getTestBags());
+
+	const ref = exec_ra(`{
+		R.a, k:number
+		1,   null
+		5,   null
+		1,   null
+	}`, {});
+
+	assert.deepEqual(root.getResult(false), ref.getResult(false));
+});
+
+QUnit.test('test natural logarithm of 1', function (assert) {
+	const query = "pi a, ln(exp(1))->k R";
+	const root = exec_ra(query, getTestBags());
+
+	const ref = exec_ra(`{
+		R.a, k:number
+		1,   1
+		5,   1
+		1,   1
+	}`, {});
+
+	assert.deepEqual(root.getResult(false), ref.getResult(false));
+});
+
+QUnit.test('test natural logarithm of 2', function (assert) {
+	const query = "pi ln(exp(2))->k R";
+	const root = exec_ra(query, getTestBags());
+
+	const ref = exec_ra(`{
+		k:number
+		2
+		2
+		2
+	}`, {});
+
+	assert.deepEqual(root.getResult(false), ref.getResult(false));
+});
+
+QUnit.test('test logarithm, base 2, of -1', function (assert) {
+	const query = "pi log(2, -1)->k R";
+	const root = exec_ra(query, getTestBags());
+
+	const ref = exec_ra(`{
+		k:number
+		null
+		null
+		null
+	}`, {});
+
+	assert.deepEqual(root.getResult(false), ref.getResult(false));
+});
+
+QUnit.test('test logarithm, base 2, of 0', function (assert) {
+	const query = "pi log(2, 0)->k R";
+	const root = exec_ra(query, getTestBags());
+
+	const ref = exec_ra(`{
+		k:number
+		null
+		null
+		null
+	}`, {});
+
+	assert.deepEqual(root.getResult(false), ref.getResult(false));
+});
+
+QUnit.test('test logarithm, base 2, of 1', function (assert) {
+	const query = "pi log(2, 1)->k R";
+	const root = exec_ra(query, getTestBags());
+
+	const ref = exec_ra(`{
+		k:number
+		0
+		0
+		0
+	}`, {});
+
+	assert.deepEqual(root.getResult(false), ref.getResult(false));
+});
+
+QUnit.test('test logarithm, base -1, of 16', function (assert) {
+	const query = "pi log(-1, 16)->k R";
+	const root = exec_ra(query, getTestBags());
+
+	const ref = exec_ra(`{
+		k:number
+		null
+		null
+		null
+	}`, {});
+
+	assert.deepEqual(root.getResult(false), ref.getResult(false));
+});
+
+QUnit.test('test logarithm, base 0, of 16', function (assert) {
+	const query = "pi log(0, 16)->k R";
+	const root = exec_ra(query, getTestBags());
+
+	const ref = exec_ra(`{
+		k:number
+		null
+		null
+		null
+	}`, {});
+
+	assert.deepEqual(root.getResult(false), ref.getResult(false));
+});
+
+QUnit.test('test logarithm, base 1, of 16', function (assert) {
+	const query = "pi log(1, 16)->k R";
+	const root = exec_ra(query, getTestBags());
+
+	const ref = exec_ra(`{
+		k:number
+		null
+		null
+		null
+	}`, {});
+
+	assert.deepEqual(root.getResult(false), ref.getResult(false));
+});
+
+QUnit.test('test logarithm, base 2, of 4', function (assert) {
+	const query = "pi log(2, 4)->k {()}";
+	const root = exec_ra(query, getTestBags());
+
+	const ref = exec_ra(`{
+		k:number
+		2
+	}`, {});
+
+	assert.deepEqual(root.getResult(false), ref.getResult(false));
+});
+
+QUnit.test('test logarithm, base 10, of 1000', function (assert) {
+	const query = "pi round(log(10, 1000))->k {()}";
+	const root = exec_ra(query, getTestBags());
+
+	const ref = exec_ra(`{
+		k:number
+		3
+	}`, {});
+
+	assert.deepEqual(root.getResult(false), ref.getResult(false));
+});
+
+QUnit.test('test substring 2 args comma style', function (assert) {
+	const query = "pi SUBSTRING('Quadratically',5) -> str {()}";
+	const root = exec_ra(query, getTestBags());
+
+	const ref = exec_ra(`{
+		str:string
+		'ratically'
+	}`, {});
+
+	assert.deepEqual(root.getResult(false), ref.getResult(false));
+});
+
+QUnit.test('test substring 2 args from style', function (assert) {
+	const query = "pi SUBSTRING('foobarbar' FROM 4) -> str {()}";
+	const root = exec_ra(query, getTestBags());
+
+	const ref = exec_ra(`{
+		str:string
+		'barbar'
+	}`, {});
+
+	assert.deepEqual(root.getResult(false), ref.getResult(false));
+});
+
+QUnit.test('test substring 2 args negative pos', function (assert) {
+	const query = "pi SUBSTRING('Sakila', -3) -> str {()}";
+	const root = exec_ra(query, getTestBags());
+
+	const ref = exec_ra(`{
+		str:string
+		'ila'
+	}`, {});
+
+	assert.deepEqual(root.getResult(false), ref.getResult(false));
+});
+
+QUnit.test('test substring 3 args comma style', function (assert) {
+	const query = "pi SUBSTRING('Quadratically',5,6) -> str {()}";
+	const root = exec_ra(query, getTestBags());
+
+	const ref = exec_ra(`{
+		str:string
+		'ratica'
+	}`, {});
+
+	assert.deepEqual(root.getResult(false), ref.getResult(false));
+});
+
+QUnit.test('test substring 3 args from/for style', function (assert) {
+	const query = "pi SUBSTRING('Quadratically' FROM 5 for 6) -> str {()}";
+	const root = exec_ra(query, getTestBags());
+
+	const ref = exec_ra(`{
+		str:string
+		'ratica'
+	}`, {});
+
+	assert.deepEqual(root.getResult(false), ref.getResult(false));
+});
+
+QUnit.test('test substring 3 args negative pos', function (assert) {
+	const query = "pi SUBSTRING('Sakila', -5, 3) -> str {()}";
+	const root = exec_ra(query, getTestBags());
+
+	const ref = exec_ra(`{
+		str:string
+		'aki'
+	}`, {});
+
+	assert.deepEqual(root.getResult(false), ref.getResult(false));
+});
+
+QUnit.test('test substring 3 args pos equals to 0', function (assert) {
+	const query = "pi SUBSTRING('abcdef', 0, 5) -> str {()}";
+	const root = exec_ra(query, getTestBags());
+
+	const ref = exec_ra(`{
+		str:string
+		'abcde'
+	}`, {});
+
+	assert.deepEqual(root.getResult(false), ref.getResult(false));
+});
+
+QUnit.test('test substring 3 args pos greater than string length', function (assert) {
+	const query = "pi SUBSTRING('abcdef', 100, 5) -> str {()}";
+	const root = exec_ra(query, getTestBags());
+
+	const ref = exec_ra(`{
+		str:string
+		''
+	}`, {});
+
+	assert.deepEqual(root.getResult(false), ref.getResult(false));
+});
+
+QUnit.test('test substring 3 args negative length', function (assert) {
+	const query = "pi SUBSTRING('abcdef', 5, -3) -> str {()}";
+	const root = exec_ra(query, getTestBags());
+
+	const ref = exec_ra(`{
+		str:string
+		''
+	}`, {});
+
+	assert.deepEqual(root.getResult(false), ref.getResult(false));
+});
+
+QUnit.test('test substring 3 args length equals to 0', function (assert) {
+	const query = "pi SUBSTRING('abcdef', 5, 0) -> str {()}";
+	const root = exec_ra(query, getTestBags());
+
+	const ref = exec_ra(`{
+		str:string
+		''
+	}`, {});
+
+	assert.deepEqual(root.getResult(false), ref.getResult(false));
+});
+
+QUnit.test('test substring 3 args length greater than string length', function (assert) {
+	const query = "pi SUBSTRING('abcdef', 5, 10) -> str {()}";
+	const root = exec_ra(query, getTestBags());
+
+	const ref = exec_ra(`{
+		str:string
+		'ef'
+	}`, {});
+
+	assert.deepEqual(root.getResult(false), ref.getResult(false));
+});
+
+QUnit.test('test cast function', function (assert) {
+	const query = "pi cast(a as string) -> str, cast('100' as number)->n , cast('false' as boolean) -> bool, cast('2025-04-16' as date)->dt R";
+	const root = exec_ra(query, getTestBags());
+
+	const ref = exec_ra(`{
+		str:string	n:number	bool:boolean	dt:date
+		'1',	100,	false,	2025-04-16
+		'5',	100,	false,	2025-04-16
+		'1',	100,	false,	2025-04-16
+	}`, {});
+
+	assert.deepEqual(root.getResult(false), ref.getResult(false));
+});

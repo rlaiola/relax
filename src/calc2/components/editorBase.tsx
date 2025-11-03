@@ -4,7 +4,6 @@
 * License, v. 2.0. If a copy of the MPL was not distributed with this
 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import { faArrowAltCircleDown, faHistory, faPlayCircle, faUpload, faDownload, faCheckCircle, faTimesCircle, faPlay, faTable, faCheck, faCalculator, faCheckSquare, faFileCsv, faTruckPickup, faFileDownload, faImage } from '@fortawesome/free-solid-svg-icons';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { DropdownList } from 'calc2/components/dropdownList';
@@ -16,7 +15,6 @@ import classNames from 'classnames';
 import * as CodeMirror from 'codemirror';
 import 'codemirror/addon/hint/show-hint';
 import { RANode, RANodeBinary, RANodeUnary } from 'db/exec/RANode';
-import { executeRelalg, parseRelalg, textFromRelalgAstRoot } from 'db/relalg';
 import { forEachPreOrder } from 'db/translate/utils';
 import * as React from 'react';
 import { findDOMNode } from 'react-dom';
@@ -24,11 +22,21 @@ import { toast } from 'react-toastify';
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader, Input } from 'reactstrap';
 import { HotTable } from '@handsontable/react';
 import * as ReactDOM from 'react-dom';
-import Handsontable from 'handsontable';
 import memoize from 'memoize-one';
-
 import html2canvas from 'html2canvas';
-import { data } from 'jquery';
+import { 
+	faHistory,
+	faPlayCircle,
+  faUpload,
+	faDownload,
+  faCheckCircle,
+  faTimesCircle,
+  faPlay,
+	faTable,
+	faFileDownload,
+	faImage,
+	faFileCsv  
+} from '@fortawesome/free-solid-svg-icons';
 
 require('codemirror/lib/codemirror.css');
 require('codemirror/theme/eclipse.css');
@@ -40,6 +48,105 @@ require('codemirror/addon/display/autorefresh.js');
 require('codemirror/mode/sql/sql.js');
 require('handsontable/dist/handsontable.full.css');
 
+CodeMirror.defineMode('trc', function () {
+	const keywords = ['in', 'and', 'or', 'xor', 'not', 'implies', 'iff', 'exists', 'for all'];
+	const keywordsMath = ['∈', '∃', '∀'];
+	const operators = ['←', '→', '∧', '∨', '⊻', '¬', '⇒', '⇔', '=', '≠', '≤', '≥', '<', '>'];
+	const matchAny = (
+		stream: CodeMirror.StringStream,
+		array: string[],
+		consume: boolean,
+		successorPattern = '',
+	) => {
+		for (let i = 0; i < array.length; i++) {
+			const match = (
+				!successorPattern
+					? stream.match(array[i], consume)
+					: stream.match(new RegExp(`^${array[i]}${successorPattern}`), consume)
+			);
+
+			if (match) {
+				return true;
+			}
+		}
+		return false;
+	};
+	const separators = '([\\(\\)\[\\]\{\\}, \\.\\t]|$)';
+
+	return {
+		startState: () => {
+			return {
+				inBlockComment: false,
+			};
+		},
+		token: (stream: CodeMirror.StringStream, state) => {
+			if (state.inBlockComment) {
+				if (stream.match(/.*?\*\//, true)) {
+					state.inBlockComment = false;
+				}
+				else {
+					stream.match(/.*/, true);
+				}
+				return 'comment';
+			}
+			else if (stream.match(/\/\*.*?\*\//, true)) {
+				return 'comment';
+			}
+			else if (!state.inBlockComment && stream.match(/^\/\*.*/, true)) {
+				state.inBlockComment = true;
+				return 'comment';
+			}
+
+			else if (state.inInlineRelation) {
+				if (stream.match(/.*?}/, true)) {
+					state.inInlineRelation = false;
+				}
+				else {
+					stream.match(/.*/, true);
+				}
+				return 'inlineRelation';
+			}
+			else if (stream.match(/^--[\t ]/, true)) {
+				stream.skipToEnd();
+				return 'comment';
+			}
+			else if (stream.match(/^\/\*.*?$/, true)) {
+				return 'comment';
+			}
+			else if (matchAny(stream, keywordsMath, true)) {
+				return 'keyword math'; // needed for the correct font
+			}
+			else if (matchAny(stream, keywords, true, separators)) {
+				return 'keyword';
+			}
+			else if (matchAny(stream, operators, true)) {
+				return 'operator math';
+			}
+			else if (stream.match(/^\[[0-9]+]/, true)) {
+				return 'attribute';
+			}
+			else if (stream.match(/^[0-9]+(\.[0-9]+)?/, true)) {
+				return 'number';
+			}
+			else if (stream.match(/\^'[^']*'/i, true)) {
+				return 'string';
+			}
+			else if (stream.match(/\^[a-z]+\.[a-z]*/i, true)) {
+				return 'qualified-column';
+			}
+			else if (stream.match(/^[\(\)\[]\{},]/i, true)) {
+				return 'bracket';
+			}
+			else if (stream.match(/^[a-z][a-z0-9\.]*/i, true)) {
+				return 'word';
+			}
+			else {
+				stream.next();
+				return 'else';
+			}
+		},
+	};
+});
 const RELATIONAL_ALGEBRA_SNIPPETS = [
 	{ prefix: 'pi', symbol: 'π', description: 'Projection (π)' },
 	{ prefix: 'sigma', symbol: 'σ', description: 'Selection (σ)' },
@@ -375,7 +482,7 @@ type Table = {
 
 
 type Props = {
-	mode: 'relalg' | 'bagalg' | 'text/x-mysql',
+	mode: 'relalg' | 'bagalg' | 'trc' | 'text/x-mysql',
 
 	/** sync, should throw exception on error */
 	execFunction(self: EditorBase, query: string, offset: CodeMirror.Position): { result: JSX.Element },
@@ -384,7 +491,7 @@ type Props = {
 	/** */
 	getHintsFunction(): string[],
 	
-	tab: 'relalg' | 'bagalg' | 'sql' | 'group',
+	tab: 'relalg' | 'bagalg' | 'trc' | 'sql' | 'group',
 
 	enableInlineRelationEditor: boolean,
 

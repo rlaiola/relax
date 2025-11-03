@@ -303,15 +303,27 @@ rho
 
 arrowLeft
 = _ o:('←' { return getNodeInfo('arrowLeft'); }) _
-	{ return o; }
+	{
+		operatorPositions.push(o);
+		return o;
+	}
 / _ o:('<-' { return getNodeInfo('arrowLeft'); }) _
-	{ return o; }
+	{
+		operatorPositions.push(o);
+		return o;
+	}
 
 arrowRight
 = _ o:('→' { return getNodeInfo('arrowRight'); }) _
-	{ return o; }
+	{
+		operatorPositions.push(o);
+		return o;
+	}
 / _ o:('->' { return getNodeInfo('arrowRight'); }) _
-	{ return o; }
+	{ 
+		operatorPositions.push(o);
+		return o;
+	}
 
 psi
 = _ o:('ψ' { return getNodeInfo('psi'); }) _
@@ -1116,48 +1128,80 @@ comparisonOperatorEquals
 = '='
 
 comparisonOperatorNotEquals
-= ('!=' / '≠' / '<>')
-	{ return '!='; }
+= _ co:('!=' { return getNodeInfo('notEquals'); }) _
+	{
+		operatorPositions.push(co);
+		return '!=';
+	}
+/ _ co:('≠' { return getNodeInfo('notEquals'); }) _
+	{
+		operatorPositions.push(co);
+		return '!=';
+	}
+/ _ co:('<>' { return getNodeInfo('notEquals'); }) _
+	{
+		operatorPositions.push(co);
+		return '!=';
+	}
 
 comparisonOperatorGreaterEquals
-= ('>=' / '≥')
-	{ return '>='; }
+= _ co:('>=' { return getNodeInfo('GreaterThanOrEquals'); }) _
+	{
+		operatorPositions.push(co);
+		return '>=';
+	}
+/ _ co:('≥' { return getNodeInfo('GreaterThanOrEquals'); })
+	{
+		operatorPositions.push(co);
+		return '>=';
+	}
 
 comparisonOperatorGreater
 = '>'
 
 comparisonOperatorLesserEquals
-= ('<=' / '≤')
-	{ return '<='; }
+= _ co:('<=' { return getNodeInfo('LessThanOrEquals'); }) _
+	{
+		operatorPositions.push(co);
+		return '<=';
+	}
+/ _ co:('≤' { return getNodeInfo('LessThanOrEquals'); }) _
+	{
+		operatorPositions.push(co);
+		return '<=';
+	}
 
 comparisonOperatorLesser
 = '<'
 
 and 'logical AND'
-= __ 'and'i __
-/ _ '∧' _
+= __ lo:('and'i { return getNodeInfo('and'); }) __
+	{ return lo; }
+/ _ lo:('∧' { return getNodeInfo('and'); }) _
+	{ return lo; }
 
 xor 'logical XOR'
-= __ 'xor'i __
-/ _ ('⊻' / '⊕') _
+= __ lo:('xor'i { return getNodeInfo('xor'); }) __
+	{ return lo; }
+/ _ lo:('⊻' { return getNodeInfo('xor'); }) _
+	{ return lo; }
 
 or 'logical OR'
-= __ 'or'i __
-/ _ '∨' _
+= __ lo:('or'i { return getNodeInfo('or'); }) __
+	{ return lo; }
+/ _ lo:('∨' { return getNodeInfo('or'); }) _
+	{ return lo; }
 
 not 'logical NOT'
-= _ ('!' / '¬') _
+= _ lo:('!' { return getNodeInfo('not'); }) _
+	{ return lo; }
+/ _ lo:('¬' { return getNodeInfo('not'); }) _
+	{ return lo; }
+/ _ lo:('not'i { return getNodeInfo('not'); }) _
+	{ return lo; }
 
 
-
-
-
-
-
-/* this is a syntax for a constant table
-
-
-*/
+/* this is a syntax for a constant table */
 
 tableDelimiter 'delimiter'
 = _sl ',' _sl
@@ -1401,8 +1445,9 @@ booleanExpr 'boolean expression'
 = valueExpr
 
 expr_rest_boolean_disj
-= or right:expr_precedence8
+= lo:or right:expr_precedence8
 	{
+		operatorPositions.push(lo);
 		return {
 			type: 'valueExpr',
 			datatype: 'boolean',
@@ -1427,8 +1472,9 @@ expr_rest_string_concat
 	}
 
 expr_rest_boolean_xdisj
-= xor right:expr_precedence7
+= lo:xor right:expr_precedence7
 	{
+		operatorPositions.push(lo);
 		return {
 			type: 'valueExpr',
 			datatype: 'boolean',
@@ -1440,8 +1486,9 @@ expr_rest_boolean_xdisj
 	}
 
 expr_rest_boolean_conj
-= and right:expr_precedence6
+= lo:and right:expr_precedence6
 	{
+		operatorPositions.push(lo);
 		return {
 			type: 'valueExpr',
 			datatype: 'boolean',
@@ -1547,8 +1594,9 @@ expr_number_minus
 	}
 
 expr_boolean_negation
-= not a:expr_precedence0
+= lo:not a:expr_precedence0
 	{
+		operatorPositions.push(lo);
 		return {
 			type: 'valueExpr',
 			datatype: 'boolean',
@@ -1583,8 +1631,78 @@ _ '(' _ arg0:valueExpr _ argn:(',' _ valueExpr _ )* ')'
 		};
 	}
 
-valueExprFunctionsBinary
+substringTernaryCommaStyle
 = func:(
+	('substring'i { return ['substring', 'string']; })
+)
+_ '(' _ arg0:valueExpr _ ',' _ arg1:valueExpr _ ',' _ arg2:valueExpr _ ')'
+	{
+		return {
+			type: 'valueExpr',
+			datatype: func[1],
+			func: func[0],
+			args: [arg0, arg1, arg2],
+
+			codeInfo: getCodeInfo()
+		};
+	}
+
+substringTernaryFromForStyle
+= func:(
+	('substring'i { return ['substring', 'string']; })
+)
+_ '(' _ arg0:valueExpr _ 'from'i _ arg1:valueExpr _ 'for'i _ arg2:valueExpr _ ')'
+	{
+		return {
+			type: 'valueExpr',
+			datatype: func[1],
+			func: func[0],
+			args: [arg0, arg1, arg2],
+
+			codeInfo: getCodeInfo()
+		};
+	}
+
+substringBinaryCommaStyle
+= func: (
+	('substring'i { return ['substring', 'string']; })
+)
+_ '(' _ arg0:valueExpr _ ',' _ arg1:valueExpr _ ')'
+	{
+		return {
+			type: 'valueExpr',
+			datatype: func[1],
+			func: func[0],
+			args: [arg0, arg1],
+
+			codeInfo: getCodeInfo()
+		};
+	}
+
+substringBinaryFromForStyle
+= func: (
+	('substring'i { return ['substring', 'string']; })
+)
+_ '(' _ arg0:valueExpr _ 'from'i _ arg1:valueExpr _ ')'
+	{
+		return {
+			type: 'valueExpr',
+			datatype: func[1],
+			func: func[0],
+			args: [arg0, arg1],
+
+			codeInfo: getCodeInfo()
+		};
+	}
+
+valueExprFunctionsTernary
+= substringTernaryCommaStyle
+/ substringTernaryFromForStyle
+
+valueExprFunctionsBinary
+= substringBinaryCommaStyle
+  / substringBinaryFromForStyle
+  / func:(
 	('adddate'i { return ['adddate', 'date']; })
 	/ ('subdate'i { return ['subdate', 'date']; })
 	/ ('mod'i { return ['mod', 'number']; })
@@ -1592,6 +1710,8 @@ valueExprFunctionsBinary
 	/ ('sub'i { return ['sub', 'number']; })
 	/ ('mul'i { return ['mul', 'number']; })
 	/ ('div'i { return ['div', 'number']; })
+	/ ('power'i { return ['power', 'number']; })
+	/ ('log'i { return ['log', 'number']; })
 	/ ('repeat'i { return ['repeat', 'string']; })
 )
 _ '(' _ arg0:valueExpr _ ',' _ arg1:valueExpr _ ')'
@@ -1601,6 +1721,25 @@ _ '(' _ arg0:valueExpr _ ',' _ arg1:valueExpr _ ')'
 			datatype: func[1],
 			func: func[0],
 			args: [arg0, arg1],
+
+			codeInfo: getCodeInfo()
+		};
+	}
+/ func:(
+	('cast'i { return ['cast', 'null']; })
+)
+_ '(' _ arg0:valueExpr _ 'as'i _ arg1:('string'i / 'number'i / 'date'i / 'boolean'i) _ ')'
+	{
+		return {
+			type: 'valueExpr',
+			datatype: func[1],
+			func: func[0],
+			args: [arg0, {
+				datatype: 'string',
+				func: 'constant',
+				args: [arg1],
+				codeInfo: getCodeInfo()
+			}],
 
 			codeInfo: getCodeInfo()
 		};
@@ -1618,9 +1757,11 @@ valueExprFunctionsUnary
 	/ ('floor'i { return ['floor', 'number']; })
 	/ ('ceil'i { return ['ceil', 'number']; })
 	/ ('round'i { return ['round', 'number']; })
+	/ ('sqrt'i { return ['sqrt', 'number']; })
+	/ ('exp'i { return ['exp', 'number']; })
+	/ ('ln'i { return ['ln', 'number']; })
 
 	/ ('date'i { return ['date', 'date']; })
-
 	/ ('year'i { return ['year', 'number']; })
 	/ ('month'i { return ['month', 'number']; })
 	/ ('day'i { return ['dayofmonth', 'number']; })
@@ -1825,6 +1966,7 @@ expr_precedence0
 / valueExprFunctionsNullary
 / valueExprFunctionsUnary
 / valueExprFunctionsBinary
+/ valueExprFunctionsTernary
 / valueExprFunctionsNary
 / valueExprColumn
 / '(' _ e:expr_precedence9 _ ')'

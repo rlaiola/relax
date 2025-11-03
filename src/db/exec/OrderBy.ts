@@ -110,7 +110,7 @@ export class OrderBy extends RANodeUnary {
 				if (index === -1) {
 					// Column not found
 					try {
-						schema.getColumnIndex(col.getName(), col.getRelAlias());
+						index = schema.getColumnIndex(col.getName(), col.getRelAlias());
 					}
 					catch (e) {
 						this.throwExecutionError(e.message);

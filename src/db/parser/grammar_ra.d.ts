@@ -42,7 +42,9 @@ declare module relalgAst {
 	type assignment = {
 		type: 'assignment',
 		name: string,
-		child: relalgOperation,
+		child: {
+			assignmentName?: string,
+		} & relalgOperation
 		child2?: undefined,
 		assignments?: undefined,
 
@@ -236,8 +238,12 @@ declare module relalgAst {
 	}
 
 	interface binaryRelalgOperation {
-		child: relalgOperation,
-		child2: relalgOperation,
+		child: {
+			assignmentName?: string,
+		} & relalgOperation,
+		child2: {
+			assignmentName?: string,
+		} & relalgOperation,
 		assignments?: undefined,
 
 		wrappedInParentheses?: boolean,
@@ -381,6 +387,11 @@ declare module relalgAst {
 		| 'floor'
 		| 'ceil'
 		| 'round'
+		| 'sqrt'
+		| 'power'
+		| 'exp'
+		| 'ln'
+		| 'log'
 		| 'date'
 		| 'year'
 		| 'month'
@@ -403,10 +414,7 @@ declare module relalgAst {
 		| '<='
 		| '>'
 		| '<'
-    | "regexp"
-    | "rlike"
-    | "replace"
-    | "repeat"
-    | "reverse"
+		| "substring"
+		| "cast"
 	);
 }
