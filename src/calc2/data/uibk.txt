@@ -1410,3 +1410,22 @@ Tournament = {
 	99       , 'Tournament #99' , 'Solomon Islands'                             , '2015-12-31'     
 	100      , 'Tournament #100', 'Sweden'                                      , '2016-03-03'     
 }
+
+group: UIBK - Public Holidays Austria
+
+R = {
+id:number, name:string, length:number
+0, "Nationalfeiertag", 16
+1 "Allerheiligen", 13
+2 "Mariä Empfängnis", 18
+3 "Heiliger Abend", 14
+4, "Weihnachen", 11
+5, "Stefanitag", 10
+6, Silvester, 9
+}
+
+S = {
+id:number, from_date:date, to_date:date, length:number
+1, 2019-11-01, 2019-11-03, 3
+4, 2019-12-23, 2020-01-06, 15
+}
