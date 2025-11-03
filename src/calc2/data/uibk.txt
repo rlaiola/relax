@@ -867,3 +867,546 @@ Customer = {
     56 'Diego' 'Gutiérrez' '307 Macacha Güemes' 'Buenos Aires' 'Argentina' '1106' 'diego.gutierrez@yahoo.ar'
     59 'Puja' 'Srivastava' '3,Raj Bhavan Road' 'Bangalore' 'India' '560001' 'puja_srivastava@yahoo.in'
 }
+
+group: UIBK - Formula1 
+
+Drivers = {
+	driverID:number,firstname:string,lastname:string,team:string,points:number
+44,Lewis,Hamilton,Mercedes,338 	
+33,Max,Verstappen,RedBullRacing,212
+77,Valtteri,Bottas,Mercedes,274
+5,Sebastian,Vettel,Ferrari,212
+27,Nico,Huelkenberg,Renault,35
+16,Charles,Leclerc,Ferrari,221 
+3,Daniel,Ricciardo,Renault,42
+23,Alexander,Albon,RedBullRacing,64
+}
+
+group: UIBK - Chess Tournaments
+
+Club = {
+	id:number, name:string                                              , country:string                                , address:string                       , zip:string 
+	1        , 'Mongolia Chess Club'                                    , 'Mongolia'                                    , '8847 A St.'                         , '6841'     
+	2        , 'Niue Chess Club'                                        , 'Niue'                                        , '9065 Magna. Street'                 , '63-074'   
+	3        , 'Sao Tome and Principe Chess Club'                       , 'Sao Tome and Principe'                       , 'P.O. Box 304, 7764 Libero Street'   , '2812GL'   
+	4        , 'Yemen Chess Club'                                       , 'Yemen'                                       , '964-4124 Nisi Av.'                  , '14389'    
+	5        , 'Nepal Chess Club'                                       , 'Nepal'                                       , 'Ap #399-9203 Tincidunt St.'         , '21-653'   
+	6        , 'Guatemala Chess Club'                                   , 'Guatemala'                                   , 'Ap #264-6001 Aliquam St.'           , '9786'     
+	7        , 'Russian Federation Chess Club'                          , 'Russian Federation'                          , '449-7604 Ac Road'                   , '23750'    
+	8        , 'Luxembourg Chess Club'                                  , 'Luxembourg'                                  , 'P.O. Box 122, 1670 Interdum. Ave'   , '719673'   
+	9        , 'Venezuela Chess Club'                                   , 'Venezuela'                                   , 'P.O. Box 670, 2217 Non, Rd.'        , '4374'     
+	10       , 'Zimbabwe Chess Club'                                    , 'Zimbabwe'                                    , '343-2012 Aliquet Ave'               , '65623'    
+	11       , 'Viet Nam Chess Club'                                    , 'Viet Nam'                                    , 'P.O. Box 753, 7163 Vestibulum. Av.' , '60809'    
+	12       , 'Grenada Chess Club'                                     , 'Grenada'                                     , 'Ap #497-5141 Duis Rd.'              , '44670-069'
+	13       , 'Denmark Chess Club'                                     , 'Denmark'                                     , 'Ap #568-2829 Nec, Rd.'              , '3787'     
+	14       , 'Myanmar Chess Club'                                     , 'Myanmar'                                     , 'P.O. Box 568, 575 Sollicitudin Road', '57-713'   
+	15       , 'Saint Pierre and Miquelon Chess Club'                   , 'Saint Pierre and Miquelon'                   , 'P.O. Box 448, 756 Purus, Ave'       , '29-010'   
+	16       , 'Thailand Chess Club'                                    , 'Thailand'                                    , '484-6427 Quisque Ave'               , '74768'    
+	17       , 'Christmas Island Chess Club'                            , 'Christmas Island'                            , '2137 Laoreet Rd.'                   , '0769'     
+	18       , 'Cambodia Chess Club'                                    , 'Cambodia'                                    , '519-4890 In, Ave'                   , '20590'    
+	19       , 'Australia Chess Club'                                   , 'Australia'                                   , 'P.O. Box 543, 9085 Fringilla Road'  , '47419'    
+	20       , 'Cuba Chess Club'                                        , 'Cuba'                                        , '8841 Tempus Av.'                    , '42119'    
+	21       , 'Montenegro Chess Club'                                  , 'Montenegro'                                  , '603-5359 Magna Rd.'                 , '722651'   
+	22       , 'Congo, the Democratic Republic of the Chess Club'       , 'Congo, the Democratic Republic of the'       , 'P.O. Box 833, 8684 Dolor. Rd.'      , '78655'    
+	23       , 'Ukraine Chess Club'                                     , 'Ukraine'                                     , '534-3385 Ut St.'                    , '973264'   
+	24       , 'Bouvet Island Chess Club'                               , 'Bouvet Island'                               , 'P.O. Box 704, 7563 Ullamcorper Av.' , '43087'    
+	25       , 'Central African Republic Chess Club'                    , 'Central African Republic'                    , '2627 Risus. Avenue'                 , '235830'   
+	26       , 'Namibia Chess Club'                                     , 'Namibia'                                     , 'Ap #238-9579 Gravida St.'           , '992322'   
+	27       , 'Ecuador Chess Club'                                     , 'Ecuador'                                     , '342-3006 Nunc St.'                  , '90244'    
+	28       , 'Brazil Chess Club'                                      , 'Brazil'                                      , '2077 Eget Av.'                      , '99335'    
+	29       , 'Costa Rica Chess Club'                                  , 'Costa Rica'                                  , '5436 Neque Rd.'                     , '27367-324'
+	30       , 'Macao Chess Club'                                       , 'Macao'                                       , '9726 Lobortis. Av.'                 , '484614'   
+	31       , 'Pitcairn Islands Chess Club'                            , 'Pitcairn Islands'                            , '9715 Nec Road'                      , '41-198'   
+	32       , 'Grenada Chess Club'                                     , 'Grenada'                                     , '522-8726 Dignissim Av.'             , '05726'    
+	33       , 'Saudi Arabia Chess Club'                                , 'Saudi Arabia'                                , '7198 Fringilla Rd.'                 , '09315'    
+	34       , 'Guernsey Chess Club'                                    , 'Guernsey'                                    , 'P.O. Box 971, 8683 Adipiscing Road' , 'T2V 5OH'  
+	35       , 'Kuwait Chess Club'                                      , 'Kuwait'                                      , 'Ap #750-6442 Eleifend St.'          , '06972'    
+	36       , 'Greenland Chess Club'                                   , 'Greenland'                                   , '330-1677 Cras St.'                  , '1198'     
+	37       , 'San Marino Chess Club'                                  , 'San Marino'                                  , '8296 Arcu. Rd.'                     , '92384'    
+	38       , 'Poland Chess Club'                                      , 'Poland'                                      , '325-3786 Sed St.'                   , '92193'    
+	39       , 'Cocos (Keeling) Islands Chess Club'                     , 'Cocos (Keeling) Islands'                     , '622-5297 Non, St.'                  , '11-865'   
+	40       , 'Guyana Chess Club'                                      , 'Guyana'                                      , '823-9031 Adipiscing Street'         , '76492'    
+	41       , 'Saint Helena, Ascension and Tristan da Cunha Chess Club', 'Saint Helena, Ascension and Tristan da Cunha', 'P.O. Box 815, 8176 Mattis. Av.'     , '38439'    
+	42       , 'Canada Chess Club'                                      , 'Canada'                                      , '5183 Dictum Street'                 , '21605'    
+	43       , 'Tanzania Chess Club'                                    , 'Tanzania'                                    , 'Ap #940-5963 Dolor. Avenue'         , '96838'    
+	44       , 'Liechtenstein Chess Club'                               , 'Liechtenstein'                               , '782-3289 Dolor. St.'                , '14865'    
+	45       , 'Israel Chess Club'                                      , 'Israel'                                      , 'Ap #677-5834 Pellentesque Rd.'      , '68337'    
+	46       , 'Denmark Chess Club'                                     , 'Denmark'                                     , '5715 Sed Rd.'                       , '145218'   
+	47       , 'Tajikistan Chess Club'                                  , 'Tajikistan'                                  , '996-133 Semper St.'                 , '1888'     
+	48       , 'Peru Chess Club'                                        , 'Peru'                                        , 'Ap #355-337 Nec Ave'                , '23117'    
+	49       , 'Grenada Chess Club'                                     , 'Grenada'                                     , 'Ap #841-6535 Etiam Avenue'          , '129124'   
+	50       , 'Norfolk Island Chess Club'                              , 'Norfolk Island'                              , 'Ap #248-7536 Sem St.'               , '20976'    
+	51       , 'Turkmenistan Chess Club'                                , 'Turkmenistan'                                , 'P.O. Box 280, 8724 Aliquet Rd.'     , '00169'    
+	52       , 'Mauritius Chess Club'                                   , 'Mauritius'                                   , 'P.O. Box 131, 1887 Ac Ave'          , '346489'   
+	53       , 'Tuvalu Chess Club'                                      , 'Tuvalu'                                      , 'Ap #964-6351 Sit Rd.'               , '420252'   
+	54       , 'Palestine, State of Chess Club'                         , 'Palestine, State of'                         , 'Ap #278-4130 Neque Avenue'          , 'PB0Z 5AC' 
+	55       , 'Iraq Chess Club'                                        , 'Iraq'                                        , '8787 Pretium Rd.'                   , '18051'    
+	56       , 'Nepal Chess Club'                                       , 'Nepal'                                       , '8701 Ut Rd.'                        , 'L0J 6J1'  
+	57       , 'Kuwait Chess Club'                                      , 'Kuwait'                                      , 'Ap #457-6768 Eu, Street'            , '70212'    
+	58       , 'Kuwait Chess Club'                                      , 'Kuwait'                                      , '901-2928 Mi, St.'                   , '00207-761'
+	59       , 'Guadeloupe Chess Club'                                  , 'Guadeloupe'                                  , '9716 Aliquet Street'                , '323973'   
+	60       , 'Hungary Chess Club'                                     , 'Hungary'                                     , '8831 Mattis Rd.'                    , '3140'     
+	61       , 'Botswana Chess Club'                                    , 'Botswana'                                    , '812-4822 Pede Avenue'               , '74221'    
+	62       , 'Mayotte Chess Club'                                     , 'Mayotte'                                     , 'P.O. Box 597, 4920 Aliquam Avenue'  , '8947'     
+	63       , 'Samoa Chess Club'                                       , 'Samoa'                                       , 'Ap #209-1230 Quam Road'             , '3609'     
+	64       , 'Benin Chess Club'                                       , 'Benin'                                       , 'Ap #466-9262 Class St.'             , '5025'     
+	65       , 'Jordan Chess Club'                                      , 'Jordan'                                      , '1548 Mauris Rd.'                    , '62618-013'
+	66       , 'Turks and Caicos Islands Chess Club'                    , 'Turks and Caicos Islands'                    , 'P.O. Box 846, 4345 Nisl Street'     , 'N7B 4V6'  
+	67       , 'Angola Chess Club'                                      , 'Angola'                                      , 'Ap #406-4099 Nulla St.'             , '43565'    
+	68       , 'Turkey Chess Club'                                      , 'Turkey'                                      , 'P.O. Box 716, 2320 Diam. St.'       , '4032'     
+	69       , 'Moldova Chess Club'                                     , 'Moldova'                                     , '889-1791 Eu Road'                   , '77714'    
+	70       , 'Bahrain Chess Club'                                     , 'Bahrain'                                     , 'Ap #224-7261 Aliquam Avenue'        , 'V2B 8G5'  
+	71       , 'Tanzania Chess Club'                                    , 'Tanzania'                                    , '756-3648 Lacus. Av.'                , '251548'   
+	72       , 'Belize Chess Club'                                      , 'Belize'                                      , '867-9321 Non, Road'                 , '46483'    
+	73       , 'Zimbabwe Chess Club'                                    , 'Zimbabwe'                                    , 'P.O. Box 157, 9700 Curabitur St.'   , '794007'   
+	74       , 'Kiribati Chess Club'                                    , 'Kiribati'                                    , '1381 Hendrerit St.'                 , '7530'     
+	75       , 'Mauritania Chess Club'                                  , 'Mauritania'                                  , '3459 Ipsum Av.'                     , '424512'   
+	76       , 'Guinea Chess Club'                                      , 'Guinea'                                      , 'P.O. Box 886, 8050 Orci, Ave'       , '7796'     
+	77       , 'Comoros Chess Club'                                     , 'Comoros'                                     , 'P.O. Box 767, 559 Velit. St.'       , '70067'    
+	78       , 'Niger Chess Club'                                       , 'Niger'                                       , 'Ap #749-1458 Eget Rd.'              , '97012-556'
+	79       , 'Grenada Chess Club'                                     , 'Grenada'                                     , 'Ap #296-8467 Montes, St.'           , '80818'    
+	80       , 'Madagascar Chess Club'                                  , 'Madagascar'                                  , '981 Purus. Ave'                     , '8449'     
+	81       , 'Slovakia Chess Club'                                    , 'Slovakia'                                    , '6441 Feugiat Road'                  , '871202'   
+	82       , 'Chad Chess Club'                                        , 'Chad'                                        , '4355 Quisque Street'                , '19828'    
+	83       , 'Brazil Chess Club'                                      , 'Brazil'                                      , '237-9598 Tincidunt. Street'         , '3568'     
+	84       , 'Norfolk Island Chess Club'                              , 'Norfolk Island'                              , '761-1129 Lobortis Road'             , '586407'   
+	85       , 'Singapore Chess Club'                                   , 'Singapore'                                   , '579-7467 Accumsan St.'              , 'U2 8PZ'   
+	86       , 'Bouvet Island Chess Club'                               , 'Bouvet Island'                               , '151-1090 Nulla. St.'                , '00438'    
+	87       , 'Monaco Chess Club'                                      , 'Monaco'                                      , '103-5007 Porttitor Rd.'             , '61207'    
+	88       , 'Sierra Leone Chess Club'                                , 'Sierra Leone'                                , 'Ap #106-9592 Ligula. St.'           , '389775'   
+	89       , 'Bulgaria Chess Club'                                    , 'Bulgaria'                                    , 'Ap #369-5945 Vel St.'               , '94488'    
+	90       , 'Andorra Chess Club'                                     , 'Andorra'                                     , 'P.O. Box 934, 1064 Vel, Rd.'        , '49707'    
+	91       , 'Armenia Chess Club'                                     , 'Armenia'                                     , 'P.O. Box 604, 3002 Gravida Street'  , 'E3 6DY'   
+	92       , 'Slovakia Chess Club'                                    , 'Slovakia'                                    , '5188 Gravida. Rd.'                  , '72401'    
+	93       , 'Senegal Chess Club'                                     , 'Senegal'                                     , 'Ap #255-2124 Adipiscing Avenue'     , '31216'    
+	94       , 'Niger Chess Club'                                       , 'Niger'                                       , '809-478 Lacus. Street'              , 'O5X 5YO'  
+	95       , 'Morocco Chess Club'                                     , 'Morocco'                                     , '2714 A, Rd.'                        , 'HY92 0DV' 
+	96       , 'Saint Vincent and The Grenadines Chess Club'            , 'Saint Vincent and The Grenadines'            , 'P.O. Box 673, 4976 Amet Street'     , 'Y5H 0C0'  
+	97       , 'Eritrea Chess Club'                                     , 'Eritrea'                                     , '8193 Libero. St.'                   , '36570'    
+	98       , 'Luxembourg Chess Club'                                  , 'Luxembourg'                                  , 'Ap #648-226 Vel Rd.'                , '93879'    
+	99       , 'Mozambique Chess Club'                                  , 'Mozambique'                                  , '594-7989 Suscipit, Rd.'             , '3351'     
+	100      , 'Canada Chess Club'                                      , 'Canada'                                      , 'P.O. Box 875, 2722 Condimentum. Rd.', '3354'     
+}
+
+Match = {
+	tournamentId:number, player1Id:number, player2Id:number, duration:string, result:string
+	93                 , 21              , 89              , '00:39'        , '1-1'        
+	88                 , 13              , 76              , '03:05'        , '0-1'        
+	68                 , 59              , 12              , '01:06'        , '1-0'        
+	92                 , 91              , 26              , '02:07'        , '0-1'        
+	71                 , 79              , 62              , '06:18'        , '1-1'        
+	18                 , 58              , 55              , '01:35'        , '0-1'        
+	99                 , 48              , 88              , '21:13'        , '0-1'        
+	10                 , 77              , 14              , '02:40'        , '0-1'        
+	93                 , 28              , 40              , '04:17'        , '1-1'        
+	1                  , 87              , 63              , '02:45'        , '1-0'        
+	64                 , 87              , 71              , '15:12'        , '1-1'        
+	20                 , 41              , 50              , '13:48'        , '0-1'        
+	71                 , 60              , 75              , '06:50'        , '1-1'        
+	87                 , 61              , 15              , '08:09'        , '1-1'        
+	33                 , 55              , 52              , '14:51'        , '1-0'        
+	93                 , 17              , 97              , '15:17'        , '1-0'        
+	23                 , 57              , 93              , '21:59'        , '0-1'        
+	3                  , 74              , 37              , '01:47'        , '1-0'        
+	70                 , 36              , 58              , '15:42'        , '1-1'        
+	69                 , 68              , 43              , '03:51'        , '0-1'        
+	8                  , 20              , 2               , '18:04'        , '1-0'        
+	80                 , 77              , 90              , '06:58'        , '0-1'        
+	86                 , 58              , 93              , '23:40'        , '1-1'        
+	68                 , 4               , 63              , '22:31'        , '1-1'        
+	99                 , 70              , 43              , '20:06'        , '1-0'        
+	15                 , 48              , 95              , '11:59'        , '1-0'        
+	76                 , 60              , 96              , '08:24'        , '1-0'        
+	52                 , 62              , 24              , '16:18'        , '1-0'        
+	87                 , 87              , 93              , '11:57'        , '1-0'        
+	29                 , 37              , 78              , '17:47'        , '1-0'        
+	62                 , 68              , 94              , '20:48'        , '0-1'        
+	84                 , 86              , 23              , '08:47'        , '1-1'        
+	13                 , 48              , 26              , '01:41'        , '0-1'        
+	26                 , 10              , 74              , '15:19'        , '0-1'        
+	43                 , 14              , 68              , '05:18'        , '1-1'        
+	13                 , 15              , 48              , '17:45'        , '0-1'        
+	77                 , 54              , 39              , '04:06'        , '0-1'        
+	76                 , 65              , 85              , '11:21'        , '1-0'        
+	74                 , 5               , 29              , '01:29'        , '1-0'        
+	19                 , 51              , 39              , '06:22'        , '1-0'        
+	79                 , 23              , 18              , '23:22'        , '0-1'        
+	62                 , 85              , 38              , '23:58'        , '1-1'        
+	94                 , 35              , 90              , '22:16'        , '0-1'        
+	77                 , 99              , 52              , '20:27'        , '0-1'        
+	38                 , 16              , 3               , '19:38'        , '1-0'        
+	24                 , 84              , 34              , '14:12'        , '1-0'        
+	64                 , 64              , 82              , '09:17'        , '1-1'        
+	88                 , 57              , 58              , '06:21'        , '0-1'        
+	18                 , 55              , 25              , '17:18'        , '1-0'        
+	85                 , 12              , 6               , '20:08'        , '0-1'        
+	37                 , 22              , 76              , '07:05'        , '1-1'        
+	20                 , 74              , 14              , '08:42'        , '1-0'        
+	41                 , 82              , 55              , '02:40'        , '1-1'        
+	76                 , 12              , 80              , '12:25'        , '0-1'        
+	90                 , 62              , 69              , '20:29'        , '1-0'        
+	2                  , 57              , 72              , '04:06'        , '0-1'        
+	25                 , 87              , 84              , '20:10'        , '1-0'        
+	79                 , 93              , 70              , '01:27'        , '1-1'        
+	79                 , 33              , 60              , '00:03'        , '0-1'        
+	91                 , 91              , 63              , '16:45'        , '1-1'        
+	49                 , 12              , 83              , '20:47'        , '1-0'        
+	47                 , 58              , 30              , '11:15'        , '1-1'        
+	94                 , 22              , 11              , '15:48'        , '0-1'        
+	96                 , 98              , 97              , '19:27'        , '0-1'        
+	56                 , 25              , 10              , '07:22'        , '1-0'        
+	76                 , 27              , 19              , '21:49'        , '0-1'        
+	84                 , 45              , 3               , '09:34'        , '0-1'        
+	1                  , 61              , 72              , '06:13'        , '0-1'        
+	43                 , 88              , 84              , '06:04'        , '1-0'        
+	44                 , 27              , 38              , '02:19'        , '1-1'        
+	9                  , 19              , 32              , '14:09'        , '1-1'        
+	79                 , 52              , 39              , '16:46'        , '0-1'        
+	31                 , 24              , 26              , '06:12'        , '0-1'        
+	43                 , 96              , 13              , '21:09'        , '1-1'        
+	60                 , 38              , 57              , '14:43'        , '1-1'        
+	56                 , 9               , 43              , '22:47'        , '1-1'        
+	56                 , 51              , 60              , '03:47'        , '1-0'        
+	74                 , 81              , 48              , '22:45'        , '1-0'        
+	63                 , 19              , 94              , '14:14'        , '0-1'        
+	89                 , 7               , 86              , '12:44'        , '1-1'        
+	23                 , 9               , 12              , '22:40'        , '1-1'        
+	11                 , 57              , 93              , '12:28'        , '1-1'        
+	10                 , 30              , 91              , '19:47'        , '1-1'        
+	35                 , 77              , 44              , '15:20'        , '1-1'        
+	43                 , 11              , 25              , '12:33'        , '0-1'        
+	98                 , 46              , 21              , '03:50'        , '1-0'        
+	87                 , 59              , 32              , '04:54'        , '0-1'        
+	49                 , 40              , 84              , '11:13'        , '1-0'        
+	27                 , 55              , 33              , '22:51'        , '1-1'        
+	55                 , 7               , 99              , '19:03'        , '0-1'        
+	32                 , 5               , 59              , '09:45'        , '1-0'        
+	82                 , 61              , 11              , '19:21'        , '0-1'        
+	42                 , 92              , 10              , '03:03'        , '1-1'        
+	87                 , 41              , 55              , '19:41'        , '1-0'        
+	59                 , 79              , 35              , '02:12'        , '1-0'        
+	13                 , 33              , 50              , '03:37'        , '1-0'        
+	2                  , 75              , 8               , '15:37'        , '1-1'        
+	67                 , 97              , 74              , '22:03'        , '0-1'        
+	97                 , 1               , 100             , '11:16'        , '1-0'        
+	7                  , 22              , 9               , '18:45'        , '1-1'        
+}
+
+Participation = {
+	playerId:number, tournamentId:number, finalRank:number
+	38             , 28                 , 28              
+	35             , 72                 , 14              
+	1              , 83                 , 28              
+	90             , 41                 , 23              
+	9              , 20                 , 24              
+	43             , 45                 , 1               
+	43             , 3                  , 14              
+	62             , 66                 , 5               
+	36             , 99                 , 27              
+	37             , 33                 , 30              
+	3              , 89                 , 2               
+	39             , 94                 , 7               
+	86             , 58                 , 17              
+	48             , 49                 , 6               
+	28             , 25                 , 7               
+	79             , 78                 , 23              
+	75             , 61                 , 30              
+	31             , 78                 , 3               
+	44             , 99                 , 8               
+	75             , 94                 , 28              
+	16             , 93                 , 28              
+	33             , 57                 , 19              
+	59             , 58                 , 13              
+	98             , 85                 , 25              
+	68             , 48                 , 2               
+	99             , 21                 , 13              
+	59             , 11                 , 19              
+	45             , 70                 , 11              
+	12             , 12                 , 6               
+	84             , 4                  , 22              
+	81             , 22                 , 26              
+	96             , 34                 , 24              
+	73             , 7                  , 22              
+	48             , 46                 , 23              
+	65             , 81                 , 10              
+	20             , 8                  , 11              
+	41             , 22                 , 1               
+	75             , 95                 , 7               
+	12             , 82                 , 22              
+	66             , 90                 , 15              
+	63             , 90                 , 19              
+	2              , 25                 , 4               
+	77             , 2                  , 22              
+	38             , 58                 , 11              
+	59             , 95                 , 8               
+	75             , 100                , 7               
+	71             , 48                 , 23              
+	41             , 17                 , 26              
+	8              , 82                 , 12              
+	37             , 59                 , 24              
+	80             , 33                 , 27              
+	38             , 35                 , 26              
+	43             , 89                 , 19              
+	77             , 2                  , 30              
+	58             , 74                 , 25              
+	3              , 4                  , 29              
+	87             , 97                 , 23              
+	13             , 68                 , 10              
+	11             , 52                 , 10              
+	69             , 67                 , 15              
+	95             , 11                 , 20              
+	60             , 87                 , 10              
+	49             , 6                  , 17              
+	89             , 43                 , 21              
+	46             , 14                 , 5               
+	71             , 44                 , 13              
+	74             , 3                  , 15              
+	74             , 42                 , 27              
+	41             , 47                 , 24              
+	95             , 65                 , 27              
+	24             , 71                 , 17              
+	52             , 10                 , 23              
+	97             , 21                 , 28              
+	17             , 61                 , 17              
+	92             , 81                 , 25              
+	1              , 51                 , 29              
+	17             , 35                 , 28              
+	96             , 58                 , 17              
+	62             , 94                 , 28              
+	48             , 43                 , 28              
+	56             , 22                 , 28              
+	46             , 79                 , 1               
+	67             , 8                  , 13              
+	1              , 82                 , 25              
+	57             , 24                 , 17              
+	73             , 9                  , 19              
+	72             , 33                 , 22              
+	46             , 42                 , 16              
+	42             , 24                 , 14              
+	9              , 96                 , 3               
+	63             , 33                 , 8               
+	29             , 71                 , 26              
+	49             , 6                  , 28              
+	77             , 89                 , 11              
+	68             , 100                , 23              
+	54             , 20                 , 1               
+	32             , 71                 , 8               
+	84             , 73                 , 23              
+	25             , 34                 , 10              
+	74             , 45                 , 14              
+}
+
+Player = {
+	id:number, firstname:string, lastname:string, birthday:string, email:string                                    , rankId:number, clubId:number
+	1        , 'William'       , 'Mcconnell'    , '1949-07-10'   , 'cursus.Integer.mollis@etpede.org'              , 3            , 22           
+	2        , 'Matthew'       , 'Ruiz'         , '1955-05-23'   , 'quis.massa.Mauris@aliquameros.co.uk'           , 1            , 23           
+	3        , 'Aimee'         , 'Lamb'         , '1949-05-19'   , 'mi.ac.mattis@disparturientmontes.net'          , 3            , 2            
+	4        , 'Justin'        , 'Edwards'      , '1983-11-07'   , 'nisl.Quisque@mattisvelit.edu'                  , 1            , 36           
+	5        , 'Ocean'         , 'Berg'         , '1994-07-26'   , 'magna.Sed@vestibulum.ca'                       , 1            , 92           
+	6        , 'Noble'         , 'Gilliam'      , '1974-04-20'   , 'egestas.Fusce.aliquet@enimcommodohendrerit.org', 2            , 73           
+	7        , 'Sonya'         , 'Martin'       , '1988-09-23'   , 'scelerisque.lorem@euismod.ca'                  , 3            , 1            
+	8        , 'Daria'         , 'Dickson'      , '1955-04-24'   , 'eu@Integeridmagna.net'                         , 2            , 84           
+	9        , 'Yardley'       , 'Ingram'       , '1999-09-14'   , 'neque.Sed@Phasellus.net'                       , 1            , 26           
+	10       , 'Keegan'        , 'Hahn'         , '1950-02-05'   , 'Suspendisse.tristique.neque@tortorInteger.org' , 1            , 94           
+	11       , 'Amela'         , 'Palmer'       , '1965-03-03'   , 'torquent.per@enimnectempus.org'                , 2            , 18           
+	12       , 'Demetria'      , 'Garza'        , '1974-01-27'   , 'bibendum@Maecenasornare.co.uk'                 , 1            , 12           
+	13       , 'Hasad'         , 'Paul'         , '1970-10-19'   , 'Integer.urna@lobortis.com'                     , 3            , 72           
+	14       , 'Brielle'       , 'Sexton'       , '1961-04-08'   , 'nunc@et.com'                                   , 3            , 12           
+	15       , 'Alana'         , 'Kent'         , '1978-09-24'   , 'imperdiet.dictum@Curabiturut.ca'               , 3            , 86           
+	16       , 'Flavia'        , 'Summers'      , '1977-01-28'   , 'mattis.Cras@elementumdui.org'                  , 3            , 7            
+	17       , 'Joelle'        , 'Herring'      , '1949-11-23'   , 'orci.consectetuer.euismod@neque.edu'           , 3            , 55           
+	18       , 'Dean'          , 'Moses'        , '1974-06-01'   , 'luctus@orci.org'                               , 1            , 18           
+	19       , 'Abigail'       , 'Williamson'   , '1965-12-07'   , 'risus.Morbi@gravidanuncsed.com'                , 2            , 49           
+	20       , 'Grady'         , 'Yates'        , '1989-11-19'   , 'penatibus@faucibusMorbivehicula.com'           , 2            , 42           
+	21       , 'Hayden'        , 'Alexander'    , '1956-07-04'   , 'tincidunt.vehicula.risus@eu.net'               , 1            , 31           
+	22       , 'Ori'           , 'Franklin'     , '1984-01-28'   , 'cursus.non@tempuslorem.net'                    , 1            , 93           
+	23       , 'Cain'          , 'Cherry'       , '1945-07-05'   , 'Aenean.massa@Inscelerisquescelerisque.co.uk'   , 1            , 33           
+	24       , 'Harding'       , 'Gonzales'     , '1977-10-24'   , 'lorem.ac@Ut.com'                               , 3            , 32           
+	25       , 'Abraham'       , 'Munoz'        , '1997-06-02'   , 'eu.enim.Etiam@molestiedapibusligula.org'       , 1            , 66           
+	26       , 'Cairo'         , 'Clemons'      , '1984-07-16'   , 'auctor.velit.Aliquam@pedeCum.com'              , 1            , 24           
+	27       , 'Nomlanga'      , 'Walker'       , '1991-07-17'   , 'mauris.ut@interdumfeugiat.co.uk'               , 3            , 32           
+	28       , 'Nelle'         , 'Byrd'         , '1992-10-24'   , 'Aliquam.ultrices.iaculis@egestas.net'          , 2            , 17           
+	29       , 'Dante'         , 'Foley'        , '1951-06-09'   , 'aliquet.lobortis@fermentumarcuVestibulum.co.uk', 3            , 20           
+	30       , 'Francesca'     , 'Oconnor'      , '1973-01-17'   , 'lorem.luctus@nisidictumaugue.edu'              , 2            , 53           
+	31       , 'Camden'        , 'Cooley'       , '1971-10-12'   , 'et@Maurisvestibulum.net'                       , 2            , 95           
+	32       , 'Avye'          , 'Sandoval'     , '1975-02-28'   , 'id.libero.Donec@velit.net'                     , 1            , 96           
+	33       , 'Alea'          , 'Cline'        , '1944-09-23'   , 'consectetuer.mauris.id@dolor.co.uk'            , 3            , 98           
+	34       , 'Audra'         , 'Livingston'   , '1960-04-02'   , 'felis.adipiscing@lacusCras.ca'                 , 2            , 21           
+	35       , 'Harding'       , 'Garcia'       , '1951-05-31'   , 'sociis@netus.com'                              , 1            , 76           
+	36       , 'Savannah'      , 'Mcintosh'     , '1944-02-14'   , 'eu.eleifend@vestibulumMaurismagna.org'         , 2            , 10           
+	37       , 'Hadley'        , 'Tillman'      , '1971-06-04'   , 'eu@sociis.net'                                 , 3            , 10           
+	38       , 'Genevieve'     , 'Richardson'   , '1966-08-13'   , 'lectus.convallis.est@ut.net'                   , 2            , 51           
+	39       , 'Martha'        , 'Hogan'        , '2002-09-05'   , 'a.nunc.In@maurisblandit.edu'                   , 3            , 6            
+	40       , 'Ignacia'       , 'Johnston'     , '1965-06-11'   , 'fringilla@lacusCras.ca'                        , 1            , 71           
+	41       , 'Denise'        , 'Morrow'       , '1994-09-01'   , 'nascetur@tortor.edu'                           , 3            , 77           
+	42       , 'Chaim'         , 'Christian'    , '1987-07-08'   , 'dolor.Fusce@pede.net'                          , 1            , 5            
+	43       , 'Dale'          , 'Salas'        , '1983-08-25'   , 'habitant@vulputate.net'                        , 1            , 58           
+	44       , 'Laura'         , 'Hurst'        , '1948-05-14'   , 'auctor.vitae@malesuadaiderat.org'              , 1            , 72           
+	45       , 'Wayne'         , 'Holcomb'      , '1997-08-23'   , 'convallis@idenim.org'                          , 2            , 60           
+	46       , 'Rose'          , 'Lopez'        , '1966-10-23'   , 'tincidunt@a.com'                               , 3            , 38           
+	47       , 'Alfreda'       , 'Gay'          , '1960-08-08'   , 'sociis@estacmattis.org'                        , 1            , 61           
+	48       , 'Hoyt'          , 'Floyd'        , '1948-04-24'   , 'nunc.risus.varius@ac.com'                      , 1            , 86           
+	49       , 'Vaughan'       , 'Ortiz'        , '1979-01-25'   , 'mattis.velit.justo@non.org'                    , 3            , 51           
+	50       , 'Ali'           , 'Holcomb'      , '1982-03-07'   , 'augue.Sed@Etiamvestibulum.com'                 , 1            , 1            
+	51       , 'Mallory'       , 'Carson'       , '1978-12-19'   , 'Duis@penatibusetmagnis.com'                    , 3            , 82           
+	52       , 'Benedict'      , 'Horne'        , '1972-11-27'   , 'ac.feugiat.non@nullaDonec.ca'                  , 1            , 20           
+	53       , 'Malik'         , 'Johns'        , '1965-02-02'   , 'lacus.Nulla.tincidunt@nislarcu.co.uk'          , 2            , 92           
+	54       , 'Christen'      , 'Browning'     , '1980-02-03'   , 'pellentesque.tellus.sem@idante.com'            , 2            , 11           
+	55       , 'Ora'           , 'Robinson'     , '1962-04-15'   , 'Etiam.vestibulum@vitaerisusDuis.ca'            , 3            , 98           
+	56       , 'Germane'       , 'Becker'       , '1951-04-24'   , 'ornare.tortor.at@Aliquam.co.uk'                , 2            , 73           
+	57       , 'Ann'           , 'Rojas'        , '1973-04-09'   , 'enim.gravida@nec.ca'                           , 1            , 60           
+	58       , 'Alan'          , 'Church'       , '2002-06-11'   , 'aliquam.eu@adlitoratorquent.com'               , 2            , 96           
+	59       , 'Kermit'        , 'Lindsey'      , '1973-05-21'   , 'ligula.consectetuer@ipsum.co.uk'               , 1            , 86           
+	60       , 'Lacey'         , 'Deleon'       , '1988-02-10'   , 'vitae.dolor.Donec@Infaucibus.com'              , 1            , 16           
+	61       , 'Angelica'      , 'Cannon'       , '1966-07-14'   , 'semper.et@euenimEtiam.co.uk'                   , 2            , 5            
+	62       , 'Farrah'        , 'Rocha'        , '1953-03-01'   , 'ac.ipsum@Sednecmetus.edu'                      , 3            , 10           
+	63       , 'Maris'         , 'Wooten'       , '1944-10-21'   , 'ornare.sagittis@egestas.edu'                   , 2            , 83           
+	64       , 'Stella'        , 'Cooper'       , '1963-03-29'   , 'dui.nec@mollis.ca'                             , 2            , 14           
+	65       , 'Aspen'         , 'Barrett'      , '1980-07-23'   , 'Sed@justo.net'                                 , 1            , 47           
+	66       , 'Graiden'       , 'Gutierrez'    , '1974-10-06'   , 'Mauris.magna.Duis@Vivamusnonlorem.org'         , 3            , 1            
+	67       , 'May'           , 'Pierce'       , '1968-03-19'   , 'augue@odio.org'                                , 2            , 93           
+	68       , 'Leilani'       , 'Evans'        , '1982-10-15'   , 'mi@justo.org'                                  , 1            , 57           
+	69       , 'Robert'        , 'Preston'      , '1946-02-03'   , 'ipsum@Donec.co.uk'                             , 3            , 91           
+	70       , 'Mia'           , 'Wise'         , '1983-08-22'   , 'dui@ipsumSuspendisse.org'                      , 1            , 94           
+	71       , 'Lyle'          , 'Hanson'       , '2003-02-02'   , 'mauris.ut.mi@acarcuNunc.co.uk'                 , 3            , 4            
+	72       , 'Emily'         , 'Bullock'      , '2000-07-08'   , 'Vivamus.nisi@consequatenim.edu'                , 2            , 1            
+	73       , 'Kyle'          , 'Patterson'    , '1985-04-07'   , 'elementum@faucibus.edu'                        , 3            , 71           
+	74       , 'Serena'        , 'Marks'        , '1999-07-29'   , 'dui.Fusce@euismodac.edu'                       , 3            , 5            
+	75       , 'Calvin'        , 'Strong'       , '1946-08-24'   , 'netus.et.malesuada@ligulaAliquamerat.ca'       , 1            , 95           
+	76       , 'Tanner'        , 'Barber'       , '1990-03-03'   , 'libero.et@condimentum.com'                     , 1            , 17           
+	77       , 'Ava'           , 'Hogan'        , '1948-03-17'   , 'egestas@metusIn.co.uk'                         , 1            , 87           
+	78       , 'Rhona'         , 'Parker'       , '1997-03-13'   , 'luctus.felis@mauris.com'                       , 1            , 3            
+	79       , 'Kiona'         , 'Ochoa'        , '1971-03-22'   , 'tellus.sem.mollis@magnis.edu'                  , 1            , 82           
+	80       , 'Wayne'         , 'Richardson'   , '1951-05-16'   , 'ac@tellusPhaselluselit.edu'                    , 2            , 60           
+	81       , 'Stuart'        , 'Ward'         , '1986-03-23'   , 'consequat.auctor.nunc@sociosquadlitora.edu'    , 1            , 10           
+	82       , 'Malcolm'       , 'Schultz'      , '1944-09-01'   , 'id.sapien.Cras@nec.ca'                         , 2            , 8            
+	83       , 'Donna'         , 'Gillespie'    , '1976-05-26'   , 'quam@auctorveliteget.co.uk'                    , 2            , 39           
+	84       , 'Jayme'         , 'Gross'        , '1962-04-22'   , 'aliquam.eros.turpis@pedeCumsociis.net'         , 3            , 87           
+	85       , 'Cherokee'      , 'Mcguire'      , '2003-09-22'   , 'elit.sed.consequat@Donecegestas.org'           , 1            , 60           
+	86       , 'Reagan'        , 'Griffith'     , '1962-09-24'   , 'vitae.risus.Duis@erategetipsum.net'            , 3            , 91           
+	87       , 'Jeanette'      , 'Fry'          , '1964-07-04'   , 'ipsum.ac.mi@maurisut.com'                      , 3            , 32           
+	88       , 'Brendan'       , 'Fields'       , '2002-05-13'   , 'tortor.dictum.eu@egestas.net'                  , 2            , 21           
+	89       , 'Yoko'          , 'Buck'         , '1955-01-12'   , 'est.Nunc.ullamcorper@Maecenasmifelis.edu'      , 1            , 5            
+	90       , 'Mikayla'       , 'Kirk'         , '1987-07-05'   , 'tellus.imperdiet@vulputateveliteu.org'         , 2            , 41           
+	91       , 'Kylee'         , 'Raymond'      , '1974-05-18'   , 'lorem.eu.metus@NulladignissimMaecenas.co.uk'   , 1            , 95           
+	92       , 'Latifah'       , 'Barnett'      , '1986-05-20'   , 'neque.sed@inconsequatenim.com'                 , 1            , 46           
+	93       , 'Nevada'        , 'Barry'        , '1991-03-02'   , 'lectus.a@hendrerit.org'                        , 3            , 4            
+	94       , 'Chandler'      , 'Hester'       , '1968-03-16'   , 'metus.Aliquam@velit.co.uk'                     , 1            , 32           
+	95       , 'Tyler'         , 'Singleton'    , '1951-05-26'   , 'nisi@dapibusquam.edu'                          , 3            , 18           
+	96       , 'Lee'           , 'Rodgers'      , '1970-08-22'   , 'pharetra.ut.pharetra@accumsansedfacilisis.ca'  , 2            , 96           
+	97       , 'Thomas'        , 'Booth'        , '1955-08-07'   , 'pulvinar.arcu@ipsum.edu'                       , 1            , 6            
+	98       , 'Scarlett'      , 'Massey'       , '1946-04-18'   , 'Suspendisse@egestasAliquam.net'                , 2            , 83           
+	99       , 'Tate'          , 'Beard'        , '1987-04-13'   , 'eget.varius@ipsumac.com'                       , 3            , 3            
+	100      , 'Serena'        , 'Huff'         , '1975-02-15'   , 'placerat.augue@augueeutempor.com'              , 3            , 6            
+}
+
+Ranking = {
+	id:number, title:string  
+	1        , 'Grand Master'
+	2        , 'Professional'
+	3        , 'Amateur'     
+}
+
+Tournament = {
+	id:number, name:string      , country:string                                , start_date:string
+	1        , 'Tournament #1'  , 'Myanmar'                                     , '2016-09-22'     
+	2        , 'Tournament #2'  , 'Marshall Islands'                            , '2016-12-29'     
+	3        , 'Tournament #3'  , 'Palestine, State of'                         , '2016-09-13'     
+	4        , 'Tournament #4'  , 'Martinique'                                  , '2016-11-30'     
+	5        , 'Tournament #5'  , 'Samoa'                                       , '2016-09-21'     
+	6        , 'Tournament #6'  , 'Turkey'                                      , '2016-04-14'     
+	7        , 'Tournament #7'  , 'Czech Republic'                              , '2016-02-04'     
+	8        , 'Tournament #8'  , 'Congo, the Democratic Republic of the'       , '2016-06-14'     
+	9        , 'Tournament #9'  , 'Cyprus'                                      , '2016-05-06'     
+	10       , 'Tournament #10' , 'Mali'                                        , '2016-04-05'     
+	11       , 'Tournament #11' , 'Finland'                                     , '2017-01-28'     
+	12       , 'Tournament #12' , 'Lithuania'                                   , '2017-09-29'     
+	13       , 'Tournament #13' , 'Thailand'                                    , '2017-07-29'     
+	14       , 'Tournament #14' , 'Croatia'                                     , '2016-05-16'     
+	15       , 'Tournament #15' , 'Botswana'                                    , '2015-12-18'     
+	16       , 'Tournament #16' , 'Algeria'                                     , '2017-06-20'     
+	17       , 'Tournament #17' , 'Lebanon'                                     , '2017-07-31'     
+	18       , 'Tournament #18' , 'Saint Helena, Ascension and Tristan da Cunha', '2016-12-06'     
+	19       , 'Tournament #19' , 'Netherlands'                                 , '2016-01-25'     
+	20       , 'Tournament #20' , 'Faroe Islands'                               , '2016-07-28'     
+	21       , 'Tournament #21' , 'Azerbaijan'                                  , '2017-09-25'     
+	22       , 'Tournament #22' , 'Japan'                                       , '2016-07-17'     
+	23       , 'Tournament #23' , 'Comoros'                                     , '2016-03-09'     
+	24       , 'Tournament #24' , 'Lebanon'                                     , '2016-11-06'     
+	25       , 'Tournament #25' , 'Kiribati'                                    , '2016-08-01'     
+	26       , 'Tournament #26' , 'Togo'                                        , '2016-04-05'     
+	27       , 'Tournament #27' , 'Grenada'                                     , '2016-03-04'     
+	28       , 'Tournament #28' , 'Ireland'                                     , '2016-07-14'     
+	29       , 'Tournament #29' , 'Cuba'                                        , '2016-09-09'     
+	30       , 'Tournament #30' , 'Guinea-Bissau'                               , '2016-11-12'     
+	31       , 'Tournament #31' , 'Austria'                                     , '2016-04-07'     
+	32       , 'Tournament #32' , 'Cuba'                                        , '2017-09-02'     
+	33       , 'Tournament #33' , 'Kenya'                                       , '2015-10-16'     
+	34       , 'Tournament #34' , 'Nicaragua'                                   , '2017-08-29'     
+	35       , 'Tournament #35' , 'Haiti'                                       , '2017-10-05'     
+	36       , 'Tournament #36' , 'Norway'                                      , '2017-06-25'     
+	37       , 'Tournament #37' , 'Kiribati'                                    , '2017-08-16'     
+	38       , 'Tournament #38' , 'Vanuatu'                                     , '2017-09-28'     
+	39       , 'Tournament #39' , 'Colombia'                                    , '2016-03-26'     
+	40       , 'Tournament #40' , 'Faroe Islands'                               , '2017-05-06'     
+	41       , 'Tournament #41' , 'Bermuda'                                     , '2015-12-22'     
+	42       , 'Tournament #42' , 'Turks and Caicos Islands'                    , '2015-11-01'     
+	43       , 'Tournament #43' , 'Cocos (Keeling) Islands'                     , '2017-05-15'     
+	44       , 'Tournament #44' , 'Gabon'                                       , '2016-12-21'     
+	45       , 'Tournament #45' , 'Mauritius'                                   , '2016-11-05'     
+	46       , 'Tournament #46' , 'Belarus'                                     , '2016-05-22'     
+	47       , 'Tournament #47' , 'Saint Vincent and The Grenadines'            , '2015-11-22'     
+	48       , 'Tournament #48' , 'Greece'                                      , '2016-10-20'     
+	49       , 'Tournament #49' , 'Mauritius'                                   , '2016-08-23'     
+	50       , 'Tournament #50' , 'Indonesia'                                   , '2016-11-17'     
+	51       , 'Tournament #51' , 'Madagascar'                                  , '2017-06-28'     
+	52       , 'Tournament #52' , 'Niger'                                       , '2017-03-21'     
+	53       , 'Tournament #53' , 'Saint Martin'                                , '2017-04-17'     
+	54       , 'Tournament #54' , 'Bhutan'                                      , '2017-08-02'     
+	55       , 'Tournament #55' , 'Kiribati'                                    , '2017-02-14'     
+	56       , 'Tournament #56' , 'Qatar'                                       , '2016-07-05'     
+	57       , 'Tournament #57' , 'Norfolk Island'                              , '2017-07-31'     
+	58       , 'Tournament #58' , 'Eritrea'                                     , '2017-07-01'     
+	59       , 'Tournament #59' , 'Paraguay'                                    , '2017-09-10'     
+	60       , 'Tournament #60' , 'Cape Verde'                                  , '2017-08-07'     
+	61       , 'Tournament #61' , 'Sint Maarten'                                , '2016-09-23'     
+	62       , 'Tournament #62' , 'Belize'                                      , '2017-09-22'     
+	63       , 'Tournament #63' , 'Denmark'                                     , '2017-04-02'     
+	64       , 'Tournament #64' , 'Albania'                                     , '2016-02-01'     
+	65       , 'Tournament #65' , 'Syria'                                       , '2017-01-30'     
+	66       , 'Tournament #66' , 'Albania'                                     , '2015-11-12'     
+	67       , 'Tournament #67' , 'Colombia'                                    , '2016-12-14'     
+	68       , 'Tournament #68' , 'Mauritania'                                  , '2016-09-11'     
+	69       , 'Tournament #69' , 'Denmark'                                     , '2017-01-22'     
+	70       , 'Tournament #70' , 'Palestine, State of'                         , '2016-10-29'     
+	71       , 'Tournament #71' , 'Guadeloupe'                                  , '2016-10-25'     
+	72       , 'Tournament #72' , 'Japan'                                       , '2017-02-19'     
+	73       , 'Tournament #73' , 'Kenya'                                       , '2016-07-13'     
+	74       , 'Tournament #74' , 'Denmark'                                     , '2016-06-23'     
+	75       , 'Tournament #75' , 'Andorra'                                     , '2015-10-28'     
+	76       , 'Tournament #76' , 'Ireland'                                     , '2015-11-09'     
+	77       , 'Tournament #77' , 'Saudi Arabia'                                , '2016-07-20'     
+	78       , 'Tournament #78' , 'Holy See (Vatican City State)'               , '2016-09-13'     
+	79       , 'Tournament #79' , 'Palau'                                       , '2017-05-25'     
+	80       , 'Tournament #80' , 'Myanmar'                                     , '2017-02-10'     
+	81       , 'Tournament #81' , 'Congo, the Democratic Republic of the'       , '2015-11-23'     
+	82       , 'Tournament #82' , 'Georgia'                                     , '2016-05-27'     
+	83       , 'Tournament #83' , 'Nepal'                                       , '2017-07-15'     
+	84       , 'Tournament #84' , 'British Indian Ocean Territory'              , '2017-03-19'     
+	85       , 'Tournament #85' , 'Montenegro'                                  , '2015-11-29'     
+	86       , 'Tournament #86' , 'Slovakia'                                    , '2016-10-13'     
+	87       , 'Tournament #87' , 'Honduras'                                    , '2016-01-30'     
+	88       , 'Tournament #88' , 'Jamaica'                                     , '2015-10-08'     
+	89       , 'Tournament #89' , 'Guinea'                                      , '2017-03-13'     
+	90       , 'Tournament #90' , 'Liechtenstein'                               , '2016-05-20'     
+	91       , 'Tournament #91' , 'Guam'                                        , '2017-01-07'     
+	92       , 'Tournament #92' , 'Bulgaria'                                    , '2017-03-05'     
+	93       , 'Tournament #93' , 'Burkina Faso'                                , '2016-05-10'     
+	94       , 'Tournament #94' , 'Togo'                                        , '2017-09-27'     
+	95       , 'Tournament #95' , 'Angola'                                      , '2016-04-12'     
+	96       , 'Tournament #96' , 'Indonesia'                                   , '2016-11-01'     
+	97       , 'Tournament #97' , 'Holy See (Vatican City State)'               , '2017-04-13'     
+	98       , 'Tournament #98' , 'Dominica'                                    , '2016-08-16'     
+	99       , 'Tournament #99' , 'Solomon Islands'                             , '2015-12-31'     
+	100      , 'Tournament #100', 'Sweden'                                      , '2016-03-03'     
+}
