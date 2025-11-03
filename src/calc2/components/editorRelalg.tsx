@@ -73,6 +73,9 @@ export class EditorRelalg extends React.Component<Props, State> {
 				}}
 				mode="relalg"
 				execFunction={(self: EditorBase, text: string, offset) => {
+					// add to history first
+					self.historyAddEntry(text);
+
 					const ast = parseRelalg(text, Object.keys(relations));
 					replaceVariables(ast, relations);
 
@@ -88,9 +91,6 @@ export class EditorRelalg extends React.Component<Props, State> {
 
 					const root = relalgFromRelalgAstRoot(ast, relations);
 					root.check();
-
-
-					self.historyAddEntry(text);
 
 					if (self.props.enableInlineRelationEditor) {
 						self.addInlineRelationMarkers(ast);
