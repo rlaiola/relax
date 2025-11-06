@@ -116,95 +116,6 @@ AngNr	KursNr	Datum	Ort
 3	I09	2001-05-29	'München'
 }
 
-group: UIBK - Music Streaming Service Schemata
-description[[
-Schemata of the [educational database “Music Streaming Service”](https://gist.github.com/antstei/97d011026e4e35ce512d86d9c6b8a0c3), which serves as a representation of a typical music streaming platform, encompassing several relations, including `Artist`, `Album`, `Track`, `Genre`, `Invoice`, and `Customer`. The data was taken from SQLite Tutorial’s “SQLite Sample Database” available at [sqlitetutorial.net/sqlite-sample-database](http://www.sqlitetutorial.net/sqlite-sample-database).
-
-1. The relation `Artist` contains information about music artists, which includes the following attributes:
-    * `ArtistId` (`number`): A unique identifier for each artist.
-    * `Name` (`string`): The name of the artist or band.
-
-2. The relation `Album` represents music albums, comprising the following attributes:
-    * `AlbumId` (`number`): A unique identifier for each album.
-    * `Title` (`string`): The title of the album.
-    * `ArtistId` (`number`): The identifier of the artist or band associated with the album.
-
-3. The relation `Track` manages individual music tracks, using the following attributes
-    * `TrackId` (`number`): A unique identifier for each track.
-    * `Name` (`string`): The name of the track.
-    * `AlbumId` (`number`): The identifier of the album to which the track belongs.
-    * `GenreId` (`number`): The identifier of the genre associated with the track.
-    * `Milliseconds` (`number`): The duration of the track in milliseconds.
-    * `Bytes` (`number`): The size of the track file in bytes.
-    * `UnitPrice` (`number`): The price of the track.
-
-4. The relation `PlaylistContent` represents the content of playlists, with the following attributes:
-    * `PlaylistId` (`number`): The identifier of the playlist.
-    * `TrackId` (`number`): The identifier of the track included in the playlist.
-
-5. The relation `Genre` manages music genres based on the following attributes:
-    * `GenreId` (`number`): A unique identifier for each genre.
-    * `Name` (`string`): The name of the genre.
-
-6. The relation `Invoice` records customer invoices, containing the following attributes:
-    * `InvoiceId` (`number`): A unique identifier for each invoice.
-    * `CustomerId` (`number`): The identifier of the customer associated with the invoice.
-    * `InvoiceDate` (`date`): The date of the invoice in the format `YYYY-MM-DD`.
-    * `Total` (`number`): The total amount of the invoice.
-
-7. The relation `InvoiceParts` represents individual items within an invoice, which includes the following attributes:
-    * `InvoicePartId` (`number`): A unique identifier for each invoice part.
-    * `InvoiceId` (`number`): The identifier of the invoice to which the part belongs.
-    * `TrackId` (`number`): The identifier of the track included in the invoice part.
-    * `UnitPrice` (`number`): The price of the track.
-    * `Quantity` (`number`): The quantity of the track.
-
-8. The relation `Customer` contains information about the service’s customers, containing the following attributes:
-    * `CustomerId` (`number`): A unique identifier for each customer.
-    * `FirstName` (`string`): The first name of the customer.
-    * `LastName` (`string`): The last name of the customer.
-    * `Address` (`string`): The customer’s address.
-    * `City` (`string`): The city of residence of the customer.
-    * `Country` (`string`): The country in which the customer resides.
-    * `PostalCode` (`string`): The postal code of the customer’s location.
-    * `Email` (`string`): The customer’s email address.
-]]
-
-Artist = {
-    ArtistId:number, Name:string
-}
-
-Album = {
-    AlbumId:number, Title:string, ArtistId:number
-}
-
-Track = {
-    TrackId:number, Name:string, AlbumId:number, GenreId:number, Miliseconds:number, Bytes:number, UnitPrice:number
-}
-
-PlaylistContent = {
-    PlaylistId:number, TrackId:number
-} 
-
-Playlist = {
-    PlaylistId:number, Name:string
-}
-
-Genre = {
-    GenreId:number, Name:string
-}
-
-Invoice = {
-    InvoiceId:number, CustomerId:number, InvoiceDate:date, Total:number
-}
-
-InvoiceParts = {
-    InvoicePartId:number, InvoiceId:number, TrackId:number, UnitPrice:number, Quantity:number
-}
-
-Customer = {
-    CustomerId:number, FirstName:string, LastName:string, Address:string, City:string, Country:string,PostalCode:string,Email:string
-}
 
 group: UIBK - Music Streaming Service
 description: [[The educational database “Music Streaming Service” serves as a representation of a typical music streaming platform, encompassing several relations, including `Artist`, `Album`, `Track`, `Genre`, `Invoice`, and `Customer`. The data was taken from SQLite Tutorial’s “SQLite Sample Database” available at [sqlitetutorial.net/sqlite-sample-database](http://www.sqlitetutorial.net/sqlite-sample-database). 1. The relation `Artist` contains information about music artists, which includes the following attributes: * `ArtistId` (`number`): A unique identifier for each artist. * `Name` (`string`): The name of the artist or band. 2. The relation `Album` represents music albums, comprising the following attributes: * `AlbumId` (`number`): A unique identifier for each album. * `Title` (`string`): The title of the album. * `ArtistId` (`number`): The identifier of the artist or band associated with the album. 3. The relation `Track` manages individual music tracks, using the following attributes * `TrackId` (`number`): A unique identifier for each track. * `Name` (`string`): The name of the track. * `AlbumId` (`number`): The identifier of the album to which the track belongs. * `GenreId` (`number`): The identifier of the genre associated with the track. * `Milliseconds` (`number`): The duration of the track in milliseconds. * `Bytes` (`number`): The size of the track file in bytes. * `UnitPrice` (`number`): The price of the track. 4. The relation `PlaylistContent` represents the content of playlists, with the following attributes: * `PlaylistId` (`number`): The identifier of the playlist. * `TrackId` (`number`): The identifier of the track included in the playlist. 5. The relation `Genre` manages music genres based on the following attributes: * `GenreId` (`number`): A unique identifier for each genre. * `Name` (`string`): The name of the genre. 6. The relation `Invoice` records customer invoices, containing the following attributes: * `InvoiceId` (`number`): A unique identifier for each invoice. * `CustomerId` (`number`): The identifier of the customer associated with the invoice. * `InvoiceDate` (`date`): The date of the invoice in the format `YYYY-MM-DD`. * `Total` (`number`): The total amount of the invoice. 7. The relation `InvoiceParts` represents individual items within an invoice, which includes the following attributes: * `InvoicePartId` (`number`): A unique identifier for each invoice part. * `InvoiceId` (`number`): The identifier of the invoice to which the part belongs. * `TrackId` (`number`): The identifier of the track included in the invoice part. * `UnitPrice` (`number`): The price of the track. * `Quantity` (`number`): The quantity of the track. 8. The relation `Customer` contains information about the service’s customers, containing the following attributes: * `CustomerId` (`number`): A unique identifier for each customer. * `FirstName` (`string`): The first name of the customer. * `LastName` (`string`): The last name of the customer. * `Address` (`string`): The customer’s address. * `City` (`string`): The city of residence of the customer. * `Country` (`string`): The country in which the customer resides. * `PostalCode` (`string`): The postal code of the customer’s location. * `Email` (`string`): The customer’s email address.]]
@@ -1517,4 +1428,94 @@ S = {
 id:number, from_date:date, to_date:date, length:number
 1, 2019-11-01, 2019-11-03, 3
 4, 2019-12-23, 2020-01-06, 15
+}
+
+group: UIBK - Music Streaming Service Schemata
+description[[
+Schemata of the [educational database “Music Streaming Service”](https://gist.github.com/antstei/97d011026e4e35ce512d86d9c6b8a0c3), which serves as a representation of a typical music streaming platform, encompassing several relations, including `Artist`, `Album`, `Track`, `Genre`, `Invoice`, and `Customer`. The data was taken from SQLite Tutorial’s “SQLite Sample Database” available at [sqlitetutorial.net/sqlite-sample-database](http://www.sqlitetutorial.net/sqlite-sample-database).
+
+1. The relation `Artist` contains information about music artists, which includes the following attributes:
+    * `ArtistId` (`number`): A unique identifier for each artist.
+    * `Name` (`string`): The name of the artist or band.
+
+2. The relation `Album` represents music albums, comprising the following attributes:
+    * `AlbumId` (`number`): A unique identifier for each album.
+    * `Title` (`string`): The title of the album.
+    * `ArtistId` (`number`): The identifier of the artist or band associated with the album.
+
+3. The relation `Track` manages individual music tracks, using the following attributes
+    * `TrackId` (`number`): A unique identifier for each track.
+    * `Name` (`string`): The name of the track.
+    * `AlbumId` (`number`): The identifier of the album to which the track belongs.
+    * `GenreId` (`number`): The identifier of the genre associated with the track.
+    * `Milliseconds` (`number`): The duration of the track in milliseconds.
+    * `Bytes` (`number`): The size of the track file in bytes.
+    * `UnitPrice` (`number`): The price of the track.
+
+4. The relation `PlaylistContent` represents the content of playlists, with the following attributes:
+    * `PlaylistId` (`number`): The identifier of the playlist.
+    * `TrackId` (`number`): The identifier of the track included in the playlist.
+
+5. The relation `Genre` manages music genres based on the following attributes:
+    * `GenreId` (`number`): A unique identifier for each genre.
+    * `Name` (`string`): The name of the genre.
+
+6. The relation `Invoice` records customer invoices, containing the following attributes:
+    * `InvoiceId` (`number`): A unique identifier for each invoice.
+    * `CustomerId` (`number`): The identifier of the customer associated with the invoice.
+    * `InvoiceDate` (`date`): The date of the invoice in the format `YYYY-MM-DD`.
+    * `Total` (`number`): The total amount of the invoice.
+
+7. The relation `InvoiceParts` represents individual items within an invoice, which includes the following attributes:
+    * `InvoicePartId` (`number`): A unique identifier for each invoice part.
+    * `InvoiceId` (`number`): The identifier of the invoice to which the part belongs.
+    * `TrackId` (`number`): The identifier of the track included in the invoice part.
+    * `UnitPrice` (`number`): The price of the track.
+    * `Quantity` (`number`): The quantity of the track.
+
+8. The relation `Customer` contains information about the service’s customers, containing the following attributes:
+    * `CustomerId` (`number`): A unique identifier for each customer.
+    * `FirstName` (`string`): The first name of the customer.
+    * `LastName` (`string`): The last name of the customer.
+    * `Address` (`string`): The customer’s address.
+    * `City` (`string`): The city of residence of the customer.
+    * `Country` (`string`): The country in which the customer resides.
+    * `PostalCode` (`string`): The postal code of the customer’s location.
+    * `Email` (`string`): The customer’s email address.
+]]
+
+Artist = {
+    ArtistId:number, Name:string
+}
+
+Album = {
+    AlbumId:number, Title:string, ArtistId:number
+}
+
+Track = {
+    TrackId:number, Name:string, AlbumId:number, GenreId:number, Miliseconds:number, Bytes:number, UnitPrice:number
+}
+
+PlaylistContent = {
+    PlaylistId:number, TrackId:number
+} 
+
+Playlist = {
+    PlaylistId:number, Name:string
+}
+
+Genre = {
+    GenreId:number, Name:string
+}
+
+Invoice = {
+    InvoiceId:number, CustomerId:number, InvoiceDate:date, Total:number
+}
+
+InvoiceParts = {
+    InvoicePartId:number, InvoiceId:number, TrackId:number, UnitPrice:number, Quantity:number
+}
+
+Customer = {
+    CustomerId:number, FirstName:string, LastName:string, Address:string, City:string, Country:string,PostalCode:string,Email:string
 }
