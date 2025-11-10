@@ -180,6 +180,9 @@ export function loadGroupsFromSource(source: GroupSourceType, id: string, mainta
           success: gist_success,
           crossDomain: true,
           statusCode: {
+            403: function (data: any) {
+              reject(new Error(data.responseJSON.message));
+            },
             404: function () {
               // tslint:disable-next-line: prefer-template
               reject(new Error('gist ' + id + ' not found'));
