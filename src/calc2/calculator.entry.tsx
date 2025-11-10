@@ -33,6 +33,7 @@ ReactDOM.render(
 		locale: i18n.language,
 	};
 
+	// load all predefined groups
 	for (const action of loadStaticGroups()) {
 		store.dispatch(action);
 	}
