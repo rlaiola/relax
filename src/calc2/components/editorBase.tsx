@@ -685,7 +685,7 @@ class Relation {
 
 const gutterClass = 'CodeMirror-table-edit-markers';
 const eventExecSuccessfulName = 'editor.execSuccessful';
-const HISTORY_STORAGE_KEY = "@editor/history"
+const HISTORY_STORAGE_KEY = "@editor/history";
 
 function getHistoryStorageKey(editorMode: string) {
 	return `${HISTORY_STORAGE_KEY}/${editorMode}`
@@ -932,7 +932,7 @@ export class EditorBase extends React.Component<Props, State> {
 		if (prevProps.mode !== this.props.mode) {
 			this.setState({ history: loadHistoryFromStorage(window.localStorage, this.props.mode) })
 		}
-		if (prevState.editor) {
+		if(prevState.editor) {
 			if(this.props.exampleSql && this.props.exampleSql !== '' && !this.state.addedExampleSqlQuery && this.props.tab === 'sql') {
 				this.replaceAll(this.props.exampleSql)
 				this.setState({addedExampleSqlQuery: true});
@@ -948,7 +948,7 @@ export class EditorBase extends React.Component<Props, State> {
 				this.setState({addedExampleRAQuery: true});
 			}
 		}
-			}
+	}
 
 	onHistoryStorageChange(event: StorageEvent) {
 		if (event.storageArea === window.localStorage && event.key === getHistoryStorageKey(this.props.mode)) {
