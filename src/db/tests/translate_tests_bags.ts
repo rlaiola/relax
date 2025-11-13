@@ -2651,3 +2651,56 @@ QUnit.test('test cast function', function (assert) {
 
 	assert.deepEqual(root.getResult(false), ref.getResult(false));
 });
+
+QUnit.test('test selection using BETWEEN with numbers', function (assert) {
+	const query = "sigma a between 3 and 5 (R)";
+	const root = exec_ra(query, getTestBags());
+
+	const ref = exec_ra(`{
+		R.a, R.b
+		5,   6
+	}`, {});
+
+	assert.deepEqual(root.getResult(false), ref.getResult(false));
+});
+
+QUnit.test('test selection using NOT BETWEEN with numbers', function (assert) {
+	const query = "sigma a not between 3 and 5 (R)";
+	const root = exec_ra(query, getTestBags());
+	
+	const ref = exec_ra(`{
+		R.a, R.b
+		1,   2
+		1,   2
+	}`, {});
+	
+	assert.deepEqual(root.getResult(false), ref.getResult(false));
+});
+
+QUnit.test('test selection using BETWEEN with strings', function (assert) {
+	const query = "sigma c between 'c' and 'd' (pi *, 'c' ->c R)";
+	const root = exec_ra(query, getTestBags());
+	
+	const ref = exec_ra(`{
+		R.a, R.b, c
+		1,   2,   'c'
+		5,   6,   'c'
+		1,   2,   'c'
+	}`, {});
+
+	assert.deepEqual(root.getResult(false), ref.getResult(false));
+});
+
+QUnit.test('test selection using NOT BETWEEN with strings', function (assert) {
+	const query = "sigma c not between 'c' and 'd' (pi *, 'a' ->c R)";
+	const root = exec_ra(query, getTestBags());
+	
+	const ref = exec_ra(`{
+		R.a, R.b, c
+		1,   2,   'a'
+		5,   6,   'a'
+		1,   2,   'a'
+	}`, {});
+
+	assert.deepEqual(root.getResult(false), ref.getResult(false));
+});

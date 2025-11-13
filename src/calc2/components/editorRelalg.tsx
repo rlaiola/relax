@@ -22,7 +22,7 @@ export const KEYWORDS_RELALG = [
 	'pi', 'sigma', 'rho', 'tau', '<-', 'intersect', 'union', '/', '-', '\\', 'x', 'cross join', 'join',
 	'inner join', 'natural join', 'left join', 'right join', 'left outer join',
 	'right outer join', 'full outer join', 'left semi join', 'right semi join', 'anti join',
-	'and', 'or', 'xor', '||',
+	'and', 'or', 'xor', '||', 'not between', 'between',
 ];
 
 type Props = {
@@ -73,7 +73,9 @@ export class EditorRelalg extends React.Component<Props, State> {
 				}}
 				mode="relalg"
 				execFunction={(self: EditorBase, text: string, offset) => {
+					// add to history first
 					self.historyAddEntry(text);
+
 					const ast = parseRelalg(text, Object.keys(relations));
 					replaceVariables(ast, relations);
 
