@@ -806,7 +806,7 @@ export class EditorBase extends React.Component<Props, State> {
 		this.state = {
 			editor: null,
 			codeMirrorOptions,
-				history: loadHistoryFromStorage(window.localStorage, props.mode),
+			history: loadHistoryFromStorage(window.localStorage, props.mode),
 			isSelectionSelected: false,
 			execSuccessful: false,
 			execErrors: [],
@@ -933,19 +933,19 @@ export class EditorBase extends React.Component<Props, State> {
 			this.setState({ history: loadHistoryFromStorage(window.localStorage, this.props.mode) })
 		}
 		if (prevState.editor) {
-			if (this.props.exampleSql && this.props.exampleSql !== '' && !this.state.addedExampleSqlQuery && this.props.tab === 'sql') {
+			if(this.props.exampleSql && this.props.exampleSql !== '' && !this.state.addedExampleSqlQuery && this.props.tab === 'sql') {
 				this.replaceAll(this.props.exampleSql)
-				this.setState({ addedExampleSqlQuery: true });
+				this.setState({addedExampleSqlQuery: true});
 			}
-			if (this.props.exampleBags && this.props.exampleBags !== '' && !this.state.addedExampleBagsQuery && this.props.tab === 'bagalg') {
+			if(this.props.exampleBags && this.props.exampleBags !== '' && !this.state.addedExampleBagsQuery && this.props.tab === 'bagalg') {
 				this.replaceAll(this.props.exampleBags);
 				// TODO: maybe auto format / replace ?
-				this.setState({ addedExampleBagsQuery: true });
+				this.setState({addedExampleBagsQuery: true});
 			}
-			if (this.props.exampleRA && this.props.exampleRA !== '' && !this.state.addedExampleRAQuery && this.props.tab === 'relalg') {
+			if(this.props.exampleRA && this.props.exampleRA !== '' && !this.state.addedExampleRAQuery && this.props.tab === 'relalg') {
 				this.replaceAll(this.props.exampleRA);
 				// TODO: maybe auto format / replace ?
-				this.setState({ addedExampleRAQuery: true });
+				this.setState({addedExampleRAQuery: true});
 			}
 		}
 			}
