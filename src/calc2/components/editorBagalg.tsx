@@ -444,6 +444,8 @@ export class EditorBagalg extends React.Component<Props, State> {
 						],
 					},
 				]}
+				clearOnReload={false}
+				clearOnNavigation={true}
 			/>
 		);
 	}

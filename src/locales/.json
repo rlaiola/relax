@@ -86,6 +86,8 @@
 	"calc.maintainer-groups.saarland": "",
 	"calc.maintainer-groups.ufes": "",
 	"calc.editors.button-history": "",
+	"calc.editors.button-clear-history": "",
+	"calc.editors.confirm-clear-history": "",
 	"calc.editors.insert-relation-title": "",
 	"calc.editors.insert-relation-tooltip": "",
 	"calc.editors.group.tab-name": "",
@@ -220,5 +222,6 @@
 	"calc.editors.ra.inline-editor.row-name": "",
 	"calc.editors.ra.inline-editor.row-type": "",
 	"calc.editors.ra.inline-editor.input-relation-name": "",
-	"calc.navigation.imprint": ""
+	"calc.navigation.imprint": "",
+	"local.change": ""
 }

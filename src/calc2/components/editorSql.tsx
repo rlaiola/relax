@@ -207,6 +207,8 @@ export class EditorSql extends React.Component<Props> {
 						],
 					},
 				]}
+				clearOnReload={false}
+				clearOnNavigation={true}
 			/>
 		);
 	}
