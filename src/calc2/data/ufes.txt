@@ -250,7 +250,7 @@ negocios = {
 }
 
 group: UFES - University database
-description[[ Dataset for the University database schema from the book 'Database System Concepts' by Silberschatz, Korth and Sudarshan ]]
+description[[ Modified dataset for the University database schema from the book 'Database System Concepts' by Silberschatz, Korth and Sudarshan ]]
 
 classroom = {
   building:string, room_number:number, capacity:number
@@ -265,36 +265,94 @@ classroom = {
 department = {
   dept_name:string, building:string,  budget:number
 
-  Biology,      Watson,  90000
-  'Comp. Sci.', Taylor,  100000
-  'Elec. Eng.', Taylor,  85000
-  Finance,      Painter, 120000
-  History,      Painter, 50000
-  Music,        Packard, 80000
-  Physics,      Watson,  70000
+  Biology,     Watson,    90000
+  'Comp. Sci.',  Taylor,    100000
+  'Elec. Eng.',  Taylor,    85000
+  Finance,    Painter,   120000
+  History,    Painter,   50000
+  Music,      Packard,   80000
+  Physics,    Watson,    70000
+  'MAT',    'CCE',    NULL
+  'INF',    'CT7',    NULL
+  'ELE',    'CT2',    NULL
+  'FIS',    'CCE',    NULL
+  'HID',    'CT8',    NULL
+  'STA',    'CCE',    NULL
+  'EPR',    'CT12',    NULL
+  'QUI',    'CCE',    NULL
+  'LET',    'IC4',    NULL
 }
 
 course = {
   course_id:string, title:string, dept_name:string, credits:number
 
-  BIO-101, 'Intro. to Biology',          Biology,       4
-  BIO-301, Genetics,                     Biology,       4
-  BIO-399, 'Computational Biology',      Biology,       3
-  CS-101,  'Intro. to Computer Science', 'Comp. Sci.',  4
-  CS-190,  'Game Design',                'Comp. Sci.',  4
-  CS-315,  Robotics,                     'Comp. Sci.',  3
-  CS-319,  'Image Processing',           'Comp. Sci.',  3
-  CS-347,  'Database System Concepts',   'Comp. Sci.',  3
-  EE-181,  'Intro. to Digital Systems',  'Elec. Eng.',  3
-  FIN-201, 'Investment Banking',          Finance,      3
-  HIS-351, 'World History',               History,      3
-  MU-199,  'Music Video Production',      Music,        3
-  PHY-101, 'Physical Principles',         Physics,      4 
+  BIO-101,   'Intro. to Biology',           Biology,   4
+  BIO-301,   Genetics,                   Biology,   4
+  BIO-399,   'Computational Biology',      Biology,   3
+  CS-101,   'Intro. to Computer Science',  'Comp. Sci.', 4
+  CS-190,    'Game Design',                'Comp. Sci.', 4
+  CS-315,    Robotics,                   'Comp. Sci.', 3
+  CS-319,    'Image Processing',           'Comp. Sci.', 3
+  CS-347,    'Database System Concepts',   'Comp. Sci.', 3
+  EE-181,    'Intro. to Digital Systems',   'Elec. Eng.', 3
+  FIN-201,    'Investment Banking',         Finance,   3
+  HIS-351,    'World History',              History,   3
+  MU-199,     'Music Video Production',     Music,     3
+  PHY-101,     'Physical Principles',        Physics,   4
+  'MAT15925',    'CÁLCULO I',    'MAT',    6
+  'INF15927',    'PROGRAMAÇÃO I',    'INF',    3
+  'MAT15932',    'ÁLGEBRA LINEAR',    'MAT',    4
+  'ELE15934',    'CIRCUITOS ELÉTRICOS I',    'ELE',    4
+  'ELE15941',    'ELETROMAGNETISMO I',    'ELE',    4
+  'ELE15924',    'PRÁTICAS DE LABORATÓRIO',    'ELE',    1
+  'INF16189',    'INTRODUÇÃO À ENGENHARIA DE COMPUTAÇÃO',    'INF',    3
+  'INF15973',    'LÓGICA PARA COMPUTAÇÃO I ',    'INF',    4
+  'MAT15931',    'CÁLCULO II',    'MAT',    4
+  'INF16153',    'PROGRAMAÇÃO II',    'INF',    3
+  'INF16190',    'PROJETO INTEGRADO DE COMPUTAÇÃO I',    'INF',    1
+  'FIS13696',    'FÍSICA I',    'FIS',    4
+  'ELE15929',    'DESENHO ASSISTIDO POR COMPUTADOR',    'ELE',    2
+  'HID15930',    'FUNDAMENTOS DE ENGENHARIA AMBIENTAL',    'HID',    2
+  'ELE15935',    'CIRCUITOS LÓGICOS',    'ELE',    3
+  'MAT15936',    'CÁLCULO III',    'MAT',    4
+  'MAT15937',    'CÁLCULO IV',    'MAT',    4
+  'INF15974',    'ESTRUTURAS DE DADOS',    'INF',    3
+  'FIS13735',    'FÍSICA II',    'FIS',    4
+  'INF16154',    'ARQUITETURA E ORGANIZAÇÃO DE COMPUTADORES',    'INF',    3
+  'ELE15940',    'CIRCUITOS ELÉTRICOS II',    'ELE',    4
+  'STA15932',    'PROBABILIDADE E ESTATÍSTICA',    'STA',    4
+  'INF15933',    'PROGRAMAÇÃO ORIENTADA A OBJETOS',    'INF',    3
+  'FIS13737',    'FÍSICA EXPERIMENTAL I',    'FIS',    1
+  'ELE16191',    'SINAIS E SISTEMAS',    'ELE',    4
+  'ELE15944',    'ELETROMAGNETISMO II',    'ELE',    4
+  'INF15980',    'SISTEMAS OPERACIONAIS',    'INF',    3
+  'ELE15943',    'ELETRÔNICA BÁSICA I',    'ELE',    5
+  'INF15975',    'TÉCNICAS DE BUSCA E ORDENAÇÃO',    'INF',    3
+  'INF16192',    'COMPUTABILIDADE E COMPLEXIDADE',    'INF',    4
+  'ELE15951',    'ANÁLISE E MODELAGEM DE SISTEMAS DINÂMICOS',    'ELE',    4
+  'INF15978',    'ENGENHARIA DE SOFTWARE I',    'INF',    4
+  'INF16158',    'REDES DE COMPUTADORES',    'INF',    3
+  'ELE15942',    'SISTEMAS EMBARCADOS I',    'ELE',    5
+  'INF16193',    'PROJETO INTEGRADO DE COMPUTAÇÃO II - SOFTWARE',    'INF',    2
+  'ELE16194',    'PROJETO INTEGRADO DE COMPUTAÇÃO II - HARDWARE',    'ELE',    2
+  'INF16161',    'PARADIGMAS DE PROGRAMAÇÃO',    'INF',    3
+  'ELE15956',    'SISTEMAS REALIMENTADOS',    'ELE',    4
+  'INF16165',    'METODOLOGIA DE PESQUISA CIENTÍFICA',    'INF',    3
+  'EPR12990',    'ENGENHARIA ECONÔMICA',    'EPR',    4
+  'INF15979',    'BANCO DE DADOS I',    'INF',    4
+  'ELE16195',    'INSTALAÇÕES ELÉTRICAS E DE COMUNICAÇÕES',    'ELE',    4
+  'EPR15963',    'GESTÃO EMPRESARIAL',    'EPR',    4
+  'HID16196',    'HIGIENE E SEGURANÇA DO TRABALHO',    'HID',    3
+  'EPR15969',    'ASPECTOS LEGAIS E ÉTICOS DA ENGENHARIA',    'EPR',    4
+  'INF16159',    'COMPUTAÇÃO E SOCIEDADE',    'INF',    2
+  'INF16197',    'ESTÁGIO SUPERVISIONADO OBRIGATÓRIO', 'INF', 6
+  'INF16198',    'TRABALHO DE CONCLUSÃO DE CURSO I', 'INF', 4
+  'INF16199',    'TRABALHO DE CONCLUSÃO DE CURSO II', 'INF', 4
 }
 
-instructor = {    
-  ID:number, name:string, dept_name:string, salary:number
-  
+instructor = {
+  ID:string, name:string, dept_name:string, salary:number
+
   10101, Srinivasan, 'Comp. Sci.', 65000
   12121, Wu,         Finance,      90000
   15151, Mozart,     Music,        40000
@@ -312,7 +370,7 @@ instructor = {
 section = {
   course_id:string, sec_id:number, semester:string, year:number, building:string, room_number:number, time_slot_id:string
 
-  BIO-101, 1, Summer, 2009, Painter, 514,  B 
+  BIO-101, 1, Summer, 2009, Painter, 514,  B
   BIO-301, 1, Summer, 2010, Painter, 514,  A
   CS-101,  1, Fall,   2009, Packard, 101,  H
   CS-101,  1, Spring, 2010, Packard, 101,  F
@@ -330,7 +388,7 @@ section = {
 }
 
 teaches = {
-  ID:number, course_id:string, sec_id:number, semester:string, year:number
+  ID:string, course_id:string, sec_id:number, semester:string, year:number
 
   10101, CS-101,  1, Fall,   2009
   10101, CS-315,  1, Spring, 2010
@@ -350,7 +408,7 @@ teaches = {
 }
 
 student = {
-  ID:number,name:string, dept_name:string,tot_cred:number
+  ID:string,name:string, dept_name:string,tot_cred:number
 
   00128, Zhang,    'Comp. Sci.', 102
   12345, Shankar,  'Comp. Sci.', 32
@@ -368,7 +426,7 @@ student = {
 }
 
 takes = {
-  ID:number, course_id:string, sec_id:number, semester:string, year:number, grade:string
+  ID:string, course_id:string, sec_id:number, semester:string, year:number, grade:string
 
   00128, CS-101,  1, Fall,   2009,  A
   00128, CS-347,  1, Fall,   2009,  'A-'
@@ -376,7 +434,7 @@ takes = {
   12345, CS-190,  2, Spring, 2009,  A
   12345, CS-315,  1, Spring, 2010,  A
   12345, CS-347,  1, Fall,   2009,  A
-  19991, HIS-351, 1, Spring, 2010,  B   
+  19991, HIS-351, 1, Spring, 2010,  B
   23121, FIN-201, 1, Spring, 2010,  'C+'
   44553, PHY-101, 1, Fall,   2009,  'B-'
   45678, CS-101,  1, Fall,   2009,  F
@@ -395,7 +453,7 @@ takes = {
 }
 
 advisor = {
-  s_id:number, i_id:number
+  s_id:string, i_id:string
 
   00128, 45565
   12345, 10101
@@ -410,7 +468,7 @@ advisor = {
 
 time_slot = {
   time_slot_id:string, day:string, start_hr:number, start_min:number, end_hr:number, end_min:number
-  
+
   A, M, 8,  0,  8,  50
   A, W, 8,  0,  8,  50
   A, F, 8,  0,  8,  50
@@ -423,11 +481,11 @@ time_slot = {
   D, M, 13, 0,  13, 50
   D, W, 13, 0,  13, 50
   D, F, 13, 0,  13, 50
-  E, T, 10, 30, 11, 45  
+  E, T, 10, 30, 11, 45
   E, R, 10, 30, 11, 45
   F, T, 14, 30, 15, 45
   F, R, 14, 30, 15, 45
-  G, M, 16, 0,  16, 50 
+  G, M, 16, 0,  16, 50
   G, W, 16, 0,  16, 50
   G, F, 16, 0,  16, 50
   H, W, 10, 0,  12, 30
@@ -436,14 +494,62 @@ time_slot = {
 prereq = {
   course_id:string, prereq_id:string
 
-  BIO-301, BIO-101
-  BIO-399, BIO-101
-  CS-190,  CS-101
-  CS-315,  CS-101
-  CS-319,  CS-101
-  CS-347,  CS-101
-  EE-181,  PHY-101
+  'MAT15932', 'MAT15925'
+  'MAT15931', 'MAT15925'
+  'INF16153', 'INF15927'
+  'INF16190', 'INF15927'
+  'INF16190', 'ELE15924'
+  'FIS13696', 'MAT15925'
+  'ELE15935', 'INF15927'
+  'ELE15935', 'INF15973'
+  'MAT15936', 'MAT15931'
+  'ELE15934', 'ELE15924'
+  'ELE15934', 'MAT15932'
+  'MAT15937', 'MAT15931'
+  'INF15974', 'INF16153'
+  'FIS13735', 'FIS13696'
+  'ELE15941', 'ELE15934'
+  'ELE15941', 'MAT15936'
+  'INF16154', 'ELE15935'
+  'ELE15940', 'MAT15937'
+  'ELE15940', 'ELE15934'
+  'STA15932', 'MAT15925'
+  'INF15933', 'INF15974'
+  'FIS13737', 'FIS13696'
+  'ELE16191', 'ELE15940'
+  'ELE16191', 'STA15932'
+  'ELE15944', 'ELE15941'
+  'ELE15943', 'ELE15940'
+  'INF15980', 'INF16154'
+  'INF15980', 'INF15974'
+  'INF15975', 'INF15974'
+  'ELE15951', 'ELE16191'
+  'INF16192', 'INF15975'
+  'INF16192', 'INF15973'
+  'INF15978', 'INF15933'
+  'INF16158', 'INF15980'
+  'ELE15942', 'INF16154'
+  'ELE16194', 'ELE15942'
+  'ELE16194', 'INF16190'
+  'ELE16194', 'INF16193'
+  'INF16193', 'ELE16194'
+  'INF16193', 'INF16190'
+  'INF16193', 'ELE15942'
+  'INF16161', 'INF15933'
+  'ELE15956', 'ELE15951'
+  'EPR12990', 'STA15932'
+  'INF16165', 'INF15933'
+  'INF16165', 'STA15932'
+  'ELE16195', 'ELE15934'
+  'ELE16195', 'ELE15929'
+  'INF15979', 'INF15975'
+  'EPR15963', 'EPR12990'
+  'EPR15969', 'HID16196'
+  'INF16159', 'INF15933'
+  'INF16198', 'INF16165'
+  'INF16199', 'INF16198'
 }
+
 
 group: UFES - F1 database
 description: Laboratory material [Database Systems Course, UFES] (http://www.informatica.ufes.br) Courtesy: Vopani ([Kaggle](https://www.kaggle.com/rohanrao/formula-1-world-championship-1950-2020)). Credits: Rodrigo Laiola Guimaraes
@@ -1825,7 +1931,7 @@ status = {
 }
 
 gps = {
-  gpId:number, name:string  
+  gpId:number, name:string
 
   1, "Australian Grand Prix"
   2, "San Marino Grand Prix"
@@ -27890,9 +27996,9 @@ group: UFES - HackerRank database
 /*
 
 WITH "b" AS (
-    SELECT "N" || ', ' || 
-            (CASE 
-               WHEN "P" IS NULL THEN 'NULL' 
+    SELECT "N" || ', ' ||
+            (CASE
+               WHEN "P" IS NULL THEN 'NULL'
                ELSE "P"::text
            END) || ''
       AS "s"
@@ -27926,11 +28032,11 @@ BST = {
 /*
 
 WITH "r" AS (
-    SELECT "ID" || ', "' || 
-           "NAME" || '", "' || 
-           "COUNTRYCODE" || '", "' ||         
-           "DISTRICT" || '", ' || 
-           "POPULATION" 
+    SELECT "ID" || ', "' ||
+           "NAME" || '", "' ||
+           "COUNTRYCODE" || '", "' ||
+           "DISTRICT" || '", ' ||
+           "POPULATION"
       AS "s"
     FROM "CITY"
 )
@@ -28108,66 +28214,66 @@ CITY = {
 /*
 
 WITH "r" AS (
-    SELECT '"' || 
-           (CASE 
-               WHEN "CODE" IS NULL THEN 'NULL' 
-               ELSE "CODE"::text 
-           END) || '", "' || 
-           (CASE 
-               WHEN "NAME" IS NULL THEN 'NULL' 
-               ELSE "NAME"::text 
-           END) || '", "' || 
-           (CASE 
-               WHEN "CONTINENT" IS NULL THEN 'NULL' 
-               ELSE "CONTINENT"::text 
+    SELECT '"' ||
+           (CASE
+               WHEN "CODE" IS NULL THEN 'NULL'
+               ELSE "CODE"::text
+           END) || '", "' ||
+           (CASE
+               WHEN "NAME" IS NULL THEN 'NULL'
+               ELSE "NAME"::text
+           END) || '", "' ||
+           (CASE
+               WHEN "CONTINENT" IS NULL THEN 'NULL'
+               ELSE "CONTINENT"::text
            END)  || '", "' ||
-           (CASE 
-               WHEN "REGION" IS NULL THEN 'NULL' 
-               ELSE "REGION"::text 
+           (CASE
+               WHEN "REGION" IS NULL THEN 'NULL'
+               ELSE "REGION"::text
            END)  || '", ' ||
-           (CASE 
-               WHEN "SURFACEAREA" IS NULL THEN 'NULL' 
-               ELSE "SURFACEAREA"::text 
-           END) || ', ' || 
-           (CASE 
-               WHEN "INDEPYEAR" IS NULL THEN 'NULL' 
-               ELSE "INDEPYEAR"::text 
-           END) || ', ' || 
-           (CASE 
-               WHEN "POPULATION" IS NULL THEN 'NULL' 
-               ELSE "POPULATION"::text 
-           END) || ', ' || 
-           (CASE 
-               WHEN "LIFEEXPECTANCY" IS NULL THEN 'NULL' 
-               ELSE "LIFEEXPECTANCY"::text 
-           END) || ', ' || 
-           (CASE 
-               WHEN "GNP" IS NULL THEN 'NULL' 
-               ELSE "GNP"::text 
-           END) || ', ' || 
-           (CASE 
-               WHEN "GNPOLD" IS NULL THEN 'NULL' 
-               ELSE "GNPOLD"::text 
-           END) || ', "' || 
-           (CASE 
-               WHEN "LOCALNAME" IS NULL THEN 'NULL' 
-               ELSE "LOCALNAME"::text 
-           END) || '", "' || 
-           (CASE 
-               WHEN "GOVERNMENTFORM" IS NULL THEN 'NULL' 
-               ELSE "GOVERNMENTFORM"::text 
-           END) || '", "' || 
-           (CASE 
-               WHEN "HEADOFSTATE" IS NULL THEN 'NULL' 
-               ELSE "HEADOFSTATE"::text 
-           END) || '", ' || 
-           (CASE 
-               WHEN "CAPITAL" IS NULL THEN 'NULL' 
-               ELSE "CAPITAL"::text 
-           END) || ', "' || 
-           (CASE 
-               WHEN "CODE2" IS NULL THEN 'NULL' 
-               ELSE "CODE2"::text 
+           (CASE
+               WHEN "SURFACEAREA" IS NULL THEN 'NULL'
+               ELSE "SURFACEAREA"::text
+           END) || ', ' ||
+           (CASE
+               WHEN "INDEPYEAR" IS NULL THEN 'NULL'
+               ELSE "INDEPYEAR"::text
+           END) || ', ' ||
+           (CASE
+               WHEN "POPULATION" IS NULL THEN 'NULL'
+               ELSE "POPULATION"::text
+           END) || ', ' ||
+           (CASE
+               WHEN "LIFEEXPECTANCY" IS NULL THEN 'NULL'
+               ELSE "LIFEEXPECTANCY"::text
+           END) || ', ' ||
+           (CASE
+               WHEN "GNP" IS NULL THEN 'NULL'
+               ELSE "GNP"::text
+           END) || ', ' ||
+           (CASE
+               WHEN "GNPOLD" IS NULL THEN 'NULL'
+               ELSE "GNPOLD"::text
+           END) || ', "' ||
+           (CASE
+               WHEN "LOCALNAME" IS NULL THEN 'NULL'
+               ELSE "LOCALNAME"::text
+           END) || '", "' ||
+           (CASE
+               WHEN "GOVERNMENTFORM" IS NULL THEN 'NULL'
+               ELSE "GOVERNMENTFORM"::text
+           END) || '", "' ||
+           (CASE
+               WHEN "HEADOFSTATE" IS NULL THEN 'NULL'
+               ELSE "HEADOFSTATE"::text
+           END) || '", ' ||
+           (CASE
+               WHEN "CAPITAL" IS NULL THEN 'NULL'
+               ELSE "CAPITAL"::text
+           END) || ', "' ||
+           (CASE
+               WHEN "CODE2" IS NULL THEN 'NULL'
+               ELSE "CODE2"::text
            END) || '"'
       AS "s"
     FROM "COUNTRY"
@@ -28344,17 +28450,17 @@ COUNTRY = {
 /*
 
 WITH "r" AS (
-    SELECT '' || 
-           (CASE 
-               WHEN "challenge_id" IS NULL THEN 'NULL' 
-               ELSE "challenge_id"::text 
-           END) || ', ' || 
-           (CASE 
-               WHEN "hacker_id" IS NULL THEN 'NULL' 
+    SELECT '' ||
+           (CASE
+               WHEN "challenge_id" IS NULL THEN 'NULL'
+               ELSE "challenge_id"::text
+           END) || ', ' ||
+           (CASE
+               WHEN "hacker_id" IS NULL THEN 'NULL'
                ELSE "hacker_id"::text
            END) || ', ' ||
-					 (CASE 
-               WHEN "difficulty_level" IS NULL THEN 'NULL' 
+					 (CASE
+               WHEN "difficulty_level" IS NULL THEN 'NULL'
                ELSE "difficulty_level"::text
            END) || ''
       AS "s"
@@ -28393,13 +28499,13 @@ Challenges = {
 /*
 
 WITH "r" AS (
-    SELECT '' || 
-           (CASE 
-               WHEN "difficulty_level" IS NULL THEN 'NULL' 
-               ELSE "difficulty_level"::text 
-           END) || ', ' || 
-           (CASE 
-               WHEN "score" IS NULL THEN 'NULL' 
+    SELECT '' ||
+           (CASE
+               WHEN "difficulty_level" IS NULL THEN 'NULL'
+               ELSE "difficulty_level"::text
+           END) || ', ' ||
+           (CASE
+               WHEN "score" IS NULL THEN 'NULL'
                ELSE "score"::text
            END) || ''
       AS "s"
@@ -28419,28 +28525,28 @@ Difficulty = {
   4, 60
   5, 80
   6, 100
-  7, 120	
+  7, 120
 }
 
 /*
 
 WITH "r" AS (
-    SELECT '' || 
-           (CASE 
-               WHEN "employee_id" IS NULL THEN 'NULL' 
-               ELSE "employee_id"::text 
-           END) || ', "' || 
-           (CASE 
-               WHEN "name" IS NULL THEN 'NULL' 
-               ELSE "name"::text 
-           END) || '", ' || 
-           (CASE 
-               WHEN "months" IS NULL THEN 'NULL' 
-               ELSE "months"::text 
+    SELECT '' ||
+           (CASE
+               WHEN "employee_id" IS NULL THEN 'NULL'
+               ELSE "employee_id"::text
+           END) || ', "' ||
+           (CASE
+               WHEN "name" IS NULL THEN 'NULL'
+               ELSE "name"::text
+           END) || '", ' ||
+           (CASE
+               WHEN "months" IS NULL THEN 'NULL'
+               ELSE "months"::text
            END)  || ', ' ||
-           (CASE 
-               WHEN "salary" IS NULL THEN 'NULL' 
-               ELSE "salary"::text 
+           (CASE
+               WHEN "salary" IS NULL THEN 'NULL'
+               ELSE "salary"::text
            END) || ''
       AS "s"
     FROM "Employee"
@@ -28559,14 +28665,14 @@ Employee = {
 /*
 
 WITH "r" AS (
-    SELECT '' || 
-           (CASE 
-               WHEN "X" IS NULL THEN 'NULL' 
-               ELSE "X"::text 
-           END) || ', ' || 
-           (CASE 
-               WHEN "Y" IS NULL THEN 'NULL' 
-               ELSE "Y"::text 
+    SELECT '' ||
+           (CASE
+               WHEN "X" IS NULL THEN 'NULL'
+               ELSE "X"::text
+           END) || ', ' ||
+           (CASE
+               WHEN "Y" IS NULL THEN 'NULL'
+               ELSE "Y"::text
            END) || ''
       AS "s"
     FROM "Functions"
@@ -28701,18 +28807,18 @@ Functions = {
 /*
 
 WITH "r" AS (
-    SELECT '' || 
-           (CASE 
-               WHEN "Grade" IS NULL THEN 'NULL' 
-               ELSE "Grade"::text 
-           END) || ', ' || 
-           (CASE 
-               WHEN "Min_Mark" IS NULL THEN 'NULL' 
-               ELSE "Min_Mark"::text 
+    SELECT '' ||
+           (CASE
+               WHEN "Grade" IS NULL THEN 'NULL'
+               ELSE "Grade"::text
            END) || ', ' ||
-           (CASE 
-               WHEN "Max_Mark" IS NULL THEN 'NULL' 
-               ELSE "Max_Mark"::text 
+           (CASE
+               WHEN "Min_Mark" IS NULL THEN 'NULL'
+               ELSE "Min_Mark"::text
+           END) || ', ' ||
+           (CASE
+               WHEN "Max_Mark" IS NULL THEN 'NULL'
+               ELSE "Max_Mark"::text
            END) || ''
       AS "s"
     FROM "GRADES"
@@ -28740,14 +28846,14 @@ GRADES = {
 /*
 
 WITH "r" AS (
-    SELECT '' || 
-           (CASE 
-               WHEN "hacker_id" IS NULL THEN 'NULL' 
-               ELSE "hacker_id"::text 
-           END) || ', ' || 
-           (CASE 
-               WHEN "name" IS NULL THEN 'NULL' 
-               ELSE "name"::text 
+    SELECT '' ||
+           (CASE
+               WHEN "hacker_id" IS NULL THEN 'NULL'
+               ELSE "hacker_id"::text
+           END) || ', ' ||
+           (CASE
+               WHEN "name" IS NULL THEN 'NULL'
+               ELSE "name"::text
            END) || ''
       AS "s"
     FROM "Hackers"
@@ -28985,14 +29091,14 @@ Hackers = {
 /*
 
 WITH "r" AS (
-    SELECT '"' || 
-           (CASE 
-               WHEN "Name" IS NULL THEN 'NULL' 
-               ELSE "Name"::text 
-           END) || '", "' || 
-           (CASE 
-               WHEN "Occupation" IS NULL THEN 'NULL' 
-               ELSE "Occupation"::text 
+    SELECT '"' ||
+           (CASE
+               WHEN "Name" IS NULL THEN 'NULL'
+               ELSE "Name"::text
+           END) || '", "' ||
+           (CASE
+               WHEN "Occupation" IS NULL THEN 'NULL'
+               ELSE "Occupation"::text
            END) || '"'
       AS "s"
     FROM "OCCUPATIONS"
@@ -29028,26 +29134,26 @@ OCCUPATIONS = {
 /*
 
 WITH "r" AS (
-    SELECT '' || 
-           (CASE 
-               WHEN "ID" IS NULL THEN 'NULL' 
-               ELSE "ID"::text 
-           END) || ', "' || 
-           (CASE 
-               WHEN "CITY" IS NULL THEN 'NULL' 
-               ELSE "CITY"::text 
-           END) || '", "' || 
-           (CASE 
-               WHEN "STATE" IS NULL THEN 'NULL' 
-               ELSE "STATE"::text 
-           END) || '", ' || 
-           (CASE 
-               WHEN "LAT_N" IS NULL THEN 'NULL' 
-               ELSE "LAT_N"::text 
-           END) || ', ' || 
-           (CASE 
-               WHEN "LONG_W" IS NULL THEN 'NULL' 
-               ELSE "LONG_W"::text 
+    SELECT '' ||
+           (CASE
+               WHEN "ID" IS NULL THEN 'NULL'
+               ELSE "ID"::text
+           END) || ', "' ||
+           (CASE
+               WHEN "CITY" IS NULL THEN 'NULL'
+               ELSE "CITY"::text
+           END) || '", "' ||
+           (CASE
+               WHEN "STATE" IS NULL THEN 'NULL'
+               ELSE "STATE"::text
+           END) || '", ' ||
+           (CASE
+               WHEN "LAT_N" IS NULL THEN 'NULL'
+               ELSE "LAT_N"::text
+           END) || ', ' ||
+           (CASE
+               WHEN "LONG_W" IS NULL THEN 'NULL'
+               ELSE "LONG_W"::text
            END) || ''
       AS "s"
     FROM "STATION"
@@ -29565,18 +29671,18 @@ STATION = {
 /*
 
 WITH "r" AS (
-    SELECT '' || 
-           (CASE 
-               WHEN "ID" IS NULL THEN 'NULL' 
-               ELSE "ID"::text 
-           END) || ', ' || 
-           (CASE 
-               WHEN "Name" IS NULL THEN 'NULL' 
-               ELSE "Name"::text 
-           END) || ', ' || 
-           (CASE 
-               WHEN "Marks" IS NULL THEN 'NULL' 
-               ELSE "Marks"::text 
+    SELECT '' ||
+           (CASE
+               WHEN "ID" IS NULL THEN 'NULL'
+               ELSE "ID"::text
+           END) || ', ' ||
+           (CASE
+               WHEN "Name" IS NULL THEN 'NULL'
+               ELSE "Name"::text
+           END) || ', ' ||
+           (CASE
+               WHEN "Marks" IS NULL THEN 'NULL'
+               ELSE "Marks"::text
            END) || ''
       AS "s"
     FROM "STUDENTS"
@@ -29618,22 +29724,22 @@ STUDENTS = {
 /*
 
 WITH "r" AS (
-    SELECT '' || 
-           (CASE 
-               WHEN "submission_id" IS NULL THEN 'NULL' 
-               ELSE "submission_id"::text 
-           END) || ', ' || 
-           (CASE 
-               WHEN "hacker_id" IS NULL THEN 'NULL' 
-               ELSE "hacker_id"::text 
-           END) || ', ' || 
-           (CASE 
-               WHEN "challenge_id" IS NULL THEN 'NULL' 
-               ELSE "challenge_id"::text 
-           END) || ', ' || 
-           (CASE 
-               WHEN "score" IS NULL THEN 'NULL' 
-               ELSE "score"::text 
+    SELECT '' ||
+           (CASE
+               WHEN "submission_id" IS NULL THEN 'NULL'
+               ELSE "submission_id"::text
+           END) || ', ' ||
+           (CASE
+               WHEN "hacker_id" IS NULL THEN 'NULL'
+               ELSE "hacker_id"::text
+           END) || ', ' ||
+           (CASE
+               WHEN "challenge_id" IS NULL THEN 'NULL'
+               ELSE "challenge_id"::text
+           END) || ', ' ||
+           (CASE
+               WHEN "score" IS NULL THEN 'NULL'
+               ELSE "score"::text
            END) || ''
       AS "s"
     FROM "Submissions"
@@ -31891,18 +31997,18 @@ Submissions = {
 /*
 
 WITH "r" AS (
-    SELECT '' || 
-           (CASE 
-               WHEN "A" IS NULL THEN 'NULL' 
-               ELSE "A"::text 
-           END) || ', ' || 
-           (CASE 
-               WHEN "B" IS NULL THEN 'NULL' 
-               ELSE "B"::text 
-           END) || ', ' || 
-           (CASE 
-               WHEN "C" IS NULL THEN 'NULL' 
-               ELSE "C"::text 
+    SELECT '' ||
+           (CASE
+               WHEN "A" IS NULL THEN 'NULL'
+               ELSE "A"::text
+           END) || ', ' ||
+           (CASE
+               WHEN "B" IS NULL THEN 'NULL'
+               ELSE "B"::text
+           END) || ', ' ||
+           (CASE
+               WHEN "C" IS NULL THEN 'NULL'
+               ELSE "C"::text
            END) || ''
       AS "s"
     FROM "TRIANGLES"

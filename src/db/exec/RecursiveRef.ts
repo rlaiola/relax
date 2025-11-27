@@ -21,16 +21,15 @@ export class RecursiveRef extends RANode {
     }
 
     check(): void {
-        // Nada: validação feita no nó pai
     }
 
     getResult(_dedup: boolean = true, session?: Session): Table {
         session = this._returnOrCreateSession(session);
         const t = session._recursiveVars?.[this._name];
+
         if (!t) {
             throw new Error(`Referência recursiva '${this._name}' usada antes de inicialização.`);
         }
-        // atualizar num linhas
         this.setResultNumRows(t.getNumRows());
         return t;
     }

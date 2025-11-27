@@ -1,16 +1,19 @@
-import { RANode, Session } from './RANode';
+import { RANode, RANodeBinary, Session } from './RANode';
 import { Table } from './Table';
 import { RecursiveRef } from './RecursiveRef';
 import { Schema } from './Schema';
+import { RecursiveExecutionNode } from './RecursiveExecutionNode';
 
-export class RecursiveAssignment extends RANode {
+export class RecursiveAssignment extends RANodeBinary {
     private _name: string;
     private _initial: RANode;
     private _recursive: RANode;
+    private _lastRecursiveStep: RANode;
     private _cachedSchema: any;
+    private _iterations: Table[] = [];
 
     constructor(name: string, initial: RANode, recursive: RANode) {
-        super('recursive');
+        super('recursive', initial, recursive);
         this._name = name;
         this._initial = initial;
         this._recursive = recursive;
@@ -52,9 +55,6 @@ export class RecursiveAssignment extends RANode {
             const anyN: any = n as any;
             if (anyN._child) visit(anyN._child);
             if (anyN._child2) visit(anyN._child2);
-            if (Array.isArray(anyN._children)) {
-            for (const c of anyN._children) visit(c);
-            }
         };
         visit(this._recursive);
     }
@@ -100,7 +100,12 @@ export class RecursiveAssignment extends RANode {
     getResult(doEliminateDuplicateRows: boolean = true, session?: Session): Table {
         session = this._returnOrCreateSession(session);
 
+        this._iterations = [];
+
         let acc = this._initial.getResult(doEliminateDuplicateRows, session);
+        this._iterations.push(acc);
+
+        let accNode = this._initial;
 
         if (!session._recursiveVars) session._recursiveVars = {};
         session._recursiveVars[this._name] = acc;
@@ -108,10 +113,10 @@ export class RecursiveAssignment extends RANode {
         for (let i = 0; i < 1024; i++) {
             const step = this._recursive.getResult(doEliminateDuplicateRows, session);
 
-            // Guarda de segurança
+            // Safety Guard
             const compat = this._schemasUnionCompatible(acc.getSchema(), step.getSchema());
             if (!compat.ok) {
-            this.throwExecutionError(`recursive ${this._name}: union incompatível em execução: ${compat.reason}`);
+                this.throwExecutionError(`recursive ${this._name}: union incompatível em execução: ${compat.reason}`);
             }
 
             const next = this.unionTables(acc, step, doEliminateDuplicateRows);
@@ -119,21 +124,60 @@ export class RecursiveAssignment extends RANode {
                 acc = next;
                 break;
             }
+
+            const stepRel = step.createRelation(`${this._name}_step_${i}`);
+
+            stepRel.setNumRows(step.getNumRows());
+
+            const execNode = new RecursiveExecutionNode(
+                `${this._name}_iter_${i}`,
+                accNode,
+                stepRel,
+                next,
+                step
+            );
+
+            this._lastRecursiveStep = execNode;
+            accNode = execNode;
             acc = next;
-            session._recursiveVars[this._name] = acc;
+            this._iterations.push(next);
+
+            session._recursiveVars[this._name] = next;
         }
 
         this.setResultNumRows(acc.getNumRows());
-        console.log(acc)
         return acc;
-
     }
 
-    getArgumentHtml() { return this._name; }
+    public getInitial(): RANode {
+        return this._initial;
+    }
 
-    getWarnings(): any[] { return []; }
+    public getRecursive(): RANode {
+        return this._recursive;
+    }
 
-    getFormulaHtml(): string {
-        return `<span class="math">recursive ${this._name}</span>`;
+    public getRecursiveSteps(): RANode {
+        return this._lastRecursiveStep;
+    }
+
+    public getIterationTable(index: number): Table {
+        return this._iterations[index];
+    }
+
+    getArgumentHtml(): string {
+        const steps = this._iterations.length;
+        return steps > 0
+            ? `${this._name} (${steps} steps)`
+            : this._name;
+    }
+
+    getWarnings(recursive: boolean): any[] {
+        if (!recursive) return this._warnings;
+        return [
+            ...this._warnings,
+            ...this._child.getWarnings(true),
+            ...this._child2.getWarnings(true)
+        ];
     }
 }
