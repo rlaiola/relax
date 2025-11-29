@@ -120,6 +120,8 @@ export class RecursiveAssignment extends RANodeBinary {
             }
 
             const next = this.unionTables(acc, step, doEliminateDuplicateRows);
+
+
             if (next.equals(acc)) {
                 acc = next;
                 break;
@@ -143,6 +145,11 @@ export class RecursiveAssignment extends RANodeBinary {
             this._iterations.push(next);
 
             session._recursiveVars[this._name] = next;
+        }
+
+        const finalSchema = acc.getSchema();
+        for (let ci = 0; ci < finalSchema.getSize(); ci++) {
+           finalSchema.setRelAlias(this._name, ci);
         }
 
         this.setResultNumRows(acc.getNumRows());

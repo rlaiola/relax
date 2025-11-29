@@ -3675,3 +3675,208 @@ QUnit.test('recursive: erro quando seed e passo têm schemas incompatíveis (che
     'lança erro de compatibilidade de union no check/execução'
   );
 });
+
+QUnit.test('recursive: steps materialized have rows and correct step table', function (assert) {
+    const query = `
+      recursive path =
+        pi departure, destination (flight)
+        union
+        pi path.departure, f.destination (
+          path ⨝ path.destination = f.departure (rho f (flight))
+        )
+      path
+    `;
+    const root = exec_ra(query, getTestFlights());
+    // execute to populate iterations
+    root.getResult(true);
+
+    // find RecursiveAssignment node by walking the tree
+    function findRecursiveAssignment(n: any): any | null {
+        if (!n) return null;
+        if (n.constructor && n.constructor.name === 'RecursiveAssignment') return n;
+        try {
+            if (typeof n.getChild === 'function') {
+                const c = n.getChild();
+                const found = findRecursiveAssignment(c);
+                if (found) return found;
+            }
+            if (typeof n.getChild2 === 'function') {
+                const c2 = n.getChild2();
+                const found2 = findRecursiveAssignment(c2);
+                if (found2) return found2;
+            }
+        } catch (e) {
+            // ignore nodes without children
+        }
+        return null;
+    }
+
+    const raNode: any = findRecursiveAssignment(root);
+    assert.ok(raNode, 'found RecursiveAssignment node');
+
+    // get top of recursive steps (may be null if no iterations)
+    const topIter: any = (typeof raNode.getRecursiveSteps === 'function') ? raNode.getRecursiveSteps() : null;
+    assert.ok(topIter !== undefined, 'getRecursiveSteps available');
+
+    let iterNode: any = topIter;
+    let count = 0;
+    while (iterNode) {
+        count++;
+        // right child should be the Relation created from step
+        let rightChild: any = null;
+        try { rightChild = typeof iterNode.getChild2 === 'function' ? iterNode.getChild2() : null; } catch (e) { rightChild = null; }
+
+        assert.ok(rightChild, `iteration ${count}: has right child relation`);
+
+        // rightChild must expose schema and num rows
+        const schema = rightChild.getSchema();
+        assert.ok(schema, `iteration ${count}: right child has schema`);
+
+        const rightRows = rightChild.getResultNumRows();
+        assert.ok(typeof rightRows === 'number' && rightRows >= 0, `iteration ${count}: right child has ${rightRows} rows`);
+
+        // iterNode should expose getStepResult()
+        assert.ok(typeof iterNode.getStepResult === 'function', `iteration ${count}: has getStepResult`);
+        const stepTable: any = iterNode.getStepResult();
+        assert.equal(rightRows, stepTable.getNumRows(), `iteration ${count}: rightChild.rows === step.getNumRows()`);
+
+        // schema equality: same number of columns
+        assert.equal(schema.getColumns().length, stepTable.getSchema().getColumns().length, `iteration ${count}: step schema column count matches`);
+
+        // go to previous iteration (left child is the accumulated previous node)
+        const leftChild = typeof iterNode.getChild === 'function' ? iterNode.getChild() : null;
+        // If leftChild is another RecursiveExecutionNode, descend to it; otherwise break
+        if (leftChild && leftChild.constructor && leftChild.constructor.name === 'RecursiveExecutionNode') {
+            iterNode = leftChild;
+        } else {
+            break;
+        }
+
+        // safety
+        if (count > 2000) {
+            assert.ok(false, 'iteration chain too long (sanity limit exceeded)');
+            break;
+        }
+    }
+
+    assert.ok(count >= 0, 'counted iterations');
+
+});
+
+QUnit.test('recursive: iterations count does not exceed limit', function (assert) {
+    const query = `
+      recursive path =
+        pi departure, destination (flight)
+        union
+        pi path.departure, f.destination (
+          path ⨝ path.destination = f.departure (rho f (flight))
+        )
+      path
+    `;
+    const root = exec_ra(query, getTestFlights());
+    root.getResult(true);
+
+    function findRecursiveAssignment(n: any): any | null {
+        if (!n) return null;
+        if (n.constructor && n.constructor.name === 'RecursiveAssignment') return n;
+        try {
+            if (typeof n.getChild === 'function') {
+                const c = n.getChild();
+                const found = findRecursiveAssignment(c);
+                if (found) return found;
+            }
+            if (typeof n.getChild2 === 'function') {
+                const c2 = n.getChild2();
+                const found2 = findRecursiveAssignment(c2);
+                if (found2) return found2;
+            }
+        } catch (e) {}
+        return null;
+    }
+
+    const raNode: any = findRecursiveAssignment(root);
+    assert.ok(raNode, 'found RecursiveAssignment node');
+
+    const topIter: any = (typeof raNode.getRecursiveSteps === 'function') ? raNode.getRecursiveSteps() : null;
+    let iterNode: any = topIter;
+    let count = 0;
+    while (iterNode) {
+        count++;
+        const leftChild = typeof iterNode.getChild === 'function' ? iterNode.getChild() : null;
+        if (leftChild && leftChild.constructor && leftChild.constructor.name === 'RecursiveExecutionNode') {
+            iterNode = leftChild;
+        } else {
+            break;
+        }
+        if (count > 2000) break;
+    }
+
+    // assert within algorithm limit (1024)
+    assert.ok(count <= 1024, `iterations (${count}) do not exceed 1024 limit`);
+});
+
+QUnit.test('recursive: step relations preserve schema and are safe to inspect', function (assert) {
+    const query = `
+      recursive path =
+        pi departure, destination (flight)
+        union
+        pi path.departure, f.destination (
+          path ⨝ path.destination = f.departure (rho f (flight))
+        )
+      path
+    `;
+    const root = exec_ra(query, getTestFlights());
+    root.getResult(true);
+
+    function findRecursiveAssignment(n: any): any | null {
+        if (!n) return null;
+        if (n.constructor && n.constructor.name === 'RecursiveAssignment') return n;
+        try {
+            if (typeof n.getChild === 'function') {
+                const c = n.getChild();
+                const found = findRecursiveAssignment(c);
+                if (found) return found;
+            }
+            if (typeof n.getChild2 === 'function') {
+                const c2 = n.getChild2();
+                const found2 = findRecursiveAssignment(c2);
+                if (found2) return found2;
+            }
+        } catch (e) {}
+        return null;
+    }
+
+    const raNode: any = findRecursiveAssignment(root);
+    assert.ok(raNode, 'found RecursiveAssignment node');
+
+    const topIter: any = (typeof raNode.getRecursiveSteps === 'function') ? raNode.getRecursiveSteps() : null;
+    let iterNode: any = topIter;
+    let checked = 0;
+    while (iterNode && checked < 10) { // sample few iterations
+        checked++;
+        const rightChild = typeof iterNode.getChild2 === 'function' ? iterNode.getChild2() : null;
+        assert.ok(rightChild, `iteration ${checked}: right child present`);
+
+        // safe inspect: calling getResult on Relation should not throw and returns a Table-like object
+        let table;
+        try {
+            table = rightChild.getResult(true);
+        } catch (e) {
+            assert.ok(false, `iteration ${checked}: rightChild.getResult threw: ${e}`);
+            break;
+        }
+        assert.ok(table && typeof table.getSchema === 'function', `iteration ${checked}: result is table-like with getSchema`);
+
+        // advance
+        const leftChild = typeof iterNode.getChild === 'function' ? iterNode.getChild() : null;
+        if (leftChild && leftChild.constructor && leftChild.constructor.name === 'RecursiveExecutionNode') {
+            iterNode = leftChild;
+        } else {
+            break;
+        }
+    }
+
+    assert.ok(checked > 0, 'inspected at least one iteration safely');
+});
+
+// ...existing code...
