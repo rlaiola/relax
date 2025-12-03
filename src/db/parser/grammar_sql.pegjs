@@ -166,7 +166,7 @@ unqualifiedColumnName
 			error(t('db.messages.parser.error-sql-invalid-column-name', {str: a}));
 		return a;
 	}
-	
+
 relation
 = a:relationName
 	{
@@ -394,6 +394,29 @@ withClauseArgument
 	}
 
 
+recursiveColumnList
+  = first:columnName rest:(_ "," _ columnName)* {
+      var cols = [first];
+      for (var i = 0; i < rest.length; i++) {
+        cols.push(rest[i][3]);
+      }
+      return cols;
+    }
+
+recursiveWithClauseArgument
+  = 'recursive'i __ name:relationName _ "(" _ cols:recursiveColumnList _ ")" __ 'as'i _ "(" _
+    stmt:statement
+  _ ")"
+{
+  return {
+    type: "recursiveAssignment",
+    name: name,
+    columns: cols,
+    statement: stmt,
+    codeInfo: getCodeInfo()
+  };
+}
+
 // nodes:
 
 
@@ -416,7 +439,7 @@ root
 	}
 
 withClause
-= 'with'i __ first:withClauseArgument rest:(_ ',' _ withClauseArgument)*
+= 'with'i __ first:(recursiveWithClauseArgument / withClauseArgument) rest:(_ ',' _ (recursiveWithClauseArgument / withClauseArgument))*
 	{
 		var assignments = [first];
 		for(var i = 0; i < rest.length; i++){
@@ -1011,14 +1034,14 @@ dbDumpRoot
 		return root;
 
 	}
-	
+
 useDbStatement
 = 'use'i __ name:$([a-zA-Z_0-9-]+) _ ';'
-	{ 
+	{
 		return {
-			type: 'groupName', 
+			type: 'groupName',
 			name: name
-		}; 
+		};
 	}
 
 createTableStmt_columnType

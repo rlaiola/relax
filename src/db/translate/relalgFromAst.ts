@@ -511,9 +511,60 @@ export function relalgFromSQLAstRoot(astRoot: sqlAst.rootSql | any, relations: {
 		raNode.setCodeInfoObject(astNode.codeInfo);
 	}
 
+	function findFirstUnionSql(node: any): any | null {
+		if (!node || typeof node !== 'object') return null;
+		if (node.type === 'union') return node;
+
+		for (const key of Object.keys(node)) {
+			const v = (node as any)[key];
+			if (!v || typeof v !== 'object') continue;
+			if (Array.isArray(v)) {
+				for (const el of v) {
+					const found = findFirstUnionSql(el);
+					if (found) return found;
+				}
+			} else {
+				const found = findFirstUnionSql(v);
+				if (found) return found;
+			}
+		}
+		return null;
+	}
+
 	function rec(nRaw: sqlAst.astNode | any): RANode {
 		let node: RANode | null = null;
 		switch (nRaw.type) {
+			case 'recursiveAssignment': {
+                const start = Date.now();
+                const n = nRaw as sqlAst.recursiveAssignment;
+
+                if (!n.statement) {
+                    throw new Error('recursiveAssignment sem statement');
+                }
+
+                const stmt = n.statement as any;
+
+                const unionNode = findFirstUnionSql(stmt);
+                if (!unionNode) {
+                    throw new Error(`CTE recursivo "${n.name}": não encontrei nó UNION no statement`);
+                }
+
+                if (!unionNode.child || !unionNode.child2) {
+                    throw new Error(`CTE recursivo "${n.name}": nó UNION inválido (sem child/child2)`);
+                }
+
+                const initialNode = rec(unionNode.child);
+                const recursiveNode = rec(unionNode.child2);
+
+                const raNode = new RecursiveAssignment(n.name, initialNode, recursiveNode);
+
+                setAdditionalData(n as any, raNode);
+                raNode.setCodeInfoObject(n.codeInfo);
+                raNode._execTime = Date.now() - start;
+
+                (relations as any)[n.name] = raNode;
+                return raNode;
+            }
 			case 'relation':
 				{
 					const n: any = nRaw;
@@ -829,6 +880,19 @@ export function relalgFromSQLAstRoot(astRoot: sqlAst.rootSql | any, relations: {
 		return root;
 	}
 
+	if (astRoot.assignments && Array.isArray(astRoot.assignments)) {
+        for (const a of astRoot.assignments) {
+            if (a.type === 'assignment') {
+                const built = rec(a.child);
+                (relations as any)[a.name] = built;
+            } else if ((a as any).type === 'recursiveAssignment') {
+                const built = rec(a as any);
+                (relations as any)[(a as any).name] = built;
+            }
+        }
+    }
+
+
 	return rec(astRoot.child);
 }
 
@@ -960,7 +1024,7 @@ export function relalgFromRelalgAstNode(astNode: relalgAst.relalgOperation, rela
 
 					let node: RANode;
                     if (entry instanceof RecursiveAssignment) {
-                        node = new RenameRelation(entry, n.name);
+                        node = entry;
                     }
                     else if (typeof (entry as any).copy === 'function') {
                         node = (entry as any).copy();
