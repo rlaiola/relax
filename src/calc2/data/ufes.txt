@@ -370,7 +370,7 @@ instructor = {
 section = {
   course_id:string, sec_id:number, semester:string, year:number, building:string, room_number:number, time_slot_id:string
 
-  BIO-101, 1, Summer, 2009, Painter, 514,  B
+  BIO-101, 1, Summer, 2009, Painter, 514,  B 
   BIO-301, 1, Summer, 2010, Painter, 514,  A
   CS-101,  1, Fall,   2009, Packard, 101,  H
   CS-101,  1, Spring, 2010, Packard, 101,  F
@@ -434,7 +434,7 @@ takes = {
   12345, CS-190,  2, Spring, 2009,  A
   12345, CS-315,  1, Spring, 2010,  A
   12345, CS-347,  1, Fall,   2009,  A
-  19991, HIS-351, 1, Spring, 2010,  B
+  19991, HIS-351, 1, Spring, 2010,  B   
   23121, FIN-201, 1, Spring, 2010,  'C+'
   44553, PHY-101, 1, Fall,   2009,  'B-'
   45678, CS-101,  1, Fall,   2009,  F
@@ -481,11 +481,11 @@ time_slot = {
   D, M, 13, 0,  13, 50
   D, W, 13, 0,  13, 50
   D, F, 13, 0,  13, 50
-  E, T, 10, 30, 11, 45
+  E, T, 10, 30, 11, 45  
   E, R, 10, 30, 11, 45
   F, T, 14, 30, 15, 45
   F, R, 14, 30, 15, 45
-  G, M, 16, 0,  16, 50
+  G, M, 16, 0,  16, 50 
   G, W, 16, 0,  16, 50
   G, F, 16, 0,  16, 50
   H, W, 10, 0,  12, 30
@@ -1930,7 +1930,7 @@ status = {
 }
 
 gps = {
-  gpId:number, name:string
+  gpId:number, name:string  
 
   1, "Australian Grand Prix"
   2, "San Marino Grand Prix"
@@ -27995,9 +27995,9 @@ group: UFES - HackerRank database
 /*
 
 WITH "b" AS (
-    SELECT "N" || ', ' ||
-            (CASE
-               WHEN "P" IS NULL THEN 'NULL'
+    SELECT "N" || ', ' || 
+            (CASE 
+               WHEN "P" IS NULL THEN 'NULL' 
                ELSE "P"::text
            END) || ''
       AS "s"
@@ -28031,11 +28031,11 @@ BST = {
 /*
 
 WITH "r" AS (
-    SELECT "ID" || ', "' ||
-           "NAME" || '", "' ||
-           "COUNTRYCODE" || '", "' ||
-           "DISTRICT" || '", ' ||
-           "POPULATION"
+    SELECT "ID" || ', "' || 
+           "NAME" || '", "' || 
+           "COUNTRYCODE" || '", "' ||         
+           "DISTRICT" || '", ' || 
+           "POPULATION" 
       AS "s"
     FROM "CITY"
 )
@@ -28213,66 +28213,66 @@ CITY = {
 /*
 
 WITH "r" AS (
-    SELECT '"' ||
-           (CASE
-               WHEN "CODE" IS NULL THEN 'NULL'
-               ELSE "CODE"::text
-           END) || '", "' ||
-           (CASE
-               WHEN "NAME" IS NULL THEN 'NULL'
-               ELSE "NAME"::text
-           END) || '", "' ||
-           (CASE
-               WHEN "CONTINENT" IS NULL THEN 'NULL'
-               ELSE "CONTINENT"::text
+    SELECT '"' || 
+           (CASE 
+               WHEN "CODE" IS NULL THEN 'NULL' 
+               ELSE "CODE"::text 
+           END) || '", "' || 
+           (CASE 
+               WHEN "NAME" IS NULL THEN 'NULL' 
+               ELSE "NAME"::text 
+           END) || '", "' || 
+           (CASE 
+               WHEN "CONTINENT" IS NULL THEN 'NULL' 
+               ELSE "CONTINENT"::text 
            END)  || '", "' ||
-           (CASE
-               WHEN "REGION" IS NULL THEN 'NULL'
-               ELSE "REGION"::text
+           (CASE 
+               WHEN "REGION" IS NULL THEN 'NULL' 
+               ELSE "REGION"::text 
            END)  || '", ' ||
-           (CASE
-               WHEN "SURFACEAREA" IS NULL THEN 'NULL'
-               ELSE "SURFACEAREA"::text
-           END) || ', ' ||
-           (CASE
-               WHEN "INDEPYEAR" IS NULL THEN 'NULL'
-               ELSE "INDEPYEAR"::text
-           END) || ', ' ||
-           (CASE
-               WHEN "POPULATION" IS NULL THEN 'NULL'
-               ELSE "POPULATION"::text
-           END) || ', ' ||
-           (CASE
-               WHEN "LIFEEXPECTANCY" IS NULL THEN 'NULL'
-               ELSE "LIFEEXPECTANCY"::text
-           END) || ', ' ||
-           (CASE
-               WHEN "GNP" IS NULL THEN 'NULL'
-               ELSE "GNP"::text
-           END) || ', ' ||
-           (CASE
-               WHEN "GNPOLD" IS NULL THEN 'NULL'
-               ELSE "GNPOLD"::text
-           END) || ', "' ||
-           (CASE
-               WHEN "LOCALNAME" IS NULL THEN 'NULL'
-               ELSE "LOCALNAME"::text
-           END) || '", "' ||
-           (CASE
-               WHEN "GOVERNMENTFORM" IS NULL THEN 'NULL'
-               ELSE "GOVERNMENTFORM"::text
-           END) || '", "' ||
-           (CASE
-               WHEN "HEADOFSTATE" IS NULL THEN 'NULL'
-               ELSE "HEADOFSTATE"::text
-           END) || '", ' ||
-           (CASE
-               WHEN "CAPITAL" IS NULL THEN 'NULL'
-               ELSE "CAPITAL"::text
-           END) || ', "' ||
-           (CASE
-               WHEN "CODE2" IS NULL THEN 'NULL'
-               ELSE "CODE2"::text
+           (CASE 
+               WHEN "SURFACEAREA" IS NULL THEN 'NULL' 
+               ELSE "SURFACEAREA"::text 
+           END) || ', ' || 
+           (CASE 
+               WHEN "INDEPYEAR" IS NULL THEN 'NULL' 
+               ELSE "INDEPYEAR"::text 
+           END) || ', ' || 
+           (CASE 
+               WHEN "POPULATION" IS NULL THEN 'NULL' 
+               ELSE "POPULATION"::text 
+           END) || ', ' || 
+           (CASE 
+               WHEN "LIFEEXPECTANCY" IS NULL THEN 'NULL' 
+               ELSE "LIFEEXPECTANCY"::text 
+           END) || ', ' || 
+           (CASE 
+               WHEN "GNP" IS NULL THEN 'NULL' 
+               ELSE "GNP"::text 
+           END) || ', ' || 
+           (CASE 
+               WHEN "GNPOLD" IS NULL THEN 'NULL' 
+               ELSE "GNPOLD"::text 
+           END) || ', "' || 
+           (CASE 
+               WHEN "LOCALNAME" IS NULL THEN 'NULL' 
+               ELSE "LOCALNAME"::text 
+           END) || '", "' || 
+           (CASE 
+               WHEN "GOVERNMENTFORM" IS NULL THEN 'NULL' 
+               ELSE "GOVERNMENTFORM"::text 
+           END) || '", "' || 
+           (CASE 
+               WHEN "HEADOFSTATE" IS NULL THEN 'NULL' 
+               ELSE "HEADOFSTATE"::text 
+           END) || '", ' || 
+           (CASE 
+               WHEN "CAPITAL" IS NULL THEN 'NULL' 
+               ELSE "CAPITAL"::text 
+           END) || ', "' || 
+           (CASE 
+               WHEN "CODE2" IS NULL THEN 'NULL' 
+               ELSE "CODE2"::text 
            END) || '"'
       AS "s"
     FROM "COUNTRY"
@@ -28449,17 +28449,17 @@ COUNTRY = {
 /*
 
 WITH "r" AS (
-    SELECT '' ||
-           (CASE
-               WHEN "challenge_id" IS NULL THEN 'NULL'
-               ELSE "challenge_id"::text
-           END) || ', ' ||
-           (CASE
-               WHEN "hacker_id" IS NULL THEN 'NULL'
+    SELECT '' || 
+           (CASE 
+               WHEN "challenge_id" IS NULL THEN 'NULL' 
+               ELSE "challenge_id"::text 
+           END) || ', ' || 
+           (CASE 
+               WHEN "hacker_id" IS NULL THEN 'NULL' 
                ELSE "hacker_id"::text
            END) || ', ' ||
-					 (CASE
-               WHEN "difficulty_level" IS NULL THEN 'NULL'
+					 (CASE 
+               WHEN "difficulty_level" IS NULL THEN 'NULL' 
                ELSE "difficulty_level"::text
            END) || ''
       AS "s"
@@ -28498,13 +28498,13 @@ Challenges = {
 /*
 
 WITH "r" AS (
-    SELECT '' ||
-           (CASE
-               WHEN "difficulty_level" IS NULL THEN 'NULL'
-               ELSE "difficulty_level"::text
-           END) || ', ' ||
-           (CASE
-               WHEN "score" IS NULL THEN 'NULL'
+    SELECT '' || 
+           (CASE 
+               WHEN "difficulty_level" IS NULL THEN 'NULL' 
+               ELSE "difficulty_level"::text 
+           END) || ', ' || 
+           (CASE 
+               WHEN "score" IS NULL THEN 'NULL' 
                ELSE "score"::text
            END) || ''
       AS "s"
@@ -28524,28 +28524,28 @@ Difficulty = {
   4, 60
   5, 80
   6, 100
-  7, 120
+  7, 120	
 }
 
 /*
 
 WITH "r" AS (
-    SELECT '' ||
-           (CASE
-               WHEN "employee_id" IS NULL THEN 'NULL'
-               ELSE "employee_id"::text
-           END) || ', "' ||
-           (CASE
-               WHEN "name" IS NULL THEN 'NULL'
-               ELSE "name"::text
-           END) || '", ' ||
-           (CASE
-               WHEN "months" IS NULL THEN 'NULL'
-               ELSE "months"::text
+    SELECT '' || 
+           (CASE 
+               WHEN "employee_id" IS NULL THEN 'NULL' 
+               ELSE "employee_id"::text 
+           END) || ', "' || 
+           (CASE 
+               WHEN "name" IS NULL THEN 'NULL' 
+               ELSE "name"::text 
+           END) || '", ' || 
+           (CASE 
+               WHEN "months" IS NULL THEN 'NULL' 
+               ELSE "months"::text 
            END)  || ', ' ||
-           (CASE
-               WHEN "salary" IS NULL THEN 'NULL'
-               ELSE "salary"::text
+           (CASE 
+               WHEN "salary" IS NULL THEN 'NULL' 
+               ELSE "salary"::text 
            END) || ''
       AS "s"
     FROM "Employee"
@@ -28664,14 +28664,14 @@ Employee = {
 /*
 
 WITH "r" AS (
-    SELECT '' ||
-           (CASE
-               WHEN "X" IS NULL THEN 'NULL'
-               ELSE "X"::text
-           END) || ', ' ||
-           (CASE
-               WHEN "Y" IS NULL THEN 'NULL'
-               ELSE "Y"::text
+    SELECT '' || 
+           (CASE 
+               WHEN "X" IS NULL THEN 'NULL' 
+               ELSE "X"::text 
+           END) || ', ' || 
+           (CASE 
+               WHEN "Y" IS NULL THEN 'NULL' 
+               ELSE "Y"::text 
            END) || ''
       AS "s"
     FROM "Functions"
@@ -28806,18 +28806,18 @@ Functions = {
 /*
 
 WITH "r" AS (
-    SELECT '' ||
-           (CASE
-               WHEN "Grade" IS NULL THEN 'NULL'
-               ELSE "Grade"::text
+    SELECT '' || 
+           (CASE 
+               WHEN "Grade" IS NULL THEN 'NULL' 
+               ELSE "Grade"::text 
+           END) || ', ' || 
+           (CASE 
+               WHEN "Min_Mark" IS NULL THEN 'NULL' 
+               ELSE "Min_Mark"::text 
            END) || ', ' ||
-           (CASE
-               WHEN "Min_Mark" IS NULL THEN 'NULL'
-               ELSE "Min_Mark"::text
-           END) || ', ' ||
-           (CASE
-               WHEN "Max_Mark" IS NULL THEN 'NULL'
-               ELSE "Max_Mark"::text
+           (CASE 
+               WHEN "Max_Mark" IS NULL THEN 'NULL' 
+               ELSE "Max_Mark"::text 
            END) || ''
       AS "s"
     FROM "GRADES"
@@ -28845,14 +28845,14 @@ GRADES = {
 /*
 
 WITH "r" AS (
-    SELECT '' ||
-           (CASE
-               WHEN "hacker_id" IS NULL THEN 'NULL'
-               ELSE "hacker_id"::text
-           END) || ', ' ||
-           (CASE
-               WHEN "name" IS NULL THEN 'NULL'
-               ELSE "name"::text
+    SELECT '' || 
+           (CASE 
+               WHEN "hacker_id" IS NULL THEN 'NULL' 
+               ELSE "hacker_id"::text 
+           END) || ', ' || 
+           (CASE 
+               WHEN "name" IS NULL THEN 'NULL' 
+               ELSE "name"::text 
            END) || ''
       AS "s"
     FROM "Hackers"
@@ -29090,14 +29090,14 @@ Hackers = {
 /*
 
 WITH "r" AS (
-    SELECT '"' ||
-           (CASE
-               WHEN "Name" IS NULL THEN 'NULL'
-               ELSE "Name"::text
-           END) || '", "' ||
-           (CASE
-               WHEN "Occupation" IS NULL THEN 'NULL'
-               ELSE "Occupation"::text
+    SELECT '"' || 
+           (CASE 
+               WHEN "Name" IS NULL THEN 'NULL' 
+               ELSE "Name"::text 
+           END) || '", "' || 
+           (CASE 
+               WHEN "Occupation" IS NULL THEN 'NULL' 
+               ELSE "Occupation"::text 
            END) || '"'
       AS "s"
     FROM "OCCUPATIONS"
@@ -29133,26 +29133,26 @@ OCCUPATIONS = {
 /*
 
 WITH "r" AS (
-    SELECT '' ||
-           (CASE
-               WHEN "ID" IS NULL THEN 'NULL'
-               ELSE "ID"::text
-           END) || ', "' ||
-           (CASE
-               WHEN "CITY" IS NULL THEN 'NULL'
-               ELSE "CITY"::text
-           END) || '", "' ||
-           (CASE
-               WHEN "STATE" IS NULL THEN 'NULL'
-               ELSE "STATE"::text
-           END) || '", ' ||
-           (CASE
-               WHEN "LAT_N" IS NULL THEN 'NULL'
-               ELSE "LAT_N"::text
-           END) || ', ' ||
-           (CASE
-               WHEN "LONG_W" IS NULL THEN 'NULL'
-               ELSE "LONG_W"::text
+    SELECT '' || 
+           (CASE 
+               WHEN "ID" IS NULL THEN 'NULL' 
+               ELSE "ID"::text 
+           END) || ', "' || 
+           (CASE 
+               WHEN "CITY" IS NULL THEN 'NULL' 
+               ELSE "CITY"::text 
+           END) || '", "' || 
+           (CASE 
+               WHEN "STATE" IS NULL THEN 'NULL' 
+               ELSE "STATE"::text 
+           END) || '", ' || 
+           (CASE 
+               WHEN "LAT_N" IS NULL THEN 'NULL' 
+               ELSE "LAT_N"::text 
+           END) || ', ' || 
+           (CASE 
+               WHEN "LONG_W" IS NULL THEN 'NULL' 
+               ELSE "LONG_W"::text 
            END) || ''
       AS "s"
     FROM "STATION"
@@ -29670,18 +29670,18 @@ STATION = {
 /*
 
 WITH "r" AS (
-    SELECT '' ||
-           (CASE
-               WHEN "ID" IS NULL THEN 'NULL'
-               ELSE "ID"::text
-           END) || ', ' ||
-           (CASE
-               WHEN "Name" IS NULL THEN 'NULL'
-               ELSE "Name"::text
-           END) || ', ' ||
-           (CASE
-               WHEN "Marks" IS NULL THEN 'NULL'
-               ELSE "Marks"::text
+    SELECT '' || 
+           (CASE 
+               WHEN "ID" IS NULL THEN 'NULL' 
+               ELSE "ID"::text 
+           END) || ', ' || 
+           (CASE 
+               WHEN "Name" IS NULL THEN 'NULL' 
+               ELSE "Name"::text 
+           END) || ', ' || 
+           (CASE 
+               WHEN "Marks" IS NULL THEN 'NULL' 
+               ELSE "Marks"::text 
            END) || ''
       AS "s"
     FROM "STUDENTS"
@@ -29723,22 +29723,22 @@ STUDENTS = {
 /*
 
 WITH "r" AS (
-    SELECT '' ||
-           (CASE
-               WHEN "submission_id" IS NULL THEN 'NULL'
-               ELSE "submission_id"::text
-           END) || ', ' ||
-           (CASE
-               WHEN "hacker_id" IS NULL THEN 'NULL'
-               ELSE "hacker_id"::text
-           END) || ', ' ||
-           (CASE
-               WHEN "challenge_id" IS NULL THEN 'NULL'
-               ELSE "challenge_id"::text
-           END) || ', ' ||
-           (CASE
-               WHEN "score" IS NULL THEN 'NULL'
-               ELSE "score"::text
+    SELECT '' || 
+           (CASE 
+               WHEN "submission_id" IS NULL THEN 'NULL' 
+               ELSE "submission_id"::text 
+           END) || ', ' || 
+           (CASE 
+               WHEN "hacker_id" IS NULL THEN 'NULL' 
+               ELSE "hacker_id"::text 
+           END) || ', ' || 
+           (CASE 
+               WHEN "challenge_id" IS NULL THEN 'NULL' 
+               ELSE "challenge_id"::text 
+           END) || ', ' || 
+           (CASE 
+               WHEN "score" IS NULL THEN 'NULL' 
+               ELSE "score"::text 
            END) || ''
       AS "s"
     FROM "Submissions"
@@ -31996,18 +31996,18 @@ Submissions = {
 /*
 
 WITH "r" AS (
-    SELECT '' ||
-           (CASE
-               WHEN "A" IS NULL THEN 'NULL'
-               ELSE "A"::text
-           END) || ', ' ||
-           (CASE
-               WHEN "B" IS NULL THEN 'NULL'
-               ELSE "B"::text
-           END) || ', ' ||
-           (CASE
-               WHEN "C" IS NULL THEN 'NULL'
-               ELSE "C"::text
+    SELECT '' || 
+           (CASE 
+               WHEN "A" IS NULL THEN 'NULL' 
+               ELSE "A"::text 
+           END) || ', ' || 
+           (CASE 
+               WHEN "B" IS NULL THEN 'NULL' 
+               ELSE "B"::text 
+           END) || ', ' || 
+           (CASE 
+               WHEN "C" IS NULL THEN 'NULL' 
+               ELSE "C"::text 
            END) || ''
       AS "s"
     FROM "TRIANGLES"
@@ -32036,38 +32036,6 @@ TRIANGLES = {
   50, 52, 51
   80, 80, 80
 }
-
-group: UFES - recursion database
-
-flight = {
-  departure:string, destination:string, id:number
-
-  VIE, FRA, 0
-  FRA, LHR, 1
-  VIE, BUD, 2
-  VIE, VCE, 3
-  VCE, FCO, 4
-  VIE, ZRH, 5
-  ZRH, CDG, 6
-  CDG, MAD, 7
-  MAD, LIS, 8
-}
-
-airport = {
-  location:string, country:string, iata:string, id:number
-
-  Vienna, Austria, VIE, 0
-  Frankfurt, Germany, FRA, 1
-  London, England, LHR, 2
-  Budapest, Hungary, BUD, 3
-  Venice, Italy, VCE, 4
-  Rome, Italy, FCO, 5
-  Zurich, Switzerland, ZRH, 6
-  Paris, France, CDG, 7
-  Madrid, Spain, MAD, 8
-  Lisbon, Portugal, LIS, 9
-}
-
 
 -- SET group_concat_max_len = 18446744073709551615;
 -- SELECT CONCAT
