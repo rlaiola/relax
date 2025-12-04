@@ -130,8 +130,8 @@ export class RaTree extends React.Component<Props> {
 						{
 							n._execTime ? <p>{t('calc.result.exec.time')} {n._execTime}ms</p> : <p>{t('calc.result.exec.time')} - ms</p>
 						}
-
-
+						
+						
 					</div>
 				);
 			};
@@ -280,7 +280,7 @@ export class RaTree extends React.Component<Props> {
 							(containerElement.querySelector('.react-transform-wrapper') as HTMLElement).offsetWidth /
 							(containerElement.querySelector('.ra-tree') as HTMLElement).offsetWidth;
 
-						  if (controlElement) {
+						if (controlElement) {
 							const zoomIn = controlElement.querySelector('.zoom-in');
 							if (zoomIn) {
 								if (zoom === 100) {
