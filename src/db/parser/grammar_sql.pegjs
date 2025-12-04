@@ -1037,11 +1037,11 @@ dbDumpRoot
 
 useDbStatement
 = 'use'i __ name:$([a-zA-Z_0-9-]+) _ ';'
-	{
+	{ 
 		return {
-			type: 'groupName',
+			type: 'groupName', 
 			name: name
-		};
+		}; 
 	}
 
 createTableStmt_columnType

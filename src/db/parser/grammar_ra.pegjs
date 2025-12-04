@@ -742,7 +742,7 @@ tableGroupHeaders
 		return headers;
 	}
 
-isoLanguageCode
+isoLanguageCode 
 = 'en'
 / 'de'
 / 'es'
@@ -756,7 +756,7 @@ exampleSql
  = a:('exampleSql' + ' - {') query:$[0-9 * a-z A-Z ( ) \n = . , ; - / \t]+ '}'
 {
 	return query;
-}
+}  
 
 
 exampleQueryRelAlg
@@ -776,7 +776,7 @@ tableGroupHeader
 	}
 / &([a-z@]+ '[[') name:$[a-z]+ lang:('@' isoLanguageCode)? '[[' text:$('\\]]' / (!(']]') .))* ']]'
 	{
-
+		
 
 		text = text.replace(/\\]]/g, ']]');
 		text = text.replace(/\\\\]]/g, '\\]]');
@@ -791,8 +791,8 @@ tableGroupHeader
 tableGroup
 = _ headers:tableGroupHeaders s:(__? exampleSql)* r:(__? exampleQueryRelAlg)* a:(__? assignment)+ //toDo: checken, ob whitespace zwingend nötig oder nicht
 	{
-
-
+	
+	
 		var assignments = [];
 		for(var i = 0; i < a.length; i++){
 			assignments.push(a[i][1]);
@@ -804,7 +804,7 @@ tableGroup
 			const header = headers[i];
 
 			if(
-				header.name !== 'group'
+				header.name !== 'group' 
 				&& header.name !== 'description'
 				&& header.name !== 'category'
 			){
@@ -845,7 +845,7 @@ tableGroup
     	}
     }
 		exampleRelAlg = exampleRelAlg.trim();
-
+		
 
 		return {
 			type: 'tableGroup',
