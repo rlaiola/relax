@@ -277,7 +277,8 @@ export class RaTree extends React.Component<Props> {
 						const minScale = 
 							(containerElement.querySelector('.react-transform-wrapper') as HTMLElement).offsetWidth /
 							(containerElement.querySelector('.ra-tree') as HTMLElement).offsetWidth;
-						if (controlElement) {
+
+							if (controlElement) {
 							const zoomIn = controlElement.querySelector('.zoom-in');
 							if (zoomIn) {
 								if (zoom === 100) {
@@ -285,6 +286,7 @@ export class RaTree extends React.Component<Props> {
 								}
 								else (zoomIn as HTMLButtonElement).disabled = false;
 							}
+
 							const zoomOut = controlElement.querySelector('.zoom-out');
 							if (zoomOut) {
 								if (zoom <= minScale*100) {

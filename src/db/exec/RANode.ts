@@ -52,7 +52,7 @@ export abstract class RANode {
 	_wrappedInParentheses: boolean = false;
 	_warnings: Warning[] = [];
 	_execTime: any;
-
+	
 	constructor(functionName = '') {
 		this._functionName = functionName;
 	}

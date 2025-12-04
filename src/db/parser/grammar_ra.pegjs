@@ -763,7 +763,7 @@ exampleQueryRelAlg
  = ('exampleRelAlg' + ' - {') query:$[0-9 * a-z A-Z ( ) \n = . , ; - / \t]+ '}'
 {
 	return query;
-}
+}  
 
 tableGroupHeader
 = &([a-z@]+ ':') name:$[a-z]+ lang:('@' isoLanguageCode)? ':' text:$(!(endOfLine) .)*
@@ -836,7 +836,7 @@ tableGroup
 			}
 		}
 		exampleSql = exampleSql.trim();
-
+		
 		// check for exampleRelAlg
 		let exampleRelAlg = '';
 		if(r && r.length > 0) {
@@ -845,7 +845,7 @@ tableGroup
     	}
     }
 		exampleRelAlg = exampleRelAlg.trim();
-		
+
 
 		return {
 			type: 'tableGroup',
