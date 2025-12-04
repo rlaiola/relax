@@ -3114,7 +3114,7 @@ QUnit.test('test rename implicit column of local variable', function (assert) {
 		R.aa, R.b, R.c
 		1,   a,   d
 		3,   c,   c
-		4,   d,   f
+		4,   d,   f 
 		5,   d,   b
 		6,   e,   f
 	}`, {});

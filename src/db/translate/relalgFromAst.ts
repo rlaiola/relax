@@ -1027,7 +1027,6 @@ export function relalgFromRelalgAstNode(astNode: relalgAst.relalgOperation, rela
 							n.codeInfo
 						);
 					}
-
 					const start = Date.now();
 
 					let node: RANode;
