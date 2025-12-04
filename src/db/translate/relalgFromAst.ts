@@ -1172,7 +1172,7 @@ export function relalgFromRelalgAstNode(astNode: relalgAst.relalgOperation, rela
 									}
 								}
 								else // normal columns
-									projections.push(new Column(el.name, el.relAlias));
+									projections.push(new Column(el.name, el.relAlias));  
 							}
 							// project all columns
 							else if (child.getMetaData('fromVariable') &&
@@ -1180,7 +1180,7 @@ export function relalgFromRelalgAstNode(astNode: relalgAst.relalgOperation, rela
 								projections.push(new Column(el.name, null));
 							}
 							else {
-								projections.push(new Column(el.name, el.relAlias));
+								projections.push(new Column(el.name, el.relAlias));  
 							}
 						}
 						else if (el.type === 'columnName') {
@@ -1576,12 +1576,12 @@ export function relalgFromRelalgAstNode(astNode: relalgAst.relalgOperation, rela
 					}
 					if (child2.getMetaData('fromVariable')) {
 						node.setMetaData(
-								'fromVariable',
-								(
-									node.getMetaData('fromVariable') ?
-										node.getMetaData('fromVariable') + ' ' : ''
-								) +
-								child2.getMetaData('fromVariable'));
+							'fromVariable',
+							(
+								node.getMetaData('fromVariable') ?
+									node.getMetaData('fromVariable') + ' ' : ''
+							) +
+							child2.getMetaData('fromVariable'));
 					}
 					setAdditionalData(n, node);
 					node._execTime = Date.now() - start;
