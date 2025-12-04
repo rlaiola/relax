@@ -15,7 +15,7 @@ export function mapPostOrder<T extends astNode>(
 	// let assignments: any[] | undefined = node.assignments;
 	// let from: sqlAst.statement['from'] | undefined = node['from'];
 	// let statement: sqlAst.relationFromSubstatement['statement'] | undefined = undefined;
-	//
+	// 
 	// let changed = false;
 
 	// descent
