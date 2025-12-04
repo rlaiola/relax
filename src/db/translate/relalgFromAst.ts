@@ -106,7 +106,7 @@ export function relalgFromTRCAstRoot(astRoot: trcAst.TRC_Expr | null, relations:
 					vars.push(...root.variables)
 					return rec(root.formula)
 				}
-				case 'RelationPredicate': return
+				case 'RelationPredicate': return 
 				case 'Negation': return rec(root.formula)
 				case 'QuantifiedExpression': {
 					vars.push(root.variable)
@@ -120,7 +120,7 @@ export function relalgFromTRCAstRoot(astRoot: trcAst.TRC_Expr | null, relations:
 				default: return null
 			}
 		}
-
+		
 		rec(root)
 
 		return vars
@@ -146,7 +146,7 @@ export function relalgFromTRCAstRoot(astRoot: trcAst.TRC_Expr | null, relations:
 				default: return null
 			}
 		}
-
+		
 		rec(root)
 
 		return relPreds
@@ -479,9 +479,9 @@ export function relalgFromTRCAstRoot(astRoot: trcAst.TRC_Expr | null, relations:
 				if (nRaw.formula.type === 'RelationPredicate') {
 					throw new ExecutionError(
 						i18n.t('db.messages.translate.error-trc-unsafe-formula',
-						{
+						{ 
 							relation: nRaw.formula.relation,
-							variable: nRaw.formula.variable
+							variable: nRaw.formula.variable 
 						}),
 						nRaw.codeInfo
 					);

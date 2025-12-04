@@ -23,7 +23,7 @@
 		};
 	}
 	
-	/** merges the codeInfo objects of a binary operation
+	/** merges the codeInfo objects of a binary operation 
 	 * it is assumed that the right node follows the left one
 	 */
 	function mergeCodeInfo(left, right){

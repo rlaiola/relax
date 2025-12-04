@@ -2506,7 +2506,7 @@ QUnit.test('test selection with explicit column(s) of relation', function (asser
 
 	const ref = exec_ra(`{
 		R.a, R.b, R.c
-		4,   d,   f
+		4,   d,   f 
 		5,   d,   b
 		6,   e,   f
 	}`, {});
@@ -2520,7 +2520,7 @@ QUnit.test('test selection with implicit column(s) of relation', function (asser
 
 	const ref = exec_ra(`{
 		R.a, R.b, R.c
-		4,   d,   f
+		4,   d,   f 
 		5,   d,   b
 		6,   e,   f
 	}`, {});
@@ -2535,7 +2535,7 @@ QUnit.test('test selection with implicit column(s) of relation from local variab
 
 	const ref = exec_ra(`{
 		R.a, R.b, R.c
-		4,   d,   f
+		4,   d,   f 
 		5,   d,   b
 		6,   e,   f
 	}`, {});
@@ -2549,7 +2549,7 @@ QUnit.test('test selection with explicit column(s) of relation from local variab
 
 	const ref = exec_ra(`{
 		R.a, R.b, R.c
-		4,   d,   f
+		4,   d,   f 
 		5,   d,   b
 		6,   e,   f
 	}`, {});
@@ -2563,7 +2563,7 @@ QUnit.test('test selection with explicit column(s) of local variable', function 
 
 	const ref = exec_ra(`{
 		R.a, R.b, R.c
-		4,   d,   f
+		4,   d,   f 
 		5,   d,   b
 		6,   e,   f
 	}`, {});
@@ -3130,7 +3130,7 @@ QUnit.test('test rename explicit column of relation from local variable', functi
 		R.aa, R.b, R.c
 		1,   a,   d
 		3,   c,   c
-		4,   d,   f
+		4,   d,   f 
 		5,   d,   b
 		6,   e,   f
 	}`, {});
@@ -3146,7 +3146,7 @@ QUnit.test('test rename explicit column of local variable', function (assert) {
 		R.aa, R.b, R.c
 		1,   a,   d
 		3,   c,   c
-		4,   d,   f
+		4,   d,   f 
 		5,   d,   b
 		6,   e,   f
 	}`, {});
