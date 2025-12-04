@@ -1172,15 +1172,15 @@ export function relalgFromRelalgAstNode(astNode: relalgAst.relalgOperation, rela
 									}
 								}
 								else // normal columns
-									projections.push(new Column(el.name, el.relAlias));  
+									projections.push(new Column(el.name, el.relAlias));	
 							}
 							// project all columns
 							else if (child.getMetaData('fromVariable') &&
 											 child.getMetaData('fromVariable') === el.relAlias) {
-								projections.push(new Column(el.name, null));
+								projections.push(new Column(el.name, null));	
 							}
 							else {
-								projections.push(new Column(el.name, el.relAlias));  
+								projections.push(new Column(el.name, el.relAlias));	
 							}
 						}
 						else if (el.type === 'columnName') {
