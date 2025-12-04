@@ -22,7 +22,7 @@
 			text: text()
 		};
 	}
-
+	
 	/** merges the codeInfo objects of a binary operation
 	 * it is assumed that the right node follows the left one
 	 */
@@ -34,15 +34,15 @@
 			},
 			text: left.text + right.text,
 		};
-
+		
 		// start = min of both ends
 		if(left.location.end.offset <= right.location.start.offset === false){
 			console.error("mergeCodeInfo: nodes not next to each other (+- whitespace): ", left, right);
 		}
-
+		
 		return out;
 	}
-
+	
 	function getNodeInfo(nodeName){
 		return {
 			type: 'nodeInfo',
@@ -121,7 +121,7 @@
 			const groupHeader = groups[i].headers.find(g => g.name === 'group');
 			if(!groupHeader){
 				continue;
-
+				
 			}
 			const name = groupHeader.text;
 
@@ -712,7 +712,7 @@ groupRoot
 = _nc a:(_nc tableGroup)+ _nc
 	{
 		var groups = [];
-
+		
 		for(var i = 0; i < a.length; i++){
 			groups.push(a[i][1]);
 		}
@@ -730,7 +730,7 @@ tableGroupHeaders
 = a:tableGroupHeader b:(__? tableGroupHeader)* //toDo: checken, ob whitespace zwingend nötig oder nicht
 	{
 		var headers = [];
-
+		
 		headers.push(a);
 
 		b.map(function(e){
@@ -845,7 +845,7 @@ tableGroup
     	}
     }
 		exampleRelAlg = exampleRelAlg.trim();
-
+		
 
 		return {
 			type: 'tableGroup',
