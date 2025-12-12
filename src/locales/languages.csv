@@ -263,17 +263,17 @@ calc.editors.ra.toolbar.division,division,divisão,Division (Relationen),divisi�
 calc.editors.ra.toolbar.division-content,<div><b>(</b> A <b>) ÷ (</b> B <b>)</b></div>,<div><b>(</b> A <b>) ÷ (</b> B <b>)</b></div>,<div><b>(</b> A <b>) ÷ (</b> B <b>)</b></div>,<div><b>(</b> A <b>) ÷ (</b> B <b>)</b></div>,<div><b>(</b> A <b>) ÷ (</b> B <b>)</b></div>,<div><b>(</b> A <b>) ÷ (</b> B <b>)</b></div>
 calc.editors.ra.toolbar.subtraction,subtraction,subtração,Mengendifferenz,resta,차집합,differenza
 calc.editors.ra.toolbar.subtraction-content,"<div><b>(</b> A <b>) - (</b> B <b>)</b></div>
-<div><b>(</b> A <b>)
+<div><b>(</b> A <b>) 
  (</b> B <b>)</b></div>","<div><b>(</b> A <b>) - (</b> B <b>)</b></div>
-<div><b>(</b> A <b>)
+<div><b>(</b> A <b>) 
  (</b> B <b>)</b></div>","<div><b>(</b> A <b>) - (</b> B <b>)</b></div>
-<div><b>(</b> A <b>)
+<div><b>(</b> A <b>) 
  (</b> B <b>)</b></div>","<div><b>(</b> A <b>) - (</b> B <b>)</b></div>
 <div><b>(</b> A <b>) \ (</b> B <b>)</b></div>
 ","<div><b>(</b> A <b>) - (</b> B <b>)</b></div>
 <div><b>(</b> A <b>) \ (</b> B <b>)</b></div>
 ","<div><b>(</b> A <b>) - (</b> B <b>)</b></div>
-<div><b>(</b> A <b>)
+<div><b>(</b> A <b>) 
  (</b> B <b>)</b></div>"
 calc.editors.ra.toolbar.cross-join,cross join,junção cruzada (cross join),cross join (Kreuzprodukt),cross join (cruzado),카디션 프로덕트,prodotto cartesiano
 calc.editors.ra.toolbar.cross-join-content,"<div><b>(</b> A <b>) <b class=""math"">⨯</b> (</b> B <b>)</b></div>","<div><b>(</b> A <b>) <b class=""math"">⨯</b> (</b> B <b>)</b></div>","<div><b>(</b> A <b>) <b class=""math"">⨯</b> (</b> B <b>)</b></div>","<div><b>(</b> A <b>) <b class=""math"">⨯</b> (</b> B <b>)</b></div>","<div><b>(</b> A <b>) <b class=""math"">⨯</b> (</b> B <b>)</b></div>","<div><b>(</b> A <b>) <b class=""math"">⨯</b> (</b> B <b>)</b></div>"
@@ -361,13 +361,13 @@ calc.editors.sql.toolbar.select,select clause,cláusula select,select-Klausel,se
 calc.editors.sql.toolbar.select-content,"<p>SELECT * FROM A</p><div>SELECT a, A.b, A.c FROM A</div>","<p>SELECT * FROM A</p><div>SELECT a, A.b, A.c FROM A</div>","<p>SELECT * FROM A</p><div>SELECT a, A.b, A.c FROM A</div>","<p>SELECT * FROM A</p><div>SELECT a, A.b, A.c FROM A</div>","<p>SELECT * FROM A</p><div>SELECT a, A.b, A.c FROM A</div>","<p>SELECT * FROM A</p><div>SELECT a, A.b, A.c FROM A</div>"
 calc.editors.sql.toolbar.from,from clause,cláusula from,from-Klausel,cláusula from (desde),from 문,Clausola from
 calc.editors.sql.toolbar.from-content,"<div>SELECT * <br>FROM A, B as b<br>INNER JOIN C NATURAL</div>","<div>SELECT * <br>FROM A, B as b<br>INNER JOIN C NATURAL</div>","<div>SELECT * <br>FROM A, B as b<br>INNER JOIN C NATURAL</div>","<div>SELECT * <br>FROM A, B as b<br>INNER JOIN C NATURAL</div>","<div>SELECT * <br>FROM A, B as b<br>INNER JOIN C NATURAL</div>","<div>SELECT * <br>FROM A, B as b<br>INNER JOIN C NATURAL</div>"
-calc.editors.sql.toolbar.where,where  clause,cláusula where,where-Klausel,cláusula where (donde),where 문,Clausola where
+calc.editors.sql.toolbar.where,where  clause,cláusula where,where-Klausel,cláusula where (donde),where 문,Clausola where 
 calc.editors.sql.toolbar.where-content,"SELECT * FROM A, B <br>where A.a = B.a or false","SELECT * FROM A, B <br>where A.a = B.a or false","SELECT * FROM A, B <br>where A.a = B.a or false","SELECT * FROM A, B <br>where A.a = B.a or false","SELECT * FROM A, B <br>where A.a = B.a or false","SELECT * FROM A, B <br>where A.a = B.a or false"
 calc.editors.sql.toolbar.group-by,group by clause,cláusula group by,group-b-Klausel,cláusula agrupar por,group by 문,Clausola group by
 calc.editors.sql.toolbar.group-by-content,"SELECT a, COUNT(b) as num <br>FROM A <br>GROUP BY a","SELECT a, COUNT(b) as num <br>FROM A <br>GROUP BY a","SELECT a, COUNT(b) as num <br>FROM A <br>GROUP BY a","SELECT a, COUNT(b) as num <br>FROM A <br>GROUP BY a","SELECT a, COUNT(b) as num <br>FROM A <br>GROUP BY a","SELECT a, COUNT(b) as num <br>FROM A <br>GROUP BY a"
-calc.editors.sql.toolbar.having,having  clause,cáusula having  clause,having-Klausel,teniendo cláusula,having 문,Clausola having
+calc.editors.sql.toolbar.having,having  clause,cáusula having  clause,having-Klausel,teniendo cláusula,having 문,Clausola having 
 calc.editors.sql.toolbar.having-content,"SELECT a, SUM(b) as sum <br>FROM A <br>GROUP BY a<br>having sum > 10","SELECT a, SUM(b) as sum <br>FROM A <br>GROUP BY a<br>having sum > 10","SELECT a, SUM(b) as sum <br>FROM A <br>GROUP BY a<br>having sum > 10","SELECT a, SUM(b) as sum <br>FROM A <br>GROUP BY a<br>having sum > 10","SELECT a, SUM(b) as sum <br>FROM A <br>GROUP BY a<br>having sum > 10","SELECT a, SUM(b) as sum <br>FROM A <br>GROUP BY a<br>having sum > 10"
-calc.editors.sql.toolbar.order-by,order by  clause,cláusula order by,order-by-Klausel,cláusula ordenar por,order by 문,Clausola order by
+calc.editors.sql.toolbar.order-by,order by  clause,cláusula order by,order-by-Klausel,cláusula ordenar por,order by 문,Clausola order by 
 calc.editors.sql.toolbar.order-by-content,"<p>SELECT * FROM A ORDER BY a asc, b desc</p><div>SELECT * FROM A ORDER BY 1, 2, 3</div>","<p>SELECT * FROM A ORDER BY a asc, b desc</p><div>SELECT * FROM A ORDER BY 1, 2, 3</div>","<p>SELECT * FROM A ORDER BY a asc, b desc</p><div>SELECT * FROM A ORDER BY 1, 2, 3</div>","<p>SELECT * FROM A ORDER BY a asc, b desc</p><div>SELECT * FROM A ORDER BY 1, 2, 3</div>","<p>SELECT * FROM A ORDER BY a asc, b desc</p><div>SELECT * FROM A ORDER BY 1, 2, 3</div>","<p>SELECT * FROM A ORDER BY a asc, b desc</p><div>SELECT * FROM A ORDER BY 1, 2, 3</div>"
 calc.editors.sql.toolbar.limit,limit clause,cláusula limit,limit-Klausel,cláusula límite,limit 문,Clausola limit
 calc.editors.sql.toolbar.limit-content,SELECT * FROM A <br>LIMIT 10 OFFSET 0,SELECT * FROM A <br>LIMIT 10 OFFSET 0,SELECT * FROM A <br>LIMIT 10 OFFSET 0,SELECT * FROM A <br>LIMIT 10 OFFSET 0,SELECT * FROM A <br>LIMIT 10 OFFSET 0,SELECT * FROM A <br>LIMIT 10 OFFSET 0
