@@ -422,9 +422,17 @@ fullOuterJoinOperator
 
 // arguments
 
+mu
+= _ o:('μ' { return getNodeInfo('recursive'); }) _
+	{ return o; }
+/ _ o:('mu'i { return getNodeInfo('recursive'); }) __
+	{ return o; }
+/ _ o:('recursive'i { return getNodeInfo('recursive'); }) __
+	{ return o; }
+
 // a recursive assignment: e.g. $x := expression union $x
 recursive_assignment
-= "recursive"i __ n:relationName !{ usedRelationNames.push(n); } assignmentOperator e:recursiveExpression
+= o:mu n:relationName !{ usedRelationNames.push(n); } assignmentOperator e:recursiveExpression
     {
         function containsInitialRelation(node, initialName) {
             if (!node) return false;
@@ -439,6 +447,8 @@ recursive_assignment
         if (!containsInitialRelation(e.child2, n)) {
             error('A parte recursiva deve referenciar a tabela inicial: ' + n);
         }
+
+        operatorPositions.push(o);
         return {
             type: 'recursiveAssignment',
             name: n,
@@ -2028,6 +2038,8 @@ RESERVED_KEYWORD_RELALG
 / 'natural'i
 / 'semi'i
 / 'anti'i
+/ 'mu'i
+/ 'recursive'i
 / 'desc'i
 / 'asc'i
 / 'case'i
