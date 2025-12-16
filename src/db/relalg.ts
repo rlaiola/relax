@@ -70,6 +70,7 @@ export function queryWithReplacedOperatorsFromAst(
 			'leftOuterJoinOperator': 'left outer join',
 			'rightOuterJoinOperator': 'right outer join',
 			'fullOuterJoinOperator': 'full outer join',
+			'recursive': 'recursive',
 		},
 		'plain2math': {
 			'delta': '∂',
@@ -101,6 +102,7 @@ export function queryWithReplacedOperatorsFromAst(
 			'leftOuterJoinOperator': '⟕',
 			'rightOuterJoinOperator': '⟖',
 			'fullOuterJoinOperator': '⟗',
+			'recursive': 'μ',
 		},
 	};
 

@@ -22,7 +22,7 @@ export const KEYWORDS_RELALG = [
 	'pi', 'sigma', 'rho', 'tau', '<-', 'intersect', 'union', '/', '-', '\\', 'x', 'cross join', 'join',
 	'inner join', 'natural join', 'left join', 'right join', 'left outer join',
 	'right outer join', 'full outer join', 'left semi join', 'right semi join', 'anti join',
-	'and', 'or', 'xor', '||', 'not between', 'between',
+	'and', 'or', 'xor', '||', 'not between', 'between', 'mu', 'recursive',
 ];
 
 type Props = {
@@ -347,6 +347,12 @@ export class EditorRelalg extends React.Component<Props, State> {
 								onClick: item => this.replaceText(item, '= '),
 								tooltipTitle: 'calc.editors.ra.toolbar.assignment',
 								tooltip: 'calc.editors.ra.toolbar.assignment-content',
+							},
+							{
+								label: 'μ',
+								onClick: this.replaceText,
+								tooltipTitle: 'calc.editors.ra.toolbar.recursive-assignment',
+								tooltip: 'calc.editors.ra.toolbar.recursive-assignment-content',
 							},
 							{
 								label: '--',
