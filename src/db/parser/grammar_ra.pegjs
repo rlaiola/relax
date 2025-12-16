@@ -473,8 +473,9 @@ assignment
 	}
 
 recursiveExpression
-= first:expression_precedence3 _ (u:unionOperator / 'union'i) _ second:expression_precedence3
+= first:expression_precedence3 o:unionOperator second:expression_precedence3
 	{
+		operatorPositions.push(o);
 		return {
 			type: 'recursiveExpression',
 			child: first,
