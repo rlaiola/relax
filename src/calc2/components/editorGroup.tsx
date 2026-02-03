@@ -171,6 +171,8 @@ export class EditorGroup extends React.Component<Props> {
 						],
 					},
 				]}
+				clearOnReload={false}
+				clearOnNavigation={true}
 			/>
 		);
 	}

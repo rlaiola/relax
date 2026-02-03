@@ -138,6 +138,8 @@
 	"calc.maintainer-groups.ufes": "Federal University of Esp\u00edrito Santo",
 	"calc.maintainer-groups.savben": "Istituto di Istruzione Superiore Savoia Benincasa",
 	"calc.editors.button-history": "history",
+	"calc.editors.button-clear-history": "clear",
+	"calc.editors.confirm-clear-history": "Are you sure you want to clear the history? This action cannot be undone.",
 	"calc.editors.insert-relation-title": "Insert",
 	"calc.editors.insert-relation-tooltip": "Insert relation or column names",
 	"calc.editors.group.tab-name": "Group Editor",
@@ -277,5 +279,6 @@
 	"calc.editors.ra.button-zoom-out": "Zoom out",
 	"calc.editors.ra.button-zoom-reset": "Reset zoom",
 	"calc.menu.recently-used": "Recently used gists",
-	"calc.result.exec.time": "Execution time: "
+	"calc.result.exec.time": "Execution time: ",
+	"local.change": "Reload page to change language?"
 }

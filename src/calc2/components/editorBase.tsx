@@ -516,7 +516,14 @@ type Props = {
 	
 	exampleBags?: string,
 
-	exampleRA?: string
+	exampleRA?: string,
+
+	/** Optional TTL for restoring editor content (in ms). If omitted or 0, content never expires. */
+	contentTtlMs?: number,
+	/** If true, don't restore saved content on a page reload (soft or hard). */
+	clearOnReload?: boolean,
+	/** If true, clear saved content when opening the editor via in-app navigation (i.e. not a reload). */
+	clearOnNavigation?: boolean,
 };
 
 type State = {
@@ -685,7 +692,102 @@ class Relation {
 
 const gutterClass = 'CodeMirror-table-edit-markers';
 const eventExecSuccessfulName = 'editor.execSuccessful';
+const HISTORY_STORAGE_KEY = "@editor/history";
+const EDITOR_CONTENT_STORAGE_KEY = "@editor/content";
 
+function getHistoryStorageKey(editorMode: string) {
+	return `${HISTORY_STORAGE_KEY}/${editorMode}`
+}
+
+function getEditorContentStorageKey(editorMode: string) {
+	return `${EDITOR_CONTENT_STORAGE_KEY}/${editorMode}`
+}
+
+/**
+ * Load editor content from storage.
+ * Supports legacy plain-string values and new JSON payloads { content, savedAt }.
+ * If ttlMs is provided (>0), will return empty string when content is older than ttlMs.
+ */
+function loadEditorContentFromStorage(storage: Storage, editorMode: string, ttlMs?: number): string {
+	const raw = storage.getItem(getEditorContentStorageKey(editorMode));
+	if (!raw) {
+		return '';
+	}
+	try {
+		const parsed = JSON.parse(raw);
+		if (typeof parsed === 'string') {
+			// legacy format: plain content string
+			return parsed;
+		}
+		const content = parsed?.content as string | undefined;
+		const savedAt = parsed?.savedAt as number | undefined;
+		if (!content) {
+			return '';
+		}
+		if (ttlMs && ttlMs > 0) {
+			if (!savedAt) {
+				return '';
+			}
+			if ((Date.now() - savedAt) > ttlMs) {
+				return '';
+			}
+		}
+		return content;
+	}
+	catch {
+		// not JSON, treat as legacy raw content
+		return raw;
+	}
+}
+
+/** Save content with timestamp for optional TTL support */
+function saveEditorContentToStorage(content: string, editorMode: string, storage: Storage) {
+	const payload = JSON.stringify({ content, savedAt: Date.now() });
+	storage.setItem(getEditorContentStorageKey(editorMode), payload);
+}
+
+/** Best-effort detection whether current navigation is a reload (hard or soft). */
+function isReloadNavigation(): boolean {
+	const navEntries = (performance.getEntriesByType && performance.getEntriesByType('navigation')) as PerformanceNavigationTiming[];
+	if (navEntries && navEntries.length > 0) {
+		return navEntries[0].type === 'reload';
+	}
+	// Fallback to deprecated API
+	// @ts-ignore
+	if (performance && performance.navigation) {
+		// 1 === TYPE_RELOAD
+		// @ts-ignore
+		return performance.navigation.type === 1;
+	}
+	return false;
+}
+
+function loadHistoryFromStorage(storage: Storage, editorMode: string): HistoryEntry[] {
+	const historyStr = storage.getItem(getHistoryStorageKey(editorMode))
+	if (!historyStr) {
+		return []
+	}
+	return (JSON.parse(historyStr) as (HistoryEntry & { time: string })[]).map(({ time, ...entry }) => ({ ...entry, time: new Date(time) }))
+}
+
+function appendHistoryToStorage(entry: HistoryEntry, historyMaxEntries: number, editorMode: string, storage: Storage) {
+	/**
+	 * append history to LocalStorage with max entries
+	 * preventing repeated code into it
+	 */
+	const history = loadHistoryFromStorage(storage, editorMode);
+	const historyWithoutCurrentEntry = history.filter((h) => h.code !== entry.code);
+	const updatedHistory = [
+		entry,
+		...historyWithoutCurrentEntry
+	].slice(0, historyMaxEntries);
+	storage.setItem(getHistoryStorageKey(editorMode), JSON.stringify(updatedHistory));
+	return updatedHistory;
+}
+
+function clearHistoryFromStorage(storage: Storage, editorMode: string) {
+    storage.removeItem(getHistoryStorageKey(editorMode));
+}
 
 export class EditorBase extends React.Component<Props, State> {
 	private hinterCache: {
@@ -779,7 +881,7 @@ export class EditorBase extends React.Component<Props, State> {
 		this.state = {
 			editor: null,
 			codeMirrorOptions,
-			history: [],
+			history: loadHistoryFromStorage(window.localStorage, props.tab || props.mode),
 			isSelectionSelected: false,
 			execSuccessful: false,
 			execErrors: [],
@@ -902,6 +1004,17 @@ export class EditorBase extends React.Component<Props, State> {
 	
 	// setting example queries..
 	componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>, snapshot?: any) {
+		if (prevProps.mode !== this.props.mode || prevProps.tab !== this.props.tab) {
+			this.setState({ history: loadHistoryFromStorage(window.localStorage, this.props.tab || this.props.mode) })
+			// Load saved content when mode changes (respect optional TTL)
+			const { editor } = this.state;
+			if (editor) {
+				const savedContent = loadEditorContentFromStorage(window.localStorage, this.props.mode, this.props.contentTtlMs);
+				if (savedContent) {
+					editor.setValue(savedContent);
+				}
+			}
+		}
 		if(prevState.editor) {
 			if(this.props.exampleSql && this.props.exampleSql !== '' && !this.state.addedExampleSqlQuery && this.props.tab === 'sql') {
 				this.replaceAll(this.props.exampleSql)
@@ -920,6 +1033,15 @@ export class EditorBase extends React.Component<Props, State> {
 		}
 	}
 
+	onHistoryStorageChange(event: StorageEvent) {
+		const keyId = this.props.tab || this.props.mode;
+		if (event.storageArea === window.localStorage && event.key === getHistoryStorageKey(keyId)) {
+			this.setState({
+				history: loadHistoryFromStorage(event.storageArea, keyId)
+			});
+		}
+	}
+
 
 	componentDidMount() {
 		const node = findDOMNode(this) as Element;
@@ -929,6 +1051,25 @@ export class EditorBase extends React.Component<Props, State> {
 		}
 
 		const editor = CodeMirror.fromTextArea(textarea, this.state.codeMirrorOptions);
+        
+		// Load saved content from local storage (respect optional TTL and reload/navigation preferences)
+		const reloaded = isReloadNavigation();
+		const contentKeyId = this.props.tab || this.props.mode;
+		// If clearOnReload and this is a reload -> clear and start empty
+		if (this.props.clearOnReload && reloaded) {
+			window.localStorage.removeItem(getEditorContentStorageKey(contentKeyId));
+		}
+		// If clearOnNavigation and this is NOT a reload (i.e. opened via in-app navigation) -> clear and start empty
+		else if (this.props.clearOnNavigation && !reloaded) {
+			window.localStorage.removeItem(getEditorContentStorageKey(contentKeyId));
+		}
+		else {
+			const savedContent = loadEditorContentFromStorage(window.localStorage, contentKeyId, this.props.contentTtlMs);
+			if (savedContent) {
+				editor.setValue(savedContent);
+			}
+		}
+		
 		this.setState({
 			editor,
 			relationEditorName: '',
@@ -953,11 +1094,18 @@ export class EditorBase extends React.Component<Props, State> {
 
 		editor.on('change', (cm: CodeMirror.Editor) => {
 			this.props.textChange(cm);
+			// Save content to local storage whenever it changes
+			const contentKeyId = this.props.tab || this.props.mode;
+			saveEditorContentToStorage(cm.getValue(), contentKeyId, window.localStorage);
 		});
 	
-
+		window.addEventListener("storage", this.onHistoryStorageChange);
 	}
 
+
+	componentWillUnmount(): void {
+		window.removeEventListener("storage", this.onHistoryStorageChange);
+	}
 
 	render() {
 		const {
@@ -1058,21 +1206,36 @@ export class EditorBase extends React.Component<Props, State> {
 									<div className="btn-group history-container">
 										<DropdownList
 											label={<span><FontAwesomeIcon icon={faHistory  as IconProp} /> <span className="hideOnSM"><T id="calc.editors.button-history" /></span></span>}
-											elements={history.map(h => ({
-												label: (
-													<>
-														<small className="muted text-muted">{h.time.toLocaleTimeString()}</small>
-														<div>{h.code}</div>
-														{/*
-														// colorize the code
-														codeNode.addClass('colorize');
-														CodeMirror.colorize(codeNode, this.state.editor.getOption('mode'));
-													*/}
-													</>
-												),
-												value: h,
-											}))}
-											onChange={this.applyHistory}
+											elements={[
+												...history.map(h => ({
+													label: (
+														<>
+															<small className="muted text-muted">{h.time.toLocaleTimeString()}</small>
+															<div>{h.code}</div>
+															{/*
+															// colorize the code
+															codeNode.addClass('colorize');
+															CodeMirror.colorize(codeNode, this.state.editor.getOption('mode'));
+														*/}
+														</>
+													),
+													value: h,
+												})),
+												...(history.length > 0 ? [
+													{ type: 'separator' as const },
+													{
+														label: <span>{t('calc.editors.button-clear-history', { defaultValue: 'Clear history' })}</span>,
+														value: '__clear__',
+													}
+												] : [])
+											]}
+											onChange={(value: HistoryEntry | string) => {
+												if (value === '__clear__') {
+													this.clearHistory();
+													return;
+												}
+												this.applyHistory(value as HistoryEntry);
+											}}
 										/>
 									</div>
 								)
@@ -1155,20 +1318,27 @@ export class EditorBase extends React.Component<Props, State> {
 
 	historyAddEntry(code: string) {
 		const { historyMaxEntries = 10, historyMaxLabelLength = 20 } = this.props;
+		const keyId = this.props.tab || this.props.mode;
 
 		const entry = {
 			time: new Date(),
 			label: code.length > historyMaxLabelLength ? code.substr(0, historyMaxLabelLength - 4) + ' ...' : code,
-			code,
+			code: code.trim(),
 		};
 
 		this.setState({
-			history: [
-				entry,
-				...this.state.history,
-			].slice(0, historyMaxEntries),
+			history: appendHistoryToStorage(entry, historyMaxEntries, keyId, window.localStorage),
 		});
 	}
+
+	clearHistory = () => {
+        if (!window.confirm(t('calc.editors.confirm-clear-history', { defaultValue: 'Clear all history entries?' }))) {
+            return;
+        }
+		const keyId = this.props.tab || this.props.mode;
+		clearHistoryFromStorage(window.localStorage, keyId);
+        this.setState({ history: [] });
+    }
 
 	clearExecutionAlerts() {
 		this.state.execErrors.splice(0, this.state.execErrors.length);

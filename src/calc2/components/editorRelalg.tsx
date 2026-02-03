@@ -438,6 +438,8 @@ export class EditorRelalg extends React.Component<Props, State> {
 						],
 					},
 				]}
+				clearOnReload={false}
+				clearOnNavigation={true}
 			/>
 		);
 	}

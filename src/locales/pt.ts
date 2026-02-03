@@ -216,6 +216,8 @@ export const langPT = {
     'editor.inline-relation-editor.button-cancel': 'Cancelar',
     'calc.editors.group.modal-sqldump.button-close': 'Fechar',
     'calc.editors.button-history': 'Hist\u00f3rico',
+    'calc.editors.button-clear-history': 'Limpar',
+    'calc.editors.confirm-clear-history': 'Tem certeza de que deseja limpar o hist\u00f3rico? Esta a\u00e7\u00e3o n\u00e3o pode ser desfeita.',
     'calc.editors.ra.inline-editor.button-upload-csv': 'Upload CSV',
     'calc.navigation.language': 'Idioma',
     'calc.menu.create-own-dataset-headline': 'Crie seu pr\u00f3prio Dataset',
@@ -323,6 +325,6 @@ export const langPT = {
     'calc.editors.ra.toolbar.inline-relation': 'rela\u00e7\u00e3o aninhada',
     'calc.editors.group.new-group-example-group':
       '\u2013 este \u00e9 um exemplo\n\ngroup: nomeDoNovoGrupo \n\n\nA = {\n\ta:string, b:number\n\texemplo,  42\n}',
-	'local.change': 'Recarregar página para alterar o idioma?'
+    'local.change': 'Recarregar p\u00e1gina para alterar o idioma?'
   };
   
