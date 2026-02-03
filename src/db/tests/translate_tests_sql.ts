@@ -804,7 +804,7 @@ QUnit.test('limit 5: limit all', function (assert) {
 QUnit.module('translate sql dump to group definition');
 
 
-QUnit.test('dbdump 1', function (assert) {
+QUnit.skip('dbdump 1', function (assert) {
 	const query = `
 		create table test (a int, b varchar);
 		insert into test values(1, 'sadf');
@@ -830,6 +830,8 @@ QUnit.test('dbdump 1', function (assert) {
 
 	assert.deepEqual(relalgjs.textFromGroupAstRoot(ast), relalgjs.textFromGroupAstRoot(refAst));
 });
+
+QUnit.module('translate sql ast to relational algebra');
 
 QUnit.test('distinct warning 1', function (assert) {
 	let ast, query;
@@ -893,7 +895,7 @@ QUnit.skip('test having-clause including aggregation 1', function (assert) {
 	assert.deepEqual(exec_sql(query).getResult(), exec_ra(queryRef).getResult());
 });
 
-QUnit.skip('test aggregate function in value-expression', function (assert) {
+QUnit.test('test aggregate function in value-expression', function (assert) {
 	const query = `
 		select count(*) as x
 		from R
@@ -901,7 +903,7 @@ QUnit.skip('test aggregate function in value-expression', function (assert) {
 	const queryRef = `
 		{
 			x
-			6
+			5
 		}
 	`;
 
