@@ -1261,7 +1261,7 @@ export class ValueExprGeneric extends ValueExpr {
 					return printFunction.call(this, '-');
 
 				case 'not':
-					return printFunction.call(this, '!');
+					return printFunction.call(this, '¬');
 
 				case 'caseWhen':
 				case 'caseWhenElse':
