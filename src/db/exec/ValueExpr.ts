@@ -11,7 +11,6 @@ import * as i18n from 'i18next';
 import { CodeInfo } from './CodeInfo';
 import { Tuple } from './Table';
 import { Session } from './RANode';
-import { Join } from './joins/Join';
 
 
 // type DataType = 'string' | 'number' | 'boolean' | 'date' | 'null';
@@ -1261,7 +1260,7 @@ export class ValueExprGeneric extends ValueExpr {
 					return printFunction.call(this, '-');
 
 				case 'not':
-					return printFunction.call(this, '!');
+					return printFunction.call(this, '¬');
 
 				case 'caseWhen':
 				case 'caseWhenElse':
@@ -1279,8 +1278,14 @@ export class ValueExprGeneric extends ValueExpr {
 					return binary.call(this, '%');
 
 				case 'and':
+					return binary.call(this, '∧');
+
 				case 'or':
+					return binary.call(this, '∨');
+
 				case 'xor':
+					return binary.call(this, '⊻');
+
 				case 'like':
 				case 'ilike':
 				case 'regexp':
@@ -1298,6 +1303,20 @@ export class ValueExprGeneric extends ValueExpr {
 					return binary.call(this, '&lt;');
 				case '!=':
 					return binary.call(this, '≠');
+				case 'between':
+				case 'notBetween': {
+					const val = this._args[0].getFormulaHtml();
+					const lower = this._args[1].getFormulaHtml();
+					const upper = this._args[2].getFormulaHtml();
+
+					const betweenExpr = `${val} ≥ ${lower} ∧ ${val} ≤ ${upper}`;
+
+					if (_func === 'between') {
+						return `<span>${betweenExpr}</span>`;
+					} else {
+						return `<span>not (${betweenExpr})</span>`;
+					}
+				}
 			}
 
 			return this.toString();

@@ -995,7 +995,7 @@ QUnit.module('translate trc ast to relational algebra', () => {
 				assert.deepEqual(resultTrc.getRows(), resultRa.getRows());
 			});
 
-			QUnit.test('test between predicate with numbers', (assert) => {
+			QUnit.test('test between predicate with numbers 1', (assert) => {
 				const queryTrc = '{ t | R(t) and t.a between 3 and 5 }';
 				const queryRa = 'sigma a >= 3 and a <= 5 (R)';
 
@@ -1005,7 +1005,17 @@ QUnit.module('translate trc ast to relational algebra', () => {
 				assert.deepEqual(resultTrc.getRows(), resultRa.getRows());
 			});
 
-			QUnit.test('test negation between predicate with numbers', (assert) => {
+			QUnit.test('test between predicate with numbers 2', (assert) => {
+				const queryTrc = '{ t | R(t) ∧ t.a between 3 ∧ 5 }';
+				const queryRa = 'sigma a >= 3 ∧ a <= 5 (R)';
+
+				const resultTrc = exec_trc(queryTrc).getResult()
+				const resultRa = exec_ra(queryRa).getResult();
+
+				assert.deepEqual(resultTrc.getRows(), resultRa.getRows());
+			});
+
+			QUnit.test('test negation between predicate with numbers 1', (assert) => {
 				const queryTrc = '{ t | R(t) and not (t.a between 3 and 5) }';
 				const queryRa = 'sigma a < 3 or a > 5 (R)';
 
@@ -1015,7 +1025,17 @@ QUnit.module('translate trc ast to relational algebra', () => {
 				assert.deepEqual(resultTrc.getRows(), resultRa.getRows());
 			});
 
-			QUnit.test('test between predicate with strings', (assert) => {
+			QUnit.test('test negation between predicate with numbers 2', (assert) => {
+				const queryTrc = '{ t | R(t) ∧ not (t.a between 3 ∧ 5) }';
+				const queryRa = 'sigma a < 3 or a > 5 (R)';
+
+				const resultTrc = exec_trc(queryTrc).getResult()
+				const resultRa = exec_ra(queryRa).getResult();
+
+				assert.deepEqual(resultTrc.getRows(), resultRa.getRows());
+			});
+
+			QUnit.test('test between predicate with strings 1', (assert) => {
 				const queryTrc = "{ t | R(t) and t.b between 'b' and 'e' }";
 				const queryRa = "sigma b >= 'b' and b <= 'e' (R)";
 
@@ -1025,9 +1045,69 @@ QUnit.module('translate trc ast to relational algebra', () => {
 				assert.deepEqual(resultTrc.getRows(), resultRa.getRows());
 			});
 
-			QUnit.test('test negation between predicate with strings', (assert) => {
+			QUnit.test('test between predicate with strings 2', (assert) => {
+				const queryTrc = "{ t | R(t) ∧ t.b between 'b' ∧ 'e' }";
+				const queryRa = "sigma b >= 'b' ∧ b <= 'e' (R)";
+
+				const resultTrc = exec_trc(queryTrc).getResult()
+				const resultRa = exec_ra(queryRa).getResult();
+
+				assert.deepEqual(resultTrc.getRows(), resultRa.getRows());
+			});
+
+			QUnit.test('test negation between predicate with strings 1', (assert) => {
 				const queryTrc = "{ t | R(t) and not (t.b between 'b' and 'e') }";
 				const queryRa = "sigma b < 'b' or b > 'e' (R)";
+
+				const resultTrc = exec_trc(queryTrc).getResult()
+				const resultRa = exec_ra(queryRa).getResult();
+
+				assert.deepEqual(resultTrc.getRows(), resultRa.getRows());
+			});
+
+			QUnit.test('test negation between predicate with strings 2', (assert) => {
+				const queryTrc = "{ t | R(t) ∧ not (t.b between 'b' ∧ 'e') }";
+				const queryRa = "sigma b < 'b' or b > 'e' (R)";
+
+				const resultTrc = exec_trc(queryTrc).getResult()
+				const resultRa = exec_ra(queryRa).getResult();
+
+				assert.deepEqual(resultTrc.getRows(), resultRa.getRows());
+			});
+
+			QUnit.test('test between predicate with date constants 1', (assert) => {
+				const queryTrc = "{ t | R(t) and date('2020-01-03') between date('2020-01-02') and date('2020-01-05') }";
+				const queryRa = "sigma date('2020-01-03') >= date('2020-01-02') and date('2020-01-03') <= date('2020-01-05') (R)";
+
+				const resultTrc = exec_trc(queryTrc).getResult()
+				const resultRa = exec_ra(queryRa).getResult();
+
+				assert.deepEqual(resultTrc.getRows(), resultRa.getRows());
+			});
+
+			QUnit.test('test between predicate with date constants 2', (assert) => {
+				const queryTrc = "{ t | R(t) ∧ date('2020-01-03') between date('2020-01-02') ∧ date('2020-01-05') }";
+				const queryRa = "sigma date('2020-01-03') >= date('2020-01-02') ∧ date('2020-01-03') <= date('2020-01-05') (R)";
+
+				const resultTrc = exec_trc(queryTrc).getResult()
+				const resultRa = exec_ra(queryRa).getResult();
+
+				assert.deepEqual(resultTrc.getRows(), resultRa.getRows());
+			});
+
+			QUnit.test('test not between predicate with date constants (false case)', (assert) => {
+				const queryTrc = "{ t | R(t) and date('2020-01-03') not between date('2020-01-02') and date('2020-01-05') }";
+				const queryRa = "sigma not (date('2020-01-03') >= date('2020-01-02') and date('2020-01-03') <= date('2020-01-05')) (R)";
+
+				const resultTrc = exec_trc(queryTrc).getResult()
+				const resultRa = exec_ra(queryRa).getResult();
+
+				assert.deepEqual(resultTrc.getRows(), resultRa.getRows());
+			});
+
+			QUnit.test('test not between predicate with date constants (true case)', (assert) => {
+				const queryTrc = "{ t | R(t) and date('2020-01-01') not between date('2020-01-02') and date('2020-01-05') }";
+				const queryRa = "sigma not (date('2020-01-01') >= date('2020-01-02') ∧ date('2020-01-01') <= date('2020-01-05')) (R)";
 
 				const resultTrc = exec_trc(queryTrc).getResult()
 				const resultRa = exec_ra(queryRa).getResult();
