@@ -1314,7 +1314,7 @@ export class ValueExprGeneric extends ValueExpr {
 					if (_func === 'between') {
 						return `<span>${betweenExpr}</span>`;
 					} else {
-						return `<span>not (${betweenExpr})</span>`;
+						return `<span>¬ (${betweenExpr})</span>`;
 					}
 				}
 			}
