@@ -262,9 +262,43 @@ QUnit.test('test selection[a>=3](R)', function (assert) {
 	assert.deepEqual(root.getResult(), ref.getResult());
 });
 
-QUnit.test('test selection[not b=c](R)', function (assert) {
+QUnit.test('test selection[not b=c](R) 1', function (assert) {
 	const relations = getTestRelations();
 	const query = 'sigma ! (b=c) R';
+	const root = exec_ra(query, relations);
+
+	const ref = exec_ra(`{
+		R.a, R.b, R.c
+
+		1, 'a', 'd'
+		4, 'd', 'f'
+		5, 'd', 'b'
+		6, 'e', 'f'
+	}`, relations);
+
+	assert.deepEqual(root.getResult(), ref.getResult());
+});
+
+QUnit.test('test selection[not b=c](R) 2', function (assert) {
+	const relations = getTestRelations();
+	const query = 'sigma not (b=c) R';
+	const root = exec_ra(query, relations);
+
+	const ref = exec_ra(`{
+		R.a, R.b, R.c
+
+		1, 'a', 'd'
+		4, 'd', 'f'
+		5, 'd', 'b'
+		6, 'e', 'f'
+	}`, relations);
+
+	assert.deepEqual(root.getResult(), ref.getResult());
+});
+
+QUnit.test('test selection[not b=c](R) 3', function (assert) {
+	const relations = getTestRelations();
+	const query = 'sigma ¬ (b=c) R';
 	const root = exec_ra(query, relations);
 
 	const ref = exec_ra(`{

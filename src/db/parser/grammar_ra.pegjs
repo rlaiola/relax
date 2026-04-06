@@ -1158,29 +1158,29 @@ comparisonOperatorLesser
 = '<'
 
 and 'logical AND'
-= __ lo:('and'i { return getNodeInfo('and'); }) __
+= __ lo:('and'i ![a-zA-Z0-9_] { return getNodeInfo('and'); }) __
 	{ return lo; }
 / _ lo:('∧' { return getNodeInfo('and'); }) _
 	{ return lo; }
 
 xor 'logical XOR'
-= __ lo:('xor'i { return getNodeInfo('xor'); }) __
+= __ lo:('xor'i ![a-zA-Z0-9_] { return getNodeInfo('xor'); }) __
 	{ return lo; }
 / _ lo:('⊻' { return getNodeInfo('xor'); }) _
 	{ return lo; }
 
 or 'logical OR'
-= __ lo:('or'i { return getNodeInfo('or'); }) __
+= __ lo:('or'i ![a-zA-Z0-9_] { return getNodeInfo('or'); }) __
 	{ return lo; }
 / _ lo:('∨' { return getNodeInfo('or'); }) _
 	{ return lo; }
 
 not 'logical NOT'
-= _ lo:('!' { return getNodeInfo('not'); }) _
+= _ lo:('!' { return getNodeInfo('not'); }) _ 
 	{ return lo; }
-/ _ lo:('¬' { return getNodeInfo('not'); }) _
+ / _ lo:('¬' { return getNodeInfo('not'); }) _
 	{ return lo; }
-/ _ lo:('not'i { return getNodeInfo('not'); }) _
+ / _ lo:('not'i ![a-zA-Z0-9_] { return getNodeInfo('not'); })
 	{ return lo; }
 
 
@@ -1588,7 +1588,7 @@ expr_number_minus
 	}
 
 expr_boolean_negation
-= lo:not a:expr_precedence0
+= lo:not __? a:expr_precedence5
 	{
 		operatorPositions.push(lo);
 		return {
