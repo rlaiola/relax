@@ -141,8 +141,83 @@ QUnit.test('test selection[a>=3](R)', function (assert) {
 	assert.deepEqual(root.getResult(), ref.getResult());
 });
 
-QUnit.test('test selection[not (b=c)](R)', function (assert) {
+QUnit.test('test selection[not (b=c)](R) 1', function (assert) {
 	const root = exec_sql('select distinct * from R where ! (b = c)');
+
+	const ref = relalgjs.executeRelalg(`{
+		R.a, R.b, R.c
+
+		1, 'a', 'd'
+		4, 'd', 'f'
+		5, 'd', 'b'
+		6, 'e', 'f'
+	}`);
+
+	assert.deepEqual(root.getResult(), ref.getResult());
+});
+
+QUnit.test('test selection[not (b=c)](R) 2', function (assert) {
+	const root = exec_sql('select distinct * from R where NOT (b = c)');
+
+	const ref = relalgjs.executeRelalg(`{
+		R.a, R.b, R.c
+
+		1, 'a', 'd'
+		4, 'd', 'f'
+		5, 'd', 'b'
+		6, 'e', 'f'
+	}`);
+
+	assert.deepEqual(root.getResult(), ref.getResult());
+});
+
+QUnit.test('test selection[not (b=c)](R) 3', function (assert) {
+	const root = exec_sql('select distinct * from R where NOT(b = c)');
+
+	const ref = relalgjs.executeRelalg(`{
+		R.a, R.b, R.c
+
+		1, 'a', 'd'
+		4, 'd', 'f'
+		5, 'd', 'b'
+		6, 'e', 'f'
+	}`);
+
+	assert.deepEqual(root.getResult(), ref.getResult());
+});
+
+QUnit.test('test selection[not (b=c)](R) 4', function (assert) {
+	const root = exec_sql('select distinct * from R where !(b = c)');
+
+	const ref = relalgjs.executeRelalg(`{
+		R.a, R.b, R.c
+
+		1, 'a', 'd'
+		4, 'd', 'f'
+		5, 'd', 'b'
+		6, 'e', 'f'
+	}`);
+
+	assert.deepEqual(root.getResult(), ref.getResult());
+});
+
+QUnit.test('test selection[not (b=c)](R) 5', function (assert) {
+	const root = exec_sql('select distinct * from R where not (b = c)');
+
+	const ref = relalgjs.executeRelalg(`{
+		R.a, R.b, R.c
+
+		1, 'a', 'd'
+		4, 'd', 'f'
+		5, 'd', 'b'
+		6, 'e', 'f'
+	}`);
+
+	assert.deepEqual(root.getResult(), ref.getResult());
+});
+
+QUnit.test('test selection[not (b=c)](R) 6', function (assert) {
+	const root = exec_sql('select distinct * from R where not(b = c)');
 
 	const ref = relalgjs.executeRelalg(`{
 		R.a, R.b, R.c
