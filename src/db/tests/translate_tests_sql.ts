@@ -1535,3 +1535,52 @@ QUnit.test('test selection using NOT BETWEEN with strings', function (assert) {
 
 	assert.deepEqual(root.getResult(), ref.getResult());
 });
+
+QUnit.test('test selection using BETWEEN with date constant', function (assert) {
+	const root = exec_sql(
+		"select distinct * from S where date('2020-01-03') between date('2020-01-02') and date('2020-01-05')"
+	);
+
+	// condition is TRUE → all tuples are returned
+	const ref = relalgjs.executeRelalg(`{
+		S.b, S.d
+		a,   100
+		b,   300
+		c,   400
+		d,   200
+		e,   150
+	}`);
+
+	assert.deepEqual(root.getResult(), ref.getResult());
+});
+
+QUnit.test('test selection using NOT BETWEEN with date constant (false case)', function (assert) {
+	const root = exec_sql(
+		"select distinct * from S where date('2020-01-03') not between date('2020-01-02') and date('2020-01-05')"
+	);
+
+	// condition is FALSE → no tuples
+	const ref = relalgjs.executeRelalg(`{
+		S.b:string, S.d:number
+	}`);
+
+	assert.deepEqual(root.getResult(), ref.getResult());
+});
+
+QUnit.test('test selection using NOT BETWEEN with date constant (true case)', function (assert) {
+	const root = exec_sql(
+		"select distinct * from S where date('2020-01-01') not between date('2020-01-02') and date('2020-01-05')"
+	);
+
+	// condition is TRUE → all tuples
+	const ref = relalgjs.executeRelalg(`{
+		S.b, S.d
+		a,   100
+		b,   300
+		c,   400
+		d,   200
+		e,   150
+	}`);
+
+	assert.deepEqual(root.getResult(), ref.getResult());
+});

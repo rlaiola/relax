@@ -416,5 +416,7 @@ declare module bagsAst {
 		| '<'
 		| "substring"
 		| "cast"
+		| 'between'
+		| 'notBetween'
 	);
 }

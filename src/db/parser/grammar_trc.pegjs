@@ -408,7 +408,7 @@ expr_rest_boolean_conj
 	}
 
 expr_rest_between
-= __ neg:('not'i __)? 'between'i __ lower:expr_precedence4 __ 'and'i __ upper:expr_precedence4
+= __ neg:('not'i __)? 'between'i __ lower:expr_precedence4 __ lo:and __ upper:expr_precedence4
 	{
 		return {
 			type: 'valueExpr',

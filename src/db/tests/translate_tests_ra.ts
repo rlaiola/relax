@@ -3640,7 +3640,7 @@ QUnit.test('test cast function', function (assert) {
 	assert.deepEqual(root.getResult(), ref.getResult());
 });
 
-QUnit.test('test selection using BETWEEN with numbers', function (assert) {
+QUnit.test('test selection using BETWEEN with numbers 1', function (assert) {
 	const query = "sigma a between 3 and 5 (R)";
 	const root = exec_ra(query, getTestRelations());
 
@@ -3654,7 +3654,21 @@ QUnit.test('test selection using BETWEEN with numbers', function (assert) {
 	assert.deepEqual(root.getResult(), ref.getResult());
 });
 
-QUnit.test('test selection using NOT BETWEEN with numbers', function (assert) {
+QUnit.test('test selection using BETWEEN with numbers 2', function (assert) {
+	const query = "σ a between 3 ∧ 5 (R)";
+	const root = exec_ra(query, getTestRelations());
+
+	const ref = exec_ra(`{
+		R.a, R.b, R.c
+		3,   c,   c
+		4,   d,   f 
+		5,   d,   b
+	}`, {});
+
+	assert.deepEqual(root.getResult(), ref.getResult());
+});
+
+QUnit.test('test selection using NOT BETWEEN with numbers 1', function (assert) {
 	const query = "sigma a not between 3 and 5 (R)";
 	const root = exec_ra(query, getTestRelations());
 	
@@ -3667,7 +3681,20 @@ QUnit.test('test selection using NOT BETWEEN with numbers', function (assert) {
 	assert.deepEqual(root.getResult(), ref.getResult());
 });
 
-QUnit.test('test selection using BETWEEN with strings', function (assert) {
+QUnit.test('test selection using NOT BETWEEN with numbers 2', function (assert) {
+	const query = "σ a not between 3 ∧ 5 (R)";
+	const root = exec_ra(query, getTestRelations());
+	
+	const ref = exec_ra(`{
+		R.a, R.b, R.c
+		1,   a,   d
+		6,   e,   f
+	}`, {});
+	
+	assert.deepEqual(root.getResult(), ref.getResult());
+});
+
+QUnit.test('test selection using BETWEEN with strings 1', function (assert) {
 	const query = "sigma b between 'c' and 'd' (R)";
 	const root = exec_ra(query, getTestRelations());
 	
@@ -3681,13 +3708,103 @@ QUnit.test('test selection using BETWEEN with strings', function (assert) {
 	assert.deepEqual(root.getResult(), ref.getResult());
 });
 
-QUnit.test('test selection using NOT BETWEEN with strings', function (assert) {
+QUnit.test('test selection using BETWEEN with strings 2', function (assert) {
+	const query = "σ b between 'c' ∧ 'd' (R)";
+	const root = exec_ra(query, getTestRelations());
+	
+	const ref = exec_ra(`{
+		R.a, R.b, R.c
+		3,   c,   c
+		4,   d,   f 
+		5,   d,   b
+	}`, {});
+
+	assert.deepEqual(root.getResult(), ref.getResult());
+});
+
+QUnit.test('test selection using NOT BETWEEN with strings 1', function (assert) {
 	const query = "sigma b not between 'c' and 'd' (R)";
 	const root = exec_ra(query, getTestRelations());
 	
 	const ref = exec_ra(`{
 		R.a, R.b, R.c
 		1,   a,   d
+		6,   e,   f
+	}`, {});
+
+	assert.deepEqual(root.getResult(), ref.getResult());
+});
+
+QUnit.test('test selection using NOT BETWEEN with strings 2', function (assert) {
+	const query = "σ b not between 'c' ∧ 'd' (R)";
+	const root = exec_ra(query, getTestRelations());
+	
+	const ref = exec_ra(`{
+		R.a, R.b, R.c
+		1,   a,   d
+		6,   e,   f
+	}`, {});
+
+	assert.deepEqual(root.getResult(), ref.getResult());
+});
+
+QUnit.test('test selection using BETWEEN with date constant 1', function (assert) {
+	const query = "σ date('2020-01-05') between date('2020-01-02') and date('2020-01-05') (R)";
+	const root = exec_ra(query, getTestRelations());
+	
+	// condition is TRUE → all tuples are kept
+	const ref = exec_ra(`{
+		R.a, R.b, R.c
+		1,   a,   d
+		3,   c,   c
+		4,   d,   f
+		5,   d,   b
+		6,   e,   f
+	}`, {});
+
+	assert.deepEqual(root.getResult(), ref.getResult());
+});
+
+QUnit.test('test selection using BETWEEN with date constant 2', function (assert) {
+	const query = "σ date('2020-01-02') between date('2020-01-02') ∧ date('2020-01-05') (R)";
+	const root = exec_ra(query, getTestRelations());
+	
+	// condition is TRUE → all tuples are kept
+	const ref = exec_ra(`{
+		R.a, R.b, R.c
+		1,   a,   d
+		3,   c,   c
+		4,   d,   f
+		5,   d,   b
+		6,   e,   f
+	}`, {});
+
+	assert.deepEqual(root.getResult(), ref.getResult());
+});
+
+QUnit.test('test selection using NOT BETWEEN with date constant 1', function (assert) {
+	const query = "sigma date('2020-01-03') not between date('2020-01-02') and date('2020-01-05') (R)";
+	const root = exec_ra(query, getTestRelations());
+	
+	// condition is FALSE → NOT BETWEEN = false → selection returns nothing
+	const ref = exec_ra(`{
+		R.a:number, R.b:string, R.c:string
+	}`, {});
+
+	assert.deepEqual(root.getResult(), ref.getResult());
+});
+
+QUnit.test('test selection using NOT BETWEEN with date constant 2', function (assert) {
+	const query = "σ date('2020-01-01') not between date('2020-01-02') ∧ date('2020-01-05') (R)";
+	const root = exec_ra(query, getTestRelations());
+	
+	// condition is TRUE → all tuples are kept
+	const ref = exec_ra(`{
+		R.a, R.b, R.c
+		1,   a,   d
+		3,   c,   c
+		4,   d,   f
+		5,   d,   b
 		6,   e,   f
 	}`, {});
 
