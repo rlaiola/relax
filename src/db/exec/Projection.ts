@@ -344,7 +344,7 @@ export class Projection extends RANodeUnary {
 						if (index === -1) {
 							// Column not found
 							try {
-								childSchema.getColumnIndex(name, relAlias);
+								index = childSchema.getColumnIndex(name, relAlias);
 							}
 							catch (e) {
 								this.throwExecutionError(e.message);
