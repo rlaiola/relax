@@ -260,6 +260,13 @@ export function loadStaticGroups() {
 		id: string,
 	}[] = [
 			{
+				maintainerGroup: t('calc.maintainer-groups.ufes'),
+				maintainer: '<a href="https://github.com/rlaiola">Rodrigo Laiola Guimaraes</a>',
+
+				source: 'local',
+				id: 'ufes',
+			},
+			{
 				maintainerGroup: t('calc.maintainer-groups.misc'),
 				maintainer: '',
 
@@ -349,13 +356,6 @@ export function loadStaticGroups() {
 
 				source: 'local',
 				id: 'sb',
-			},
-			{
-				maintainerGroup: t('calc.maintainer-groups.ufes'),
-				maintainer: '<a href="https://github.com/rlaiola">Rodrigo Laiola Guimaraes</a>',
-
-				source: 'local',
-				id: 'ufes',
 			},
 		];
 
