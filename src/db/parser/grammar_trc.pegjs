@@ -239,7 +239,9 @@ equivalence 'logical BICONDITIONAL'
     }
 
 not 'logical NOT'
-  = _ ('not' / '!' / '¬') _
+  = _ lo:('not'i ![a-zA-Z0-9_] { return 'not'; })
+  / _ lo:('!' { return 'not'; })
+  / _ lo:('¬' { return 'not'; })
 
 // comparisons
 comparisonOperators
@@ -406,7 +408,7 @@ expr_rest_boolean_conj
 	}
 
 expr_rest_between
-= __ neg:('not'i __)? 'between'i __ lower:expr_precedence4 __ 'and'i __ upper:expr_precedence4
+= __ neg:('not'i __)? 'between'i __ lower:expr_precedence4 __ lo:and __ upper:expr_precedence4
 	{
 		return {
 			type: 'valueExpr',
@@ -506,7 +508,7 @@ expr_number_minus
 	}
 
 expr_boolean_negation
-= not a:expr_precedence0
+= not a:expr_precedence5
 	{
 		return {
 			type: 'valueExpr',
