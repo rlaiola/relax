@@ -439,7 +439,7 @@ export abstract class Join extends RANodeBinary {
 		else { // right (outer) joins
 			let nullArrayLeft: null[];
 			if (createRowToAddIfNOTMatched !== null) {
-				nullArrayLeft = Join.createNullArray(targetTable.getSchema().getSize() - numColsB); // == size of new B
+				nullArrayLeft = Join.createNullArray(Math.max(0, targetTable.getSchema().getSize() - numColsB)); // == size of new B
 			}
 
 			for (let i = 0; i < numRowsB; i++) {
@@ -511,10 +511,15 @@ export abstract class Join extends RANodeBinary {
 				// skip all but certain columns (for joins with USING())
 				continue;
 			}
-			
-			let indices = [];
+
+			// If there are duplicate columns, try to match by name only if alias match yields nothing
+			let indices: number[] = [];
 			if (hasDuplicateCols) {
 				indices = schemaB.getColumnIndexArray(a.getName(), a.getRelAlias());
+				// If no match found with alias, try without alias (by name only)
+				if (indices.length === 0) {
+					indices = schemaB.getColumnIndexArray(a.getName(), null);
+				}
 			} else {
 				indices = schemaB.getColumnIndexArray(a.getName(), null);
 			}

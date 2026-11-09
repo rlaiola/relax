@@ -14,6 +14,7 @@ import { Group } from 'calc2/store/groups';
 import classNames from 'classnames';
 import * as CodeMirror from 'codemirror';
 import 'codemirror/addon/hint/show-hint';
+import { htmlToText } from 'db/exec/html';
 import { RANode, RANodeBinary, RANodeUnary } from 'db/exec/RANode';
 import { forEachPreOrder } from 'db/translate/utils';
 import * as React from 'react';
@@ -47,6 +48,7 @@ require('codemirror/addon/display/placeholder.js');
 require('codemirror/addon/display/autorefresh.js');
 require('codemirror/mode/sql/sql.js');
 require('handsontable/dist/handsontable.full.css');
+require('./editorBase.scss');
 
 CodeMirror.defineMode('trc', function () {
 	const keywords = ['in', 'and', 'or', 'xor', 'not', 'implies', 'iff', 'exists', 'for all', 'not between', 'between'];
@@ -1125,6 +1127,10 @@ export class EditorBase extends React.Component<Props, State> {
 			execButtonLabel,
 		} = this.props;
 
+		const hasEditorContent =
+			!!editor && editor.getValue().trim().length > 0;
+		const hasQueryResult = !!queryResult;
+
 		return (
 			<div>
 				<div className="editor-base">
@@ -1140,12 +1146,12 @@ export class EditorBase extends React.Component<Props, State> {
 					<div className="input-buttons">
 						<button
 							type="button"
-							disabled={isExecutionDisabled}
+							disabled={isExecutionDisabled || !hasEditorContent}
 							className={classNames('btn btn-primary exec-button selection', {
 								'selection-selected': isSelectionSelected,
 								'btn-danger': execErrors.length > 0,
 								'btn-success': execSuccessful,
-								'disabled': isExecutionDisabled,
+								'disabled': isExecutionDisabled || !hasEditorContent,
 							})}
 							onClick={() => {
 								if (!editor) {
@@ -1177,6 +1183,7 @@ export class EditorBase extends React.Component<Props, State> {
 											</>
 											),
 									 	value: '',
+										disabled: !hasEditorContent,
 									},
 									{
 										label: (
@@ -1185,6 +1192,7 @@ export class EditorBase extends React.Component<Props, State> {
 											</>
 											),
 									 	value: '',
+										disabled: !hasQueryResult,
 									},
 									{
 										label: (
@@ -1193,6 +1201,7 @@ export class EditorBase extends React.Component<Props, State> {
 											</>
 											),
 									 	value: '',
+										disabled: !hasQueryResult,
 									},
 									]
 										
@@ -1211,7 +1220,7 @@ export class EditorBase extends React.Component<Props, State> {
 													label: (
 														<>
 															<small className="muted text-muted">{h.time.toLocaleTimeString()}</small>
-															<div>{h.code}</div>
+															<div className="history-dropdown-item">{h.code}</div>
 															{/*
 															// colorize the code
 															codeNode.addClass('colorize');
@@ -1599,7 +1608,7 @@ export class EditorBase extends React.Component<Props, State> {
 			const found = [];
 	
 			const error = EditorBase._generateErrorFromException(e, 0, 0);
-			const messageWithoutHtml = $('<span>').append(error.message).text();
+			const messageWithoutHtml = htmlToText(error.message);
 
 			if (!error.codemirrorPositions) {
 				this.clearExecutionAlerts();

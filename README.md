@@ -10,6 +10,15 @@ A relational algebra calculator
 * Execute `yarn serve` to locally run the webapp on port 8088
 * (Optional) open folder with https://code.visualstudio.com/ and install the workspace recommended extensions (includes tasks)
 
+## How to test
+Every pull request runs these checks automatically (see `.github/workflows/ci.yml`). To run them locally:
+
+* Execute `yarn typecheck` to check the types
+* Use `NODE_OPTIONS=--openssl-legacy-provider yarn build` to create a build in the `dist` folder
+* Execute `yarn test` to run the tests of that build in headless Firefox (requires Firefox)
+
+With `yarn serve` running, you can also see the tests at <http://localhost:8088/test.html>.
+
 Alternatively, you can make use of the Visual Studio Code Dev Containers extension to develop inside a Docker container and take advantage of Visual Studio Code's full feature set. A **development container** is a running container with a well-defined tool/runtime stack and its prerequisites.
 
 To get started, follow these steps:
@@ -23,14 +32,11 @@ To get started, follow these steps:
 * Any change in the files within the container is kept in the existing repository source code on your filesystem so that you can easily push your contributions.
 
 ## How to Release
-* Clone the repo
-* Checkout the `development` branch
-* Execute `yarn install` to install all dependencies
-* Use `NODE_OPTIONS=--openssl-legacy-provider yarn build` to create release build in the `dist` folder
-* Copy the content of your `dist` folder somewhere outside of the repository
-* Checkout the branch `gh-pages`
-* Remove everything there and paste content of the former `dist` folder
-* Push to github (the person doing this must be an administrator of the project)
+* Open the [Release workflow](https://github.com/dbis-uibk/relax/actions/workflows/release.yml) and select *Run workflow* on the `development` branch (requires write access to the repo)
+* Enter a message like `v0.38 Short description`, which becomes the commit message on `gh-pages`
+* The workflow runs all checks, publishes the build to the `gh-pages` branch and waits until it is live
+
+To undo a release, revert its commit on the `gh-pages` branch.
 
 ## Contributions
 * Contributions are **highly appreciated**
